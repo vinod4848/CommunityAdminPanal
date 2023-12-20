@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { CustomInput } from "../components/CustomInput";
 import Dropzone from "react-dropzone";
 import "react-quill/dist/quill.snow.css";
-import { dellImages, uploadImages } from "../features/upload/uploadSlice";
+import { dellImages, uploadImages,uploadImageOfblog } from "../features/upload/uploadSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,6 @@ import {
 let userSchema = Yup.object().shape({
   title: Yup.string().required("Title is Required"),
   description: Yup.string().required("Description is Required"),
-  category: Yup.string().required("Category is Required"),
 });
 
 const AddBlog = () => {
@@ -33,7 +32,6 @@ const AddBlog = () => {
     dispatch(getblogCats());
   }, [dispatch]);
 
-  const blogCatState = useSelector((state) => state.blogCat.blogCats);
   const imgState = useSelector((state) => state.upload.images);
   const newBlog = useSelector((state) => state.blog.blog);
 
@@ -43,7 +41,7 @@ const AddBlog = () => {
     isSuccess,
     blogName,
     blogDescription,
-    blogCategory,
+
     blogImage,
   } = newBlog;
 
@@ -89,7 +87,6 @@ const AddBlog = () => {
   const initialValues = {
     title: blogName || "",
     description: blogDescription || "",
-    category: blogCategory || "",
     images: getImage(blogImage),
   };
   const formik = useFormik({
@@ -138,29 +135,9 @@ const AddBlog = () => {
         <div className="error">
           {formik.touched.description && formik.errors.description}
         </div>
-        <select
-          name="category"
-          onChange={formik.handleChange("category")}
-          onBlur={formik.handleBlur("category")}
-          value={formik.values.category}
-          className="form-control py-3 mb-3"
-          id=""
-        >
-          <option value="">Select Category</option>
-          {blogCatState.map((i, j) => {
-            return (
-              <option key={j} value={i.title}>
-                {i.title}
-              </option>
-            );
-          })}
-        </select>
-        <div className="error">
-          {formik.touched.category && formik.errors.category}
-        </div>
         <div className="bg-white border-1 p-5 text-center">
           <Dropzone
-            onDrop={(acceptedFiles) => dispatch(uploadImages(acceptedFiles))}
+            onDrop={(acceptedFiles) => dispatch(uploadImageOfblog(acceptedFiles))}
           >
             {({ getRootProps, getInputProps }) => (
               <section>

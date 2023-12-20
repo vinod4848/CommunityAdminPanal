@@ -26,6 +26,16 @@ export const dellImages = createAsyncThunk(
     }
   }
 );
+export const uploadImageOfblog = createAsyncThunk(
+  "uploadImage/blogs",
+  async (id, thunkAPI) => {
+    try {
+      return await uploadService.uploadBlogimage(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   images: [],
@@ -69,7 +79,23 @@ export const uploadSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
+      })
+      .addCase(uploadImageOfblog.pending, (state) => {
+        state.isLoding = true;
+      })
+      .addCase(uploadImageOfblog.fulfilled, (state, action) => {
+        state.isLoding = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.images = [];
+      })
+      .addCase(uploadImageOfblog.rejected, (state, action) => {
+        state.isLoding = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
       });
+
   },
 });
 

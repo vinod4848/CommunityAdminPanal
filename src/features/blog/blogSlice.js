@@ -55,9 +55,8 @@ const initialState = {
   isError: false,
   isLoding: false,
   isSuccess: false,
-  blog:{},
+  blog: {},
   message: "",
-  
 };
 export const blogSlice = createSlice({
   name: "blogs",
@@ -99,13 +98,11 @@ export const blogSlice = createSlice({
         state.isLoding = true;
       })
       .addCase(getABlog.fulfilled, (state, action) => {
-        debugger;
         state.isLoding = false;
         state.isError = false;
         state.isSuccess = true;
         state.blog.blogName = action.payload.title;
         state.blog.blogDescription = action.payload.description;
-        state.blog.blogCategory = action.payload.category;
         state.blog.blogImage = action.payload.images;
       })
       .addCase(getABlog.rejected, (state, action) => {
@@ -114,7 +111,6 @@ export const blogSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-
       .addCase(updateABlog.pending, (state) => {
         state.isLoding = true;
       })

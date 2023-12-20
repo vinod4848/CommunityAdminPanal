@@ -1,19 +1,24 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   AiOutlineDashboard,
-  AiOutlineShoppingCart,
+  // AiOutlineShoppingCart,
   AiOutlineUser,
-  AiOutlineBgColors,
+  // AiOutlineBgColors,
 } from "react-icons/ai";
 import { Link, Outlet } from "react-router-dom";
 import { IoMdNotifications } from "react-icons/io";
-import { SiBrandfolder } from "react-icons/si";
+// import { SiBrandfolder } from "react-icons/si";
 import { ImBlog } from "react-icons/im";
-import { BiCategoryAlt } from "react-icons/bi";
-import { SiGooglemarketingplatform } from "react-icons/si";
-import { RiCoupon3Fill } from "react-icons/ri";
-import { GrUnorderedList } from "react-icons/gr";
-import { FaBlogger } from "react-icons/fa";
+// import { BiCategoryAlt } from "react-icons/bi";
+// import { SiGooglemarketingplatform } from "react-icons/si";
+// import { RiCoupon3Fill } from "react-icons/ri";
+// import { GrUnorderedList } from "react-icons/gr";
+import {
+  FaBlogger,
+  FaEnvelope,
+  FaEnvelopeOpen,
+  FaPortrait,
+} from "react-icons/fa";
 import { Layout, Menu, theme } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +55,7 @@ const MainLayout = () => {
         <div className="logo">
           <h2 className="text-white fs-5 text-center py-3 mb-0">
             {show && <span className="sm-logo">Get</span>}
-            {show2 && <span className="gl-logo">Shopping</span>}
+            {show2 && <span className="gl-logo">community</span>}
           </h2>
         </div>
         <Menu
@@ -72,60 +77,60 @@ const MainLayout = () => {
             {
               key: "customers",
               icon: <AiOutlineUser className="fs-4" />,
-              label: "Customers",
+              label: "Users",
             },
-            {
-              key: "catalog",
-              icon: <AiOutlineShoppingCart className="fs-4" />,
-              label: "Catalog",
-              children: [
-                {
-                  key: "product",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
-                  label: "Add Product",
-                },
-                {
-                  key: "product-list",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
-                  label: "Product List",
-                },
-                {
-                  key: "brand",
-                  icon: <SiBrandfolder className="fs-4" />,
-                  label: "Brand",
-                },
-                {
-                  key: "list-brand",
-                  icon: <SiBrandfolder className="fs-4" />,
-                  label: "Brand-List",
-                },
-                {
-                  key: "category",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: "Category",
-                },
-                {
-                  key: "list-category",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: "Category-list",
-                },
-                {
-                  key: "color",
-                  icon: <AiOutlineBgColors className="fs-4" />,
-                  label: "Color",
-                },
-                {
-                  key: "list-color",
-                  icon: <AiOutlineBgColors className="fs-4" />,
-                  label: "Color-list",
-                },
-              ],
-            },
-            {
-              key: "orders",
-              icon: <GrUnorderedList className="fs-4" />,
-              label: "Orders",
-            },
+            // {
+            //   key: "catalog",
+            //   icon: <AiOutlineShoppingCart className="fs-4" />,
+            //   label: "Catalog",
+            //   children: [
+            //     {
+            //       key: "product",
+            //       icon: <AiOutlineShoppingCart className="fs-4" />,
+            //       label: "Add Product",
+            //     },
+            //     {
+            //       key: "product-list",
+            //       icon: <AiOutlineShoppingCart className="fs-4" />,
+            //       label: "Product List",
+            //     },
+            //     {
+            //       key: "brand",
+            //       icon: <SiBrandfolder className="fs-4" />,
+            //       label: "Brand",
+            //     },
+            //     {
+            //       key: "list-brand",
+            //       icon: <SiBrandfolder className="fs-4" />,
+            //       label: "Brand-List",
+            //     },
+            //     {
+            //       key: "category",
+            //       icon: <BiCategoryAlt className="fs-4" />,
+            //       label: "Category",
+            //     },
+            //     {
+            //       key: "list-category",
+            //       icon: <BiCategoryAlt className="fs-4" />,
+            //       label: "Category-list",
+            //     },
+            //     {
+            //       key: "color",
+            //       icon: <AiOutlineBgColors className="fs-4" />,
+            //       label: "Color",
+            //     },
+            //     {
+            //       key: "list-color",
+            //       icon: <AiOutlineBgColors className="fs-4" />,
+            //       label: "Color-list",
+            //     },
+            //   ],
+            // },
+            // {
+            //   key: "orders",
+            //   icon: <GrUnorderedList className="fs-4" />,
+            //   label: "Orders",
+            // },
             {
               key: "blog",
               icon: <FaBlogger className="fs-4" />,
@@ -141,40 +146,140 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Blog List",
                 },
-                {
-                  key: "blog-category",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Blog Category",
-                },
-                {
-                  key: "blog-category-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Blog Category List",
-                },
               ],
             },
             {
-              key: "marketing",
-              icon: <SiGooglemarketingplatform className="fs-4" />,
-              label: "Marketing",
+              key: "event",
+              icon: <FaEnvelope className="fs-4" />,
+              label: "Event",
               children: [
                 {
-                  key: "coupon",
-                  icon: <RiCoupon3Fill className="fs-4" />,
-                  label: "Add Coupon",
+                  key: "events",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Add Event",
                 },
                 {
-                  key: "coupon-list",
-                  icon: <RiCoupon3Fill className="fs-4" />,
-                  label: "Coupon List",
+                  key: "event-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Event List",
+                },
+              ],
+            },
+           
+            {
+              key: "News",
+              icon: <FaBlogger className="fs-4" />,
+              label: "News",
+              children: [
+                {
+                  key: "newa",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add News",
+                },
+                {
+                  key: "news-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "News List",
                 },
               ],
             },
             {
-              key: "enquiries",
-              icon: <GrUnorderedList className="fs-4" />,
-              label: "Enquiries",
+              key: "advertising ",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Advertising ",
+              children: [
+                {
+                  key: "advertising ",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Advertising ",
+                },
+                {
+                  key: "advertising-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Advertising  List",
+                },
+              ],
             },
+            {
+              key: "job",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Job",
+              children: [
+                {
+                  key: "job",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Job ",
+                },
+                {
+                  key: "job-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Job  List",
+                },
+              ],
+            },
+            {
+              key: "directory",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Directory",
+              children: [
+                {
+                  key: "directory",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Job ",
+                },
+                {
+                  key: "directory-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Directory  List",
+                },
+              ],
+            },
+
+            {
+              key: "gallery",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Gallery",
+              children: [
+                {
+                  key: "gallery",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Gallery ",
+                },
+                {
+                  key: "gallery-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Gallery  List",
+                },
+              ],
+            },
+            {
+              key: "event-list",
+              icon: <FaPortrait className="fs-4" />,
+              label: "Matrimonial List",
+            },
+            
+            // {
+            //   key: "marketing",
+            //   icon: <SiGooglemarketingplatform className="fs-4" />,
+            //   label: "Marketing",
+            //   children: [
+            //     {
+            //       key: "coupon",
+            //       icon: <RiCoupon3Fill className="fs-4" />,
+            //       label: "Add Coupon",
+            //     },
+            //     {
+            //       key: "coupon-list",
+            //       icon: <RiCoupon3Fill className="fs-4" />,
+            //       label: "Coupon List",
+            //     },
+            //   ],
+            // },
+            // {
+            //   key: "enquiries",
+            //   icon: <GrUnorderedList className="fs-4" />,
+            //   label: "Enquiries",
+            // },
           ]}
         />
       </Sider>
@@ -217,7 +322,7 @@ const MainLayout = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <h5 className="mb-0">{getUserData?.firstName}</h5>
+                <h5 className="mb-0">{getUserData?.username}</h5>
                 <p className="mb-0">{getUserData?.email}</p>
               </div>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
