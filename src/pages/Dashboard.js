@@ -125,7 +125,7 @@ const Dashboard = () => {
   const data2 = [];
   for (let i = 0; i < orderState.length; i++) {
     data2.push({
-      key: i+1,
+      key: i + 1,
       name: orderState[i].orderby.firstName,
       product: orderState[i].products.map((i, j) => {
         return <p key={j}>{i.product?.title}</p>;
@@ -185,7 +185,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="mt-4">
-        <h3 className="mt-5 title">Recent Orders</h3>
+        <h3 className="mt-5 title">Recent Post</h3>
         <div>
           <Table
             style={{ width: "100%" }}

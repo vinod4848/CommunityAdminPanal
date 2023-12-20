@@ -1,7 +1,8 @@
 import { Table } from "antd";
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../features/customers/customerSlice";
+
 const columns = [
   {
     title: "SN",
@@ -12,7 +13,6 @@ const columns = [
     dataIndex: "name",
     defaultSortOrder: "descend",
     sorter: (a, b) => a.name.length - b.name.length,
-
   },
   {
     title: "Email",
@@ -29,24 +29,24 @@ const Customers = () => {
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
+
   const customerstate = useSelector((state) => state.customer.customers);
-  const data1 = [];
-  for (let i = 0; i < customerstate.length; i++) {
-    if (customerstate[i].role !== "admin") {
-      data1.push({
-        key: i,
-        name: customerstate[i].firstName + " " + customerstate[i].lastName,
-        email: customerstate[i].email,
-        mobile: customerstate[i].mobile,
-      });
-    }
-  }
+  const data1 = customerstate
+    .filter((customer) => customer.role !== "admin")
+    .map((customer, index) => ({
+      key: index + 1,
+      name: customer.username,
+      email: customer.email,
+      mobile: customer.phone,
+    }));
 
   return (
-    <div>
-      <h3 className="mb-4 title">Customers</h3>
-      <div>
-        <Table columns={columns} dataSource={data1} />
+    <div className="container mt-4">
+      <h3 className="mb-4 title">Users</h3>
+      <div className="card">
+        <div className="card-body">
+          <Table columns={columns} dataSource={data1} />
+        </div>
       </div>
     </div>
   );

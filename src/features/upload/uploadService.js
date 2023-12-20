@@ -14,8 +14,17 @@ const deleteImages = async (id) => {
   return response.id;
 };
 
+const uploadBlogimage = async (id) => {
+  const response = await axios.delete(
+    `${base_url}uploadImage/blogs/${id}`,
+    Config
+  );
+  return response.id;
+};
+
 const uploadService = {
   uploadImages,
   deleteImages,
+  uploadBlogimage
 };
 export default uploadService;
