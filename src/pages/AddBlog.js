@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { CustomInput } from "../components/CustomInput";
 import Dropzone from "react-dropzone";
 import "react-quill/dist/quill.snow.css";
-import { dellImages, uploadImages,uploadImageOfblog } from "../features/upload/uploadSlice";
+import { dellImages, uploadImages } from "../features/upload/uploadSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -137,7 +137,7 @@ const AddBlog = () => {
         </div>
         <div className="bg-white border-1 p-5 text-center">
           <Dropzone
-            onDrop={(acceptedFiles) => dispatch(uploadImageOfblog(acceptedFiles))}
+            onDrop={(acceptedFiles) => dispatch(uploadImages(acceptedFiles))}
           >
             {({ getRootProps, getInputProps }) => (
               <section>

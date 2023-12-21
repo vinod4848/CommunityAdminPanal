@@ -7,6 +7,12 @@ import ForgotPassword from "./pages/ForgotPassword";
 import MainLayout from "./components/MainLayout";
 import Enquiries from "./pages/Enquiries";
 import BlogList from "./pages/BlogList";
+import Advertisinglist from "./pages/AdvertisingList";
+import Eventlist from "./pages/EventList";
+import Joblist from "./pages/JobList"
+import Newslist from "./pages/NewsList"
+import Directorielist from "./pages/DirectorieList"
+import Matrimoniallist from "./pages/Matrimonial.List"
 import Blogcatlist from "./pages/Blogcatlist";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
@@ -38,6 +44,12 @@ function App() {
           <Route path="enquiries" element={<Enquiries />} />
           <Route path="enquiries/:id" element={<ViewEnq />} />
           <Route path="blog-list" element={<BlogList />} />
+          <Route path="advertising-list" element={<Advertisinglist />} />
+          <Route path="event-list" element={<Eventlist />} />
+          <Route path="job-list" element={<Joblist />} />
+          <Route path="news-list" element={<Newslist />} />
+          <Route path="directory-list" element={<Directorielist />} />
+          <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />
           <Route path="blog/:id" element={<AddBlog />} />
           <Route path="coupon-list" element={<CouponList />} />

@@ -17,7 +17,7 @@ import {
   FaBlogger,
   FaEnvelope,
   FaEnvelopeOpen,
-  FaPortrait,
+  // FaPortrait,
 } from "react-icons/fa";
 import { Layout, Menu, theme } from "antd";
 import React, { useState } from "react";
@@ -165,7 +165,7 @@ const MainLayout = () => {
                 },
               ],
             },
-           
+
             {
               key: "News",
               icon: <FaBlogger className="fs-4" />,
@@ -225,7 +225,7 @@ const MainLayout = () => {
                 {
                   key: "directory",
                   icon: <FaBlogger className="fs-4" />,
-                  label: "Add Job ",
+                  label: "Add Directory ",
                 },
                 {
                   key: "directory-list",
@@ -252,12 +252,20 @@ const MainLayout = () => {
                 },
               ],
             },
+
             {
-              key: "event-list",
-              icon: <FaPortrait className="fs-4" />,
-              label: "Matrimonial List",
+              key: "Matrimonial",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Matrimonial",
+              children: [
+                {
+                  key: "matrimonial-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Matrimonial  List",
+                },
+              ],
             },
-            
+
             // {
             //   key: "marketing",
             //   icon: <SiGooglemarketingplatform className="fs-4" />,
