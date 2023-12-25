@@ -3,10 +3,7 @@ import moment from "moment";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAJob, getJob, updateAJob } from "../features/job/jobSlice";
-import { Link } from "react-router-dom";
-import { BiEdit } from "react-icons/bi";
-import { MdOutlineDelete } from "react-icons/md";
+import { getJob, updateAJob } from "../features/job/jobSlice";
 import CustomModel from "../components/CustomModel";
 
 const columns = [
@@ -28,12 +25,11 @@ const columns = [
     render: (deadline) => moment(deadline).format("YYYY-MM-DD HH:mm:ss"),
   },
   { title: "Contact Email", dataIndex: "contactEmail" },
-  { title: "Actions", dataIndex: "action" },
-  { title: "Activate/Deactivate", dataIndex: "activateDeactivate" },
+  { title: "Activate", dataIndex: "activateDeactivate" },
 ];
 
 const JobListApprovalPending = () => {
-  const [jobId, setJobId] = useState();
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -61,22 +57,6 @@ const JobListApprovalPending = () => {
         salary: job.salary,
         applicationDeadline: job.applicationDeadline,
         contactEmail: job.contactEmail,
-        action: (
-          <>
-            <Link
-              to={`/admin/job/${job._id}`}
-              className="ms-1 fs-5 text-danger"
-            >
-              <BiEdit />
-            </Link>
-            <button
-              className="fs-5 text-danger bg-transparent border-0"
-              onClick={() => showModal(job._id)}
-            >
-              <MdOutlineDelete />
-            </button>
-          </>
-        ),
         activateDeactivate: (
           <Button
             type="primary"
@@ -88,21 +68,8 @@ const JobListApprovalPending = () => {
       }));
   };
 
-  const showModal = (jobId) => {
-    setOpen(true);
-    setJobId(jobId);
-  };
-
   const hideModal = () => {
     setOpen(false);
-  };
-
-  const deleteJob = (jobId) => {
-    dispatch(deleteAJob(jobId));
-    setOpen(false);
-    setTimeout(() => {
-      dispatch(getJob());
-    }, 100);
   };
 
   const handleActivateDeactivate = async (jobId, isPublished) => {
@@ -133,7 +100,6 @@ const JobListApprovalPending = () => {
         hideModal={hideModal}
         open={open}
         PerformAction={() => {
-          deleteJob(jobId);
         }}
         title="Are you sure you want to delete this Job"
       />

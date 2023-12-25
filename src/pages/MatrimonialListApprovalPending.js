@@ -1,13 +1,12 @@
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getMatrimonial,
-  deleteAMatrimonial,
+  updateAMatrimonial,
 } from "../features/matrimonial/matrimonialSlice";
-import { MdOutlineDelete } from "react-icons/md";
-import CustomModel from "../components/CustomModel";
 
 const columns = [
   {
@@ -151,24 +150,25 @@ const columns = [
       <img src={image} alt="profileBanner" style={{ maxWidth: "100px" }} />
     ),
   },
+
   {
-    title: "Actions",
-    dataIndex: "action",
+    title: "Activate",
+    dataIndex: "activateDeactivate",
   },
 ];
 
 const MatrimonialListApprovalPending = () => {
-  const [matrimonialId, setmatrimonialId] = useState();
-  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getMatrimonial());
   }, [dispatch]);
+
   const matrimonialState = useSelector(
     (state) => state.matrimonial.matrimonials
   );
 
-  const transformmatrimonialData = () => {
+  const transformMatrimonialData = () => {
     return matrimonialState
       .filter((matrimonial) => !matrimonial.isApproved)
       .map((matrimonial, index) => ({
@@ -191,59 +191,47 @@ const MatrimonialListApprovalPending = () => {
         aboutMe: matrimonial.aboutMe,
         height: matrimonial.height,
         partnerPreferences: matrimonial.partnerPreferences,
-        action: (
-          <>
-            <button
-              className=" fs-3 text-danger bg-transparent border-0"
-              onClick={() => showModal(matrimonial._id)}
-            >
-              <MdOutlineDelete />
-            </button>
-          </>
+        action: <></>,
+        activateDeactivate: (
+          <Button
+            type="primary"
+            onClick={() =>
+              handleActivateDeactivate(matrimonial._id, !matrimonial.isApproved)
+            }
+          >
+            {matrimonial.isApproved ? "Deactivate" : "Activate"}
+          </Button>
         ),
       }));
   };
 
-  const showModal = (matrimonialId) => {
-    setOpen(true);
-    setmatrimonialId(matrimonialId);
-  };
-
-  const hideModal = () => {
-    setOpen(false);
-  };
-
-  const deletematrimonial = (matrimonialId) => {
-    dispatch(deleteAMatrimonial(matrimonialId));
-    setOpen(false);
-    setTimeout(() => {
-      dispatch(getMatrimonial());
-    }, 100);
+  const handleActivateDeactivate = async (matrimonialId, isApproved) => {
+    try {
+      await axios.put(
+        `http://localhost:3000/api/matrimonial/profiles/${matrimonialId}`,
+        {
+          isApproved: isApproved,
+        }
+      );
+      dispatch(updateAMatrimonial({ matrimonialId, isApproved }));
+      setTimeout(() => {
+        dispatch(getMatrimonial());
+      }, 100);
+    } catch (error) {
+      console.error("Error updating matrimonial:", error);
+    }
   };
 
   return (
     <div>
       <h3 className="mb-4 title">Matrimonial Profiles</h3>
-      {/* <div>
-        <Table columns={columns} dataSource={transformmatrimonialData()} />
-      </div> */}
-
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}
-          dataSource={transformmatrimonialData()}
+          dataSource={transformMatrimonialData()}
           scroll={{ x: true }}
         />
       </div>
-
-      <CustomModel
-        hideModal={hideModal}
-        open={open}
-        PerformAction={() => {
-          deletematrimonial(matrimonialId);
-        }}
-        title="Are you sure you want to delete this Matrimonial"
-      />
     </div>
   );
 };

@@ -40,12 +40,9 @@ const columns = [
       <img src={image} alt="EventBanner" style={{ maxWidth: "100px" }} />
     ),
   },
+ 
   {
-    title: "Actions",
-    dataIndex: "action",
-  },
-  {
-    title: "Activate/Deactivate",
+    title: "Activate",
     dataIndex: "activateDeactivate",
   },
 ];
