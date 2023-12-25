@@ -53,6 +53,7 @@ const AddBlog = () => {
     }
   }, [dispatch, getblogId]);
 
+  
   function getImage(images) {
     if (Array.isArray(images)) {
       let array = images.map((e) => e.public_id);

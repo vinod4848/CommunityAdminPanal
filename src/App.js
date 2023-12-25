@@ -11,6 +11,9 @@ import Advertisinglist from "./pages/AdvertisingList";
 import Eventlist from "./pages/EventList";
 import Joblist from "./pages/JobList"
 import Newslist from "./pages/NewsList"
+import JobListApprovalPending from "./pages/JobListApprovalPending"
+import MatrimonialListApprovalPending from "./pages/MatrimonialListApprovalPending"
+import EventListApprovalPending from "./pages/EventListApprovalPending"
 import Directorielist from "./pages/DirectorieList"
 import Matrimoniallist from "./pages/Matrimonial.List"
 import Blogcatlist from "./pages/Blogcatlist";
@@ -48,6 +51,9 @@ function App() {
           <Route path="event-list" element={<Eventlist />} />
           <Route path="job-list" element={<Joblist />} />
           <Route path="news-list" element={<Newslist />} />
+          <Route path="approval-job-list" element={<JobListApprovalPending />} />
+          <Route path="approval-list-matrimonial" element={<MatrimonialListApprovalPending />} />
+          <Route path="approval-list-event" element={<EventListApprovalPending />} />
           <Route path="directory-list" element={<Directorielist />} />
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />

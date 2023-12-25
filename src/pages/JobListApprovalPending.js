@@ -1,8 +1,9 @@
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import moment from "moment";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAJob, getJob } from "../features/job/jobSlice";
+import { deleteAJob, getJob, updateAJob } from "../features/job/jobSlice";
 import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
@@ -24,13 +25,14 @@ const columns = [
   {
     title: "Application Deadline",
     dataIndex: "applicationDeadline",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+    render: (deadline) => moment(deadline).format("YYYY-MM-DD HH:mm:ss"),
   },
   { title: "Contact Email", dataIndex: "contactEmail" },
   { title: "Actions", dataIndex: "action" },
+  { title: "Activate/Deactivate", dataIndex: "activateDeactivate" },
 ];
 
-const Joblist = () => {
+const JobListApprovalPending = () => {
   const [jobId, setJobId] = useState();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ const Joblist = () => {
 
   const transformJobData = () => {
     return jobState
-      .filter((job) => job.isPublished) 
+      .filter((job) => !job.isPublished)
       .map((job, index) => ({
         key: index + 1,
         title: job.title,
@@ -61,7 +63,10 @@ const Joblist = () => {
         contactEmail: job.contactEmail,
         action: (
           <>
-            <Link to={`/admin/job/${job._id}`} className="ms-1 fs-5 text-danger">
+            <Link
+              to={`/admin/job/${job._id}`}
+              className="ms-1 fs-5 text-danger"
+            >
               <BiEdit />
             </Link>
             <button
@@ -71,6 +76,14 @@ const Joblist = () => {
               <MdOutlineDelete />
             </button>
           </>
+        ),
+        activateDeactivate: (
+          <Button
+            type="primary"
+            onClick={() => handleActivateDeactivate(job._id, !job.isPublished)}
+          >
+            {job.isPublished ? "Deactivate" : "Activate"}
+          </Button>
         ),
       }));
   };
@@ -92,14 +105,28 @@ const Joblist = () => {
     }, 100);
   };
 
+  const handleActivateDeactivate = async (jobId, isPublished) => {
+    try {
+      await axios.put(`http://localhost:3000/api/jobs/${jobId}`, {
+        isPublished: isPublished,
+      });
+      dispatch(updateAJob({ jobId, isPublished }));
+      setTimeout(() => {
+        dispatch(getJob());
+      }, 100);
+    } catch (error) {
+      console.error("Error updating job:", error);
+    }
+  };
+
   return (
     <div>
-      <h3 className="mb-4 title">Jobs</h3>
+      <h3 className="mb-4 title"> Job Approval Pending</h3>
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}
           dataSource={transformJobData()}
-          scroll={{ x: true }} // Enable horizontal scrolling
+          scroll={{ x: true }}
         />
       </div>
       <CustomModel
@@ -114,4 +141,4 @@ const Joblist = () => {
   );
 };
 
-export default Joblist;
+export default JobListApprovalPending;

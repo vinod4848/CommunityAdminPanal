@@ -23,6 +23,7 @@ const updateEvent = async (event) => {
       image: event.eventData.image,
       category: event.eventData.category,
       date: event.eventData.date,
+      isActive:event.eventData.isActive
     },
     { headers: Config }
   );

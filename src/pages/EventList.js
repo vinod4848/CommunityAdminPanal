@@ -51,7 +51,9 @@ const Eventlist = () => {
   const eventState = useSelector((state) => state.event.events);
 
   const transformeventData = () => {
-    return eventState.map((event, index) => ({
+    return eventState
+    .filter((event) => event.isActive) 
+    .map((event, index) => ({
       key: index + 1,
       title: event.title,
       description: event.description,

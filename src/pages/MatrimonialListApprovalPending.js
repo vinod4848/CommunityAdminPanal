@@ -55,7 +55,7 @@ const columns = [
     title: "Height",
     dataIndex: "height",
   },
-  
+
   {
     title: "Family",
     dataIndex: "family",
@@ -157,7 +157,7 @@ const columns = [
   },
 ];
 
-const Matrimoniallist = () => {
+const MatrimonialListApprovalPending = () => {
   const [matrimonialId, setmatrimonialId] = useState();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -170,7 +170,7 @@ const Matrimoniallist = () => {
 
   const transformmatrimonialData = () => {
     return matrimonialState
-      .filter((matrimonial) => matrimonial.isApproved) 
+      .filter((matrimonial) => !matrimonial.isApproved)
       .map((matrimonial, index) => ({
         key: index + 1,
         firstName: matrimonial.firstName,
@@ -193,12 +193,6 @@ const Matrimoniallist = () => {
         partnerPreferences: matrimonial.partnerPreferences,
         action: (
           <>
-            {/* <Link
-              to={`/admin/matrimonial/${matrimonial._id}`}
-              className=" ms-1 fs-3 text-danger"
-            >
-              <BiEdit />
-            </Link> */}
             <button
               className=" fs-3 text-danger bg-transparent border-0"
               onClick={() => showModal(matrimonial._id)}
@@ -254,4 +248,4 @@ const Matrimoniallist = () => {
   );
 };
 
-export default Matrimoniallist;
+export default MatrimonialListApprovalPending;

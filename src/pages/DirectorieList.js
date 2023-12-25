@@ -1,7 +1,10 @@
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteADirectorie, getDirectorie } from "../features/directory/directorySlice";
+import {
+  deleteADirectorie,
+  getDirectorie,
+} from "../features/directory/directorySlice";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { BiEdit } from "react-icons/bi";
@@ -9,52 +12,59 @@ import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 
 const columns = [
-    {
-      title: "SN",
-      dataIndex: "key",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-    },
-    {
-      title: "Company Name",
-      dataIndex: "companyName",
-    },
-    {
-      title: "Established Date",
-      dataIndex: "establishedDate",
-      render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
-    },
-    {
-      title: "Social Media Links",
-      dataIndex: "socialMediaLinks",
-      render: (socialMediaLinks) => (
-        <span>
-          Facebook: {socialMediaLinks.facebook}, Twitter: {socialMediaLinks.twitter}, LinkedIn: {socialMediaLinks.linkedin}
-        </span>
-      ),
-    },
-    {
-      title: "Tags",
-      dataIndex: "tags",
-      render: (tags) => <span>{tags.join(", ")}</span>,
-    },
-    {
-      title: "Actions",
-      dataIndex: "action",
-    },
-   
-  ];
-  
+  {
+    title: "SN",
+    dataIndex: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+  },
+  {
+    title: "Address",
+    dataIndex: "address",
+  },
+  {
+    title: "Company Name",
+    dataIndex: "companyName",
+  },
+  {
+    title: "Established Date",
+    dataIndex: "establishedDate",
+    render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
+  },
+  {
+    title: "Social Media Links",
+    dataIndex: "socialMediaLinks",
+    render: (socialMediaLinks) => (
+      <span>
+        Facebook: {socialMediaLinks.facebook}, Twitter:{" "}
+        {socialMediaLinks.twitter}, LinkedIn: {socialMediaLinks.linkedin}
+      </span>
+    ),
+  },
+  {
+    title: "Tags",
+    dataIndex: "tags",
+    render: (tags) => <span>{tags.join(", ")}</span>,
+  },
+  {
+    title: "Actions",
+    dataIndex: "action",
+  },
+];
 
 const Directorielist = () => {
   const [directorieId, setdirectorieId] = useState();
@@ -77,13 +87,18 @@ const Directorielist = () => {
       establishedDate: directorie.establishedDate,
       socialMediaLinks: directorie.socialMediaLinks,
       tags: directorie.tags,
+      phone: directorie.userId.phone,
+      email: directorie.userId.email,
       action: (
         <>
-          <Link to={`/admin/directorie/${directorie._id}`} className="fs-3 text-danger">
+          <Link
+            to={`/admin/directorie/${directorie._id}`}
+            className="ms-1 fs-4 text-danger"
+          >
             <BiEdit />
           </Link>
           <button
-            className="ms-2 fs-3 text-danger bg-transparent border-0"
+            className=" fs-4 text-danger bg-transparent border-0"
             onClick={() => showModal(directorie._id)}
           >
             <MdOutlineDelete />
