@@ -104,12 +104,15 @@ export const eventSlice = createSlice({
         state.isLoding = false;
         state.isError = false;
         state.isSuccess = true;
-        state.event.eventData = action.payload.title;
-        state.event.eventData = action.payload.description;
-        state.event.eventData = action.payload.image;
-        state.event.eventData = action.payload.category;
-        state.event.eventData = action.payload.date;
+        const eventData = action.payload; 
+        state.event.eventData.title = eventData.title;
+        state.event.eventData.description = eventData.description;
+        state.event.eventData.image = eventData.image;
+        state.event.eventData.category = eventData.category;
+        state.event.eventData.address = eventData.address;
+        state.event.eventData.date = eventData.date;
       })
+      
       .addCase(getAAEvent.rejected, (state, action) => {
         state.isLoding = false;
         state.isError = true;

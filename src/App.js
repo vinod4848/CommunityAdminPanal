@@ -20,19 +20,10 @@ import Blogcatlist from "./pages/Blogcatlist";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Colorlist from "./pages/Colorlist";
-import Categorylist from "./pages/Categorylist";
-import Brandlist from "./pages/Brandlist";
-import Productlist from "./pages/Productlist";
+import Categorylist from "./pages/Categorylist"
 import AddBlog from "./pages/AddBlog";
-import AddblogCategory from "./pages/Addblogcat";
-import AddColor from "./pages/Addcolor";
-import AddCategory from "./pages/AddCategory";
-import AddBrand from "./pages/Addbrand";
-import Addproduct from "./pages/Addproduct";
-import AddCoupon from "./pages/AddCoupon";
-import CouponList from "./pages/couponlist";
-import ViewOrder from "./pages/ViewOrder";
-import ViewEnq from "./pages/ViewEnq";
+import AddEvent from "./pages/AddEvent";
+
 
 function App() {
   return (
@@ -45,7 +36,6 @@ function App() {
         <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="enquiries" element={<Enquiries />} />
-          <Route path="enquiries/:id" element={<ViewEnq />} />
           <Route path="blog-list" element={<BlogList />} />
           <Route path="advertising-list" element={<Advertisinglist />} />
           <Route path="event-list" element={<Eventlist />} />
@@ -57,28 +47,19 @@ function App() {
           <Route path="directory-list" element={<Directorielist />} />
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />
+          <Route path="events" element={<AddEvent />} />
+          <Route path="events/:id" element={<AddEvent />} />
           <Route path="blog/:id" element={<AddBlog />} />
-          <Route path="coupon-list" element={<CouponList />} />
-          <Route path="coupon/:id" element={<AddCoupon />} />
-          <Route path="coupon" element={<AddCoupon />} />
+
+       
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />
-          <Route path="order/:id" element={<ViewOrder />} />
+       
           <Route path="customers" element={<Customers />} />
           <Route path="list-color" element={<Colorlist />} />
-          <Route path="color" element={<AddColor />} />
-          <Route path="color/:id" element={<AddColor />} />
-          <Route path="category" element={<AddCategory />} />
-          <Route path="category/:id" element={<AddCategory />} />
+     
           <Route path="list-category" element={<Categorylist />} />
-          <Route path="brand" element={<AddBrand />} />
-          <Route path="brand/:id" element={<AddBrand />} />
-          <Route path="list-brand" element={<Brandlist />} />
-          <Route path="product" element={<Addproduct />} />
-          <Route path="product/:id" element={<Addproduct />} />
-          <Route path="product-list" element={<Productlist />} />
-          <Route path="blog-category" element={<AddblogCategory />} />
-          <Route path="blog-category/:id" element={<AddblogCategory />} />
+          
         </Route>
       </Routes>
     </Router>

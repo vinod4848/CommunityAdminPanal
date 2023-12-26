@@ -30,6 +30,10 @@ const columns = [
     dataIndex: "category",
   },
   {
+    title: "Address",
+    dataIndex: "address",
+  },
+  {
     title: "Date",
     dataIndex: "date",
   },
@@ -42,7 +46,7 @@ const columns = [
   },
  
   {
-    title: "Activate",
+    title: "Action",
     dataIndex: "activateDeactivate",
   },
 ];
@@ -68,6 +72,7 @@ const EventListApprovalPending = () => {
         image: event.image,
         category: event.category,
         date: event.date,
+        address: event.address,
         action: (
           <>
             <Link to={`/admin/event/${event._id}`} className="fs-3 text-danger">

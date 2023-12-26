@@ -25,6 +25,10 @@ const columns = [
     dataIndex: "category",
   },
   {
+    title: "Address",
+    dataIndex: "address",
+  },
+  {
     title: "Date",
     dataIndex: "date",
   },
@@ -60,9 +64,10 @@ const Eventlist = () => {
       image: event.image,
       category: event.category,
       date: event.date,
+      address: event.address,
       action: (
         <>
-          <Link to={`/admin/event/${event._id}`} className="fs-3 text-danger">
+          <Link to={`/admin/events/${event._id}`} className="fs-3 text-danger">
             <BiEdit />
           </Link>
           <button

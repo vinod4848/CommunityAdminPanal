@@ -22,6 +22,7 @@ const updateEvent = async (event) => {
       description: event.eventData.description,
       image: event.eventData.image,
       category: event.eventData.category,
+      address: event.eventData.address,
       date: event.eventData.date,
       isActive:event.eventData.isActive
     },
