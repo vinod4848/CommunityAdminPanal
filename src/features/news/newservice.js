@@ -6,7 +6,7 @@ const getNews = async () => {
   const response = await axios.get(`${base_url}news/`, Config);
   return response.data;
 };
-const createNew = async (job) => {
+const createNewService = async (job) => {
   try {
     const response = await axios.post(`${base_url}news`, job, Config);
     return response.data;
@@ -41,7 +41,7 @@ const deleteNew = async (id) => {
 };
 const newService = {
   getNews,
-  createNew,
+  createNewService,
   updateNew,
   getNew,
   deleteNew,

@@ -128,7 +128,7 @@ const MainLayout = () => {
               label: "News",
               children: [
                 {
-                  key: "newa",
+                  key: "news",
                   icon: <FaBlogger className="fs-4" />,
                   label: "Add News",
                 },

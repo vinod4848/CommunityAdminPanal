@@ -23,6 +23,9 @@ import Colorlist from "./pages/Colorlist";
 import Categorylist from "./pages/Categorylist"
 import AddBlog from "./pages/AddBlog";
 import AddEvent from "./pages/AddEvent";
+import AddNews from "./pages/AddNews";
+import AddJob from "./pages/AddJob";
+import AddAdvertisement from "./pages/AddAdvertising";
 
 
 function App() {
@@ -48,18 +51,16 @@ function App() {
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />
           <Route path="events" element={<AddEvent />} />
+          <Route path="job" element={<AddJob />} />
+          <Route path="advertising" element={<AddAdvertisement />} />
           <Route path="events/:id" element={<AddEvent />} />
           <Route path="blog/:id" element={<AddBlog />} />
-
-       
+          <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />
-       
           <Route path="customers" element={<Customers />} />
           <Route path="list-color" element={<Colorlist />} />
-     
           <Route path="list-category" element={<Categorylist />} />
-          
         </Route>
       </Routes>
     </Router>

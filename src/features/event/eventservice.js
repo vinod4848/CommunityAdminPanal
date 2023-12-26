@@ -14,7 +14,7 @@ const createEvent = async (event) => {
     throw new Error("Failed to create event: " + error.message);
   }
 };
-const updateEvent = async (event) => {
+const updateAEvent = async (event) => {
   const response = await axios.put(
     `${base_url}events/${event.id}`,
     {
@@ -43,7 +43,7 @@ const deleteEvent = async (id) => {
 const eventService = {
   getEvents,
   createEvent,
-  updateEvent,
+  updateAEvent,
   getEvent,
   deleteEvent,
 };

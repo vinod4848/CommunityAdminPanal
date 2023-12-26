@@ -21,7 +21,7 @@ export const createEvent = createAsyncThunk(
     }
   }
 );
-export const getAAEvent = createAsyncThunk(
+export const getAEvent = createAsyncThunk(
   "event/get-event",
   async (id, thunkAPI) => {
     try {
@@ -32,10 +32,10 @@ export const getAAEvent = createAsyncThunk(
   }
 );
 export const updateAEvent = createAsyncThunk(
-  "event/get-update",
+  "event/update-event",
   async (id, thunkAPI) => {
     try {
-      return await eventService.updateEvent(id);
+      return await eventService.updateAEvent(id);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -97,23 +97,22 @@ export const eventSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-      .addCase(getAAEvent.pending, (state) => {
+      .addCase(getAEvent.pending, (state) => {
         state.isLoding = true;
       })
-      .addCase(getAAEvent.fulfilled, (state, action) => {
+      .addCase(getAEvent.fulfilled, (state, action) => {
         state.isLoding = false;
         state.isError = false;
         state.isSuccess = true;
-        const eventData = action.payload; 
-        state.event.eventData.title = eventData.title;
-        state.event.eventData.description = eventData.description;
-        state.event.eventData.image = eventData.image;
-        state.event.eventData.category = eventData.category;
-        state.event.eventData.address = eventData.address;
-        state.event.eventData.date = eventData.date;
+        state.setEventdatas = action.payload.getEventdata.title;
+        state.setEventdatas = action.payload.getEventdata.description;
+        state.setEventdatas = action.payload.getEventdata.image;
+        state.setEventdatas = action.payload.getEventdata.category;
+        state.setEventdatas = action.payload.getEventdata.address;
+        state.setEventdatas = action.payload.getEventdata.date;
       })
       
-      .addCase(getAAEvent.rejected, (state, action) => {
+      .addCase(getAEvent.rejected, (state, action) => {
         state.isLoding = false;
         state.isError = true;
         state.isSuccess = false;

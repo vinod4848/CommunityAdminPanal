@@ -12,7 +12,7 @@ export const createNew = createAsyncThunk(
   "news/createNew",
   async (newData, thunkAPI) => {
     try {
-      return await newService.createNew(newData);
+      return await newService.createNewService(newData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -86,7 +86,7 @@ export const jobSlice = createSlice({
         state.isLoding = false;
         state.isError = false;
         state.isSuccess = true;
-        state.createdjob = action.payload;
+        state.createdNew = action.payload;
       })
       .addCase(createNew.rejected, (state, action) => {
         state.isLoding = false;
@@ -103,7 +103,6 @@ export const jobSlice = createSlice({
         state.isSuccess = true;
         state.news.newData = action.payload.title;
         state.news.newData = action.payload.content;
-        state.news.newData = action.payload.author;
         state.news.newData = action.payload.category;
         state.news.newData = action.payload.tags;
         state.news.newData = action.payload.image;
