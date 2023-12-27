@@ -1,5 +1,6 @@
 import { Table, Button } from "antd";
 import { useEffect, useState } from "react";
+import { base_url } from "../utils/base_url";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteAEvent,
@@ -116,7 +117,7 @@ const EventListApprovalPending = () => {
 
   const handleActivateDeactivate = async (eventId, isActive) => {
     try {
-      await axios.put(`http://localhost:3000/api/events/${eventId}`, {
+      await axios.put(`${base_url}/events/${eventId}`, {
         isActive: isActive,
       });
       dispatch(updateAEvent({ eventId, isActive }));

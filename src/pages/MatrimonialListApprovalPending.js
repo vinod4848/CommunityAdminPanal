@@ -1,6 +1,7 @@
 import { Table, Button } from "antd";
 import moment from "moment";
 import axios from "axios";
+import { base_url } from "../utils/base_url";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -208,7 +209,7 @@ const MatrimonialListApprovalPending = () => {
   const handleActivateDeactivate = async (matrimonialId, isApproved) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/matrimonial/profiles/${matrimonialId}`,
+        `${base_url}/matrimonial/profiles/${matrimonialId}`,
         {
           isApproved: isApproved,
         }

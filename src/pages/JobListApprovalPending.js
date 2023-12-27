@@ -1,6 +1,7 @@
 import { Table, Button } from "antd";
 import moment from "moment";
 import axios from "axios";
+import { base_url } from "../utils/base_url";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getJob, updateAJob } from "../features/job/jobSlice";
@@ -73,7 +74,7 @@ const JobListApprovalPending = () => {
 
   const handleActivateDeactivate = async (jobId, isPublished) => {
     try {
-      await axios.put(`http://localhost:3000/api/jobs/${jobId}`, {
+      await axios.put(`${base_url}/jobs/${jobId}`, {
         isPublished: isPublished,
       });
       dispatch(updateAJob({ jobId, isPublished }));
@@ -83,8 +84,7 @@ const JobListApprovalPending = () => {
     } catch (error) {
       console.error("Error updating job:", error);
     }
-  };
-
+  };  
   return (
     <div>
       <h3 className="mb-4 title"> Job Approval Pending</h3>

@@ -137,11 +137,6 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "News List",
                 },
-                {
-                  key: "approval-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Approval Pending",
-                },
               ],
             },
             {
@@ -158,11 +153,6 @@ const MainLayout = () => {
                   key: "advertising-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Advertising  List",
-                },
-                {
-                  key: "approval-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Approval Pending",
                 },
               ],
             },
