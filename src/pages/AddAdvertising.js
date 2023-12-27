@@ -8,7 +8,7 @@ const AddAdvertisement = () => {
 
   const [advertisement, setAdvertisement] = useState({
     clientName: "",
-    campaignName: "",
+    companyName: "",
     image: "",
     startDate: "",
     endDate: "",
@@ -31,7 +31,7 @@ const AddAdvertisement = () => {
 
       toast.success("Advertisement added successfully!");
 
-      navigate("/admin/advertisement-list");
+      navigate("/admin/advertising-list");
     } catch (error) {
       console.error("Error adding advertisement:", error);
 
@@ -57,9 +57,9 @@ const AddAdvertisement = () => {
           <label>Campaign Name:</label>
           <input
             type="text"
-            name="campaignName"
+            name="companyName"
             className="form-control"
-            value={advertisement.campaignName}
+            value={advertisement.companyName}
             onChange={handleChange}
           />
         </div>
@@ -73,27 +73,7 @@ const AddAdvertisement = () => {
           />
         </div>
         <div className="mb-3">
-          <label>Start Date:</label>
-          <input
-            type="datetime-local"
-            name="startDate"
-            className="form-control"
-            value={advertisement.startDate}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label>End Date:</label>
-          <input
-            type="datetime-local"
-            name="endDate"
-            className="form-control"
-            value={advertisement.endDate}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <button type="submit" className="btn btn-success">
+          <button type="submit" className="btn btn-success form-control">
             Add Advertisement
           </button>
         </div>

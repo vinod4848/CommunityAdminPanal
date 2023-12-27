@@ -76,7 +76,7 @@ const MainLayout = () => {
                   label: "User List",
                 },
                 {
-                  key: "approval-list",
+                  key: "approval-list-user",
                   icon: <ImBlog className="fs-4" />,
                   label: "Approval Pending",
                 },
@@ -150,7 +150,7 @@ const MainLayout = () => {
               label: "Advertising ",
               children: [
                 {
-                  key: "advertising ",
+                  key: "advertising",
                   icon: <FaBlogger className="fs-4" />,
                   label: "Add Advertising ",
                 },

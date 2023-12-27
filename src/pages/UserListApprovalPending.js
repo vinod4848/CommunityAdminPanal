@@ -12,7 +12,12 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     defaultSortOrder: "descend",
-    sorter: (a, b) => a.name.length - b.name.length,
+    sorter: (a, b) => {
+      const nameA = String(a.name).toLowerCase();
+      const nameB = String(b.name).toLowerCase();
+
+      return nameA.localeCompare(nameB);
+    },
   },
   {
     title: "Email",
@@ -24,18 +29,17 @@ const columns = [
   },
 ];
 
-const Customers = () => {
+const UserListApprovalPending = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
-
+  let serialNumber = 0;
   const customerstate = useSelector((state) => state.customer.customers);
   const data1 = customerstate
-    .filter((customer) => customer.role !== "admin")
-    .filter((customer) => customer.isPublished)
-    .map((customer, index) => ({
-      key: index + 1,
+    .filter((customer) => customer.role !== "admin" && !customer.isPublished)
+    .map((customer) => ({
+      key: ++serialNumber,
       name: customer.username,
       email: customer.email,
       mobile: customer.phone,
@@ -43,7 +47,7 @@ const Customers = () => {
 
   return (
     <div className="container mt-4">
-      <h3 className="mb-4 title">Users</h3>
+      <h3 className="mb-4 title">Users Approval Pending</h3>
       <div className="card">
         <div className="card-body">
           <Table columns={columns} dataSource={data1} />
@@ -53,4 +57,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default UserListApprovalPending;

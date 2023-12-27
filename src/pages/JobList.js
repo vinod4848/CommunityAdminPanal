@@ -99,7 +99,7 @@ const Joblist = () => {
         <Table
           columns={columns}
           dataSource={transformJobData()}
-          scroll={{ x: true }} // Enable horizontal scrolling
+          scroll={{ x: true }} 
         />
       </div>
       <CustomModel

@@ -26,6 +26,9 @@ import AddEvent from "./pages/AddEvent";
 import AddNews from "./pages/AddNews";
 import AddJob from "./pages/AddJob";
 import AddAdvertisement from "./pages/AddAdvertising";
+import AddDirectory from "./pages/AddDirectorie";
+import AddUser from "./pages/AddUser";
+import UserListApprovalPending from "./pages/UserListApprovalPending";
 
 
 function App() {
@@ -46,6 +49,7 @@ function App() {
           <Route path="news-list" element={<Newslist />} />
           <Route path="approval-job-list" element={<JobListApprovalPending />} />
           <Route path="approval-list-matrimonial" element={<MatrimonialListApprovalPending />} />
+          <Route path="approval-list-user" element={<UserListApprovalPending />} />
           <Route path="approval-list-event" element={<EventListApprovalPending />} />
           <Route path="directory-list" element={<Directorielist />} />
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
@@ -53,6 +57,8 @@ function App() {
           <Route path="events" element={<AddEvent />} />
           <Route path="job" element={<AddJob />} />
           <Route path="advertising" element={<AddAdvertisement />} />
+          <Route path="directory" element={<AddDirectory />} />
+          <Route path="users" element={<AddUser />} />
           <Route path="events/:id" element={<AddEvent />} />
           <Route path="blog/:id" element={<AddBlog />} />
           <Route path="news" element={<AddNews />} />

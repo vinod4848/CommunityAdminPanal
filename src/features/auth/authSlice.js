@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authservice";
+import updateService from "./authservice";
 
 const getUserfromLocalstorage = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
@@ -26,7 +27,16 @@ export const login = createAsyncThunk(
     }
   }
 );
-
+export const updateUser = createAsyncThunk(
+  "User/get-update",
+  async (id, thunkAPI) => {
+    try {
+      return await updateService.updateUser(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const getOrders = createAsyncThunk(
   "user/getAllOrder",
   async (thunkAPI) => {
@@ -70,6 +80,21 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.isMessage = action.error;
         state.isLoding = false;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoding = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoding = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.updatedUser = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoding = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.isMessage = action.error;
       })
       .addCase(getOrders.pending, (state) => {
         state.isLoding = true;

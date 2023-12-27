@@ -22,14 +22,13 @@ const columns = [
   {
     title: "Application Deadline",
     dataIndex: "applicationDeadline",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD HH:mm:ss"),
+    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
   },
   { title: "Contact Email", dataIndex: "contactEmail" },
   { title: "Activate", dataIndex: "activateDeactivate" },
 ];
 
 const JobListApprovalPending = () => {
-
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -99,8 +98,7 @@ const JobListApprovalPending = () => {
       <CustomModel
         hideModal={hideModal}
         open={open}
-        PerformAction={() => {
-        }}
+        PerformAction={() => {}}
         title="Are you sure you want to delete this Job"
       />
     </div>

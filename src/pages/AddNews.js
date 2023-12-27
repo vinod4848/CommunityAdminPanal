@@ -1,174 +1,104 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { React, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import axios from "axios";
+import { base_url } from "../utils/base_url";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { CustomInput } from "../components/CustomInput";
-import {
-  createNew,
-  getAANew,
-  resetState,
-  updateANew,
-} from "../features/news/newSlice";
-
-const userSchema = Yup.object().shape({
-  title: Yup.string().required("Title is Required"),
-  content: Yup.string().required("content is Required"),
-  image: Yup.string(),
-  category: Yup.string().required("category is Required"),
-  tags: Yup.string().required("tags is Required"),
-  date: Yup.date().required("Date is Required"),
-});
 
 const AddNews = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const getNewsId = location.pathname.split("/")[3];
-  const NewsState = useSelector((state) => state.news);
-  const { isSuccess, isError, isLoding, createdNew, updatedNews, newData } =
-    NewsState;
-
-  useEffect(() => {
-    if (getNewsId !== undefined) {
-      dispatch(getAANew(getNewsId));
-    } else {
-      dispatch(resetState());
-    }
-  }, [dispatch, getNewsId]);
-
-  useEffect(() => {
-    if (isSuccess && createdNew) {
-      toast.success("News Added Successfully!");
-    }
-    if (updateANew && isSuccess) {
-      toast.success("News Updated Successfully!");
-      navigate("/admin/list-event");
-    }
-    if (isError) {
-      toast.error("Something went wrong!");
-    }
-  }, [isSuccess, isError, isLoding, updatedNews, createdNew, navigate]);
-
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      title: newData?.title || "",
-      content: newData?.content || "",
-      category: newData?.category || "",
-      tags: newData?.tags || "",
-      image: newData?.image || "",
-    },
-    validationSchema: userSchema,
-    onSubmit: async (values) => {
-      try {
-        if (getNewsId !== undefined) {
-          const data = { id: getNewsId, newData: values };
-          dispatch(updateANew(data));
-        } else {
-          dispatch(createNew(values));
-        }
-
-        toast.success(
-          getNewsId !== undefined
-            ? "News Updated Successfully!"
-            : "News Added Successfully!"
-        );
-
-        formik.resetForm();
-        dispatch(resetState());
-        navigate("/admin/event-list");
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("Something went wrong!");
-      }
-    },
+  const [news, setJob] = useState({
+    title: "",
+    content: "",
+    category: "",
+    tags: "",
+    image: "",
   });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setJob((prevJob) => ({ ...prevJob, [name]: value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(`${base_url}/news`, news);
+      console.log("Job added successfully:", response.data);
+      toast.success("Job added successfully!");
+      navigate("/admin/news-list");
+    } catch (error) {
+      console.error("Error adding news:", error);
+
+      toast.error("Error adding news. Please try again.");
+    }
+  };
+  <ToastContainer position="top-center" autoClose={3000} hideProgressBar />;
   return (
-    <div>
-      <h3 className="mb-4 title">
-        {getNewsId !== undefined ? "Edit" : "Add"} News
-      </h3>
-      <div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="d-flex gap-3 flex-column"
-        >
-          <CustomInput
+    <div className="container mt-5">
+      <h1>Add News</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label>Title:</label>
+          <input
             type="text"
-            label="Enter News title"
             name="title"
-            onChange={formik.handleChange("title")}
-            onBlur={formik.handleBlur("title")}
-            values={formik.values.title}
-            id="event"
+            className="form-control"
+            value={news.title}
+            onChange={handleChange}
           />
-          <div className="error">
-            {formik.touched.title && formik.errors.title}
-          </div>
+        </div>
 
-          <CustomInput
+        <div className="mb-3">
+          <label>Category:</label>
+          <input
             type="text"
-            label="content"
-            name="content"
-            onChange={formik.handleChange("content")}
-            onBlur={formik.handleBlur("content")}
-            val={formik.values.content}
-            id="content"
-          />
-          <div className="error">
-            {formik.touched.content && formik.errors.content}
-          </div>
-          <CustomInput
-            type="text"
-            label="category"
             name="category"
-            onChange={formik.handleChange("category")}
-            onBlur={formik.handleBlur("category")}
-            value={formik.values.category}
-            id="category"
+            className="form-control"
+            value={news.category}
+            onChange={handleChange}
           />
-          <div className="error">
-            {formik.touched.category && formik.errors.category}
-          </div>
-
-          <CustomInput
-            type="textarea"
-            label="tags"
+        </div>
+        <div className="mb-3">
+          <label>Tags:</label>
+          <input
+            type="text"
             name="tags"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.tags}
-            id="tags"
+            className="form-control"
+            value={news.tags}
+            onChange={handleChange}
           />
-          <div className="error">
-            {formik.touched.tags && formik.errors.tags}
-          </div>
-
-          <CustomInput
+        </div>
+        <div className="mb-3">
+          <label>Content:</label>
+          <textarea
+            name="content"
+            className="form-control"
+            value={news.content}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Image:</label>
+          <input
             type="file"
-            label="image"
             name="image"
-            onChange={(e) => {
-              formik.setFieldValue("image", e.currentTarget.files[0]);
-            }}
-            onBlur={formik.handleBlur("image")}
-            id="image"
+            className="form-control"
+            value={news.image}
+            onChange={handleChange}
           />
-          <div className="error">
-            {formik.touched.image && formik.errors.image}
-          </div>
+        </div>
 
+        <div className="mb-3">
           <button
-            className="btn btn-success border-0 rounded-3 my-5"
             type="submit"
+            className="btn btn-success border-0 rounde-3 my-5 form-control"
           >
-            {getNewsId !== undefined ? "Edit" : "Add"} News
+            Add News
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
