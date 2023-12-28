@@ -60,7 +60,7 @@ function App() {
           <Route path="directory" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="events/:id" element={<AddEvent />} />
-          <Route path="blog/:id" element={<AddBlog />} />
+          <Route path="blogs/:blogId" element={<AddBlog />} />
           <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />

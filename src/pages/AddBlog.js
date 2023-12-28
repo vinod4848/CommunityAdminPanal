@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 
 const AddBlog = () => {
   const navigate = useNavigate();
+  const { blogId } = useParams();
 
   const [blog, setBlog] = useState({
     title: "",
     description: "",
     image: null,
   });
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        if (blogId) {
+          const response = await axios.get(`${base_url}/blogs/${blogId}`);
+          setBlog(response.data, " chck data ");
+        }
+      } catch (error) {
+        console.error("Error fetching blog:", error);
+      }
+    };
+
+    fetchBlog();
+  }, [blogId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -26,36 +42,45 @@ const AddBlog = () => {
     e.preventDefault();
 
     try {
-      const blogResponse = await axios.post(`${base_url}/blogs`, {
-        title: blog.title,
-        description: blog.description,
-      });
+      if (blogId) {
+        await axios.put(`${base_url}/blogs/${blogId}`, {
+          title: blog.title,
+          description: blog.description,
+          image: blog.image,
+        });
 
-      const blogId = blogResponse.data._id;
+        console.log("Blog updated successfully");
+        toast.success("Blog updated successfully!");
+      } else {
+        const blogResponse = await axios.post(`${base_url}/blogs`, {
+          title: blog.title,
+          description: blog.description,
+        });
 
-      const formData = new FormData();
-      formData.append("image", blog.image);
+        const newBlogId = blogResponse.data._id;
 
-      await axios.post(
-        `${base_url}/uploadImage/blogs/${blogId}`,
-        formData
-      );
+        const formData = new FormData();
+        formData.append("image", blog.image);
 
-      console.log("Blog and image added successfully");
+        await axios.post(
+          `${base_url}/uploadImage/blogs/${newBlogId}`,
+          formData
+        );
 
-      toast.success("Blog and image added successfully!");
+        console.log("New blog and image added successfully");
+        toast.success("New blog and image added successfully!");
+      }
 
       navigate("/admin/blog-list");
     } catch (error) {
-      console.error("Error adding blog:", error);
-
-      toast.error("Error adding blog. Please try again.");
+      console.error("Error adding/updating blog:", error);
+      toast.error("Error adding/updating blog. Please try again.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1>Add Blog</h1>
+      <h1>{blogId ? "Edit Blog" : "Add Blog"}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Title</label>
@@ -88,7 +113,7 @@ const AddBlog = () => {
         </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
-            Add Blog
+            {blogId ? "Update Blog" : "Add Blog"}
           </button>
         </div>
       </form>

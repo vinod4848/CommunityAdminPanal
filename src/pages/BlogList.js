@@ -56,7 +56,7 @@ const Bloglist = () => {
       image: blog.image,
       action: (
         <>
-          <Link to={`/admin/blog/${blog._id}`} className="fs-3 text-danger">
+          <Link to={`/admin/blogs/${blog._id}`} className="fs-3 text-danger">
             <BiEdit />
           </Link>
           <button
