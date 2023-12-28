@@ -3,8 +3,8 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAJob, getJob } from "../features/job/jobSlice";
-import { Link } from "react-router-dom";
-import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 
@@ -61,9 +61,9 @@ const Joblist = () => {
         contactEmail: job.contactEmail,
         action: (
           <>
-            <Link to={`/admin/job/${job._id}`} className="ms-1 fs-5 text-danger">
+            {/* <Link to={`/admin/job/${job._id}`} className="ms-1 fs-5 text-danger">
               <BiEdit />
-            </Link>
+            </Link> */}
             <button
               className="fs-5 text-danger bg-transparent border-0"
               onClick={() => showModal(job._id)}

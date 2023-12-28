@@ -193,11 +193,6 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Directory  List",
                 },
-                {
-                  key: "approval-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Approval Pending",
-                },
               ],
             },
 

@@ -5,8 +5,8 @@ import {
   deleteAAdvertising,
   getAdvertising,
 } from "../features/advertising/advertisingSlice";
-import { Link } from "react-router-dom";
-import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 
@@ -53,12 +53,12 @@ const Advertisinglist = () => {
       image: advertising.image,
       action: (
         <>
-          <Link
+          {/* <Link
             to={`/admin/advertising/${advertising._id}`}
             className="fs-3 text-danger"
           >
             <BiEdit />
-          </Link>
+          </Link> */}
           <button
             className="ms-2 fs-3 text-danger bg-transparent border-0"
             onClick={() => showModal(advertising._id)}

@@ -3,33 +3,47 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
+
 const AddAdvertisement = () => {
   const navigate = useNavigate();
 
   const [advertisement, setAdvertisement] = useState({
     clientName: "",
     companyName: "",
-    image: "",
-    startDate: "",
-    endDate: "",
+    image: null,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAdvertisement((prevAd) => ({ ...prevAd, [name]: value }));
+    const { name, value, files } = e.target;
+
+    setAdvertisement((prevAd) => ({
+      ...prevAd,
+      [name]: name === "image" ? files[0] : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${base_url}/advertisements`,
-        advertisement
-      );
-      console.log("Advertisement added successfully:", response.data);
+      const adResponse = await axios.post(`${base_url}/advertisements`, {
+        clientName: advertisement.clientName,
+        companyName: advertisement.companyName,
+      });
 
-      toast.success("Advertisement added successfully!");
+      const adId = adResponse.data._id;
+
+      const formData = new FormData();
+      formData.append("image", advertisement.image);
+
+      await axios.post(
+        `${base_url}/uploadImage/advertisements/${adId}`,
+        formData
+      );
+
+      console.log("Advertisement and image added successfully");
+
+      toast.success("Advertisement and image added successfully!");
 
       navigate("/admin/advertising-list");
     } catch (error) {

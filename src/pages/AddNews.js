@@ -1,32 +1,51 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { base_url } from "../utils/base_url";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { base_url } from "../utils/base_url";
 
 const AddNews = () => {
   const navigate = useNavigate();
-  const [news, setJob] = useState({
+
+  const [news, setNews] = useState({
     title: "",
     content: "",
     category: "",
     tags: "",
-    image: "",
+    image: null,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setJob((prevJob) => ({ ...prevJob, [name]: value }));
+    const { name, value, files } = e.target;
+
+    setNews((prevNews) => ({
+      ...prevNews,
+      [name]: name === "image" ? files[0] : value,
+    }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${base_url}/news`, news);
-      console.log("Job added successfully:", response.data);
-      toast.success("Job added successfully!");
+      const newsResponse = await axios.post(`${base_url}/news`, {
+        title: news.title,
+        content: news.content,
+        category: news.category,
+        tags: news.tags,
+      });
+
+      const newsId = newsResponse.data._id;
+
+      const formData = new FormData();
+      formData.append("image", news.image);
+
+      await axios.post(`${base_url}/uploadImage/news/${newsId}`, formData);
+
+      console.log("News and image added successfully");
+
+      toast.success("News and image added successfully!");
+
       navigate("/admin/news-list");
     } catch (error) {
       console.error("Error adding news:", error);
@@ -34,7 +53,7 @@ const AddNews = () => {
       toast.error("Error adding news. Please try again.");
     }
   };
-  <ToastContainer position="top-center" autoClose={3000} hideProgressBar />;
+
   return (
     <div className="container mt-5">
       <h1>Add News</h1>
@@ -85,16 +104,12 @@ const AddNews = () => {
             type="file"
             name="image"
             className="form-control"
-            value={news.image}
             onChange={handleChange}
           />
         </div>
 
         <div className="mb-3">
-          <button
-            type="submit"
-            className="btn btn-success border-0 rounde-3 my-5 form-control"
-          >
+          <button type="submit" className="btn btn-success form-control">
             Add News
           </button>
         </div>
