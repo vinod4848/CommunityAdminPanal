@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 
 const AddDirectory = () => {
   const navigate = useNavigate();
-  const [directorydata, setDirectory] = useState({
-    userId: "657949178e2b5917b09975cb",
+  const { directoryId } = useParams();
+
+  const initialDirectoryState = {
     name: "",
     firstName: "",
     lastName: "",
@@ -21,7 +22,26 @@ const AddDirectory = () => {
       linkedin: "",
     },
     tags: [],
-  });
+  };
+
+  const [directory, setDirectory] = useState(initialDirectoryState);
+
+  useEffect(() => {
+    const fetchDirectory = async () => {
+      try {
+        if (directoryId) {
+          const response = await axios.get(
+            `${base_url}/directories/${directoryId}`
+          );
+          setDirectory(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching directory:", error);
+      }
+    };
+
+    fetchDirectory();
+  }, [directoryId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,33 +74,39 @@ const AddDirectory = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${base_url}/directories`,
-        directorydata
-      );
-      console.log("Directory added successfully:", response.data);
+      if (directoryId) {
+        await axios.put(`${base_url}/directories/${directoryId}`, directory);
+        console.log("Directory updated successfully");
 
-      toast.success("Directory added successfully!");
+        toast.success("Directory updated successfully!");
+      } else {
+        await axios.post(`${base_url}/directories`, directory);
+        console.log("Directory added successfully");
+
+        toast.success("Directory added successfully!");
+      }
+
+      setDirectory(initialDirectoryState);
 
       navigate("/admin/directory-list");
     } catch (error) {
-      console.error("Error adding directory:", error);
+      console.error("Error adding/updating directory:", error);
 
-      toast.error("Error adding directory. Please try again.");
+      toast.error("Error adding/updating directory. Please try again.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1>Add Dateirectory</h1>
+      <h1>{directoryId ? "Edit Directory" : "Add Directory"}</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+      <div className="mb-3">
           <label> Name</label>
           <input
             type="text"
             name="name"
             className="form-control"
-            value={directorydata.name}
+            value={directory.name}
             onChange={handleChange}
           />
         </div>
@@ -91,7 +117,7 @@ const AddDirectory = () => {
             type="text"
             name="firstName"
             className="form-control"
-            value={directorydata.firstName}
+            value={directory.firstName}
             onChange={handleChange}
           />
         </div>
@@ -102,7 +128,7 @@ const AddDirectory = () => {
             type="text"
             name="lastName"
             className="form-control"
-            value={directorydata.lastName}
+            value={directory.lastName}
             onChange={handleChange}
           />
         </div>
@@ -114,7 +140,7 @@ const AddDirectory = () => {
             type="text"
             name="address"
             className="form-control"
-            value={directorydata.address}
+            value={directory.address}
             onChange={handleChange}
           />
         </div>
@@ -125,7 +151,7 @@ const AddDirectory = () => {
           <textarea
             name="description"
             className="form-control"
-            value={directorydata.description}
+            value={directory.description}
             onChange={handleChange}
           />
         </div>
@@ -137,7 +163,7 @@ const AddDirectory = () => {
             type="text"
             name="companyName"
             className="form-control"
-            value={directorydata.companyName}
+            value={directory.companyName}
             onChange={handleChange}
           />
         </div>
@@ -147,7 +173,7 @@ const AddDirectory = () => {
             type="text"
             name="tags"
             className="form-control"
-            value={directorydata.tags.join(",")}
+            value={directory.tags.join(",")}
             onChange={handleTagsChange}
           />
         </div>
@@ -158,7 +184,7 @@ const AddDirectory = () => {
             type="date"
             name="establishedDate"
             className="form-control"
-            value={directorydata.establishedDate}
+            value={directory.establishedDate}
             onChange={handleChange}
           />
         </div>
@@ -170,7 +196,7 @@ const AddDirectory = () => {
             type="text"
             name="facebook"
             className="form-control"
-            value={directorydata.socialMediaLinks.facebook}
+            value={directory.socialMediaLinks.facebook}
             onChange={(e) =>
               handleSocialMediaChange("facebook", e.target.value)
             }
@@ -184,7 +210,7 @@ const AddDirectory = () => {
             type="text"
             name="twitter"
             className="form-control"
-            value={directorydata.socialMediaLinks.twitter}
+            value={directory.socialMediaLinks.twitter}
             onChange={(e) => handleSocialMediaChange("twitter", e.target.value)}
           />
         </div>
@@ -196,15 +222,16 @@ const AddDirectory = () => {
             type="text"
             name="linkedin"
             className="form-control"
-            value={directorydata.socialMediaLinks.linkedin}
+            value={directory.socialMediaLinks.linkedin}
             onChange={(e) =>
               handleSocialMediaChange("linkedin", e.target.value)
             }
           />
         </div>
+
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
-            Add Directory
+            {directoryId ? "Update Directory" : "Add Directory"}
           </button>
         </div>
       </form>

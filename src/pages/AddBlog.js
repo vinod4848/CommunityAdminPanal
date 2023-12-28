@@ -8,18 +8,20 @@ const AddBlog = () => {
   const navigate = useNavigate();
   const { blogId } = useParams();
 
-  const [blog, setBlog] = useState({
+  const initialBlogState = {
     title: "",
     description: "",
     image: null,
-  });
+  };
+
+  const [blog, setBlog] = useState(initialBlogState);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         if (blogId) {
           const response = await axios.get(`${base_url}/blogs/${blogId}`);
-          setBlog(response.data, " chck data ");
+          setBlog(response.data);
         }
       } catch (error) {
         console.error("Error fetching blog:", error);
@@ -36,6 +38,10 @@ const AddBlog = () => {
       ...prevBlog,
       [name]: name === "image" ? files[0] : value,
     }));
+  };
+
+  const handleFormReset = () => {
+    setBlog(initialBlogState);
   };
 
   const handleSubmit = async (e) => {
@@ -70,6 +76,7 @@ const AddBlog = () => {
         console.log("New blog and image added successfully");
         toast.success("New blog and image added successfully!");
       }
+      handleFormReset();
 
       navigate("/admin/blog-list");
     } catch (error) {

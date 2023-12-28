@@ -54,13 +54,14 @@ function App() {
           <Route path="directory-list" element={<Directorielist />} />
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />
+          <Route path="blogs/:blogId" element={<AddBlog />} />
           <Route path="events" element={<AddEvent />} />
           <Route path="job" element={<AddJob />} />
           <Route path="advertising" element={<AddAdvertisement />} />
           <Route path="directory" element={<AddDirectory />} />
+          <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="events/:id" element={<AddEvent />} />
-          <Route path="blogs/:blogId" element={<AddBlog />} />
           <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />
