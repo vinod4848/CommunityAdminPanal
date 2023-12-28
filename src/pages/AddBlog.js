@@ -111,6 +111,17 @@ const AddBlog = () => {
             onChange={handleChange}
           />
         </div>
+        {blogId && blog.image && (
+          <div>
+            <label>Current Blog Image:</label>
+            <img
+              src={blog.image}
+              alt="Current Blog"
+              style={{ maxWidth: "100px" }}
+            />
+          </div>
+        )}
+
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
             {blogId ? "Update Blog" : "Add Blog"}
