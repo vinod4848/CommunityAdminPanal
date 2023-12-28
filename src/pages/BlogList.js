@@ -24,6 +24,13 @@ const columns = [
     ),
   },
   {
+    title: "Event Banner",
+    dataIndex: "image",
+    render: (image) => (
+      <img src={image} alt="EventBanner" style={{ maxWidth: "100px" }} />
+    ),
+  },
+  {
     title: "Actions",
     dataIndex: "action",
   },
@@ -46,6 +53,7 @@ const Bloglist = () => {
       key: index + 1,
       title: blog.title,
       description: blog.description,
+      image: blog.image,
       action: (
         <>
           <Link to={`/admin/blog/${blog._id}`} className="fs-3 text-danger">
