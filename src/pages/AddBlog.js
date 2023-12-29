@@ -11,6 +11,7 @@ const AddBlog = () => {
   const initialBlogState = {
     title: "",
     description: "",
+    category: "",
     image: null,
   };
 
@@ -52,6 +53,7 @@ const AddBlog = () => {
         await axios.put(`${base_url}/blogs/${blogId}`, {
           title: blog.title,
           description: blog.description,
+          category: blog.category,
           image: blog.image,
         });
 
@@ -61,6 +63,7 @@ const AddBlog = () => {
         const blogResponse = await axios.post(`${base_url}/blogs`, {
           title: blog.title,
           description: blog.description,
+          category: blog.category,
         });
 
         const newBlogId = blogResponse.data._id;
@@ -106,6 +109,16 @@ const AddBlog = () => {
             name="description"
             className="form-control"
             value={blog.description}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Category</label>
+          <input
+            type="text"
+            name="category"
+            className="form-control"
+            value={blog.category}
             onChange={handleChange}
           />
         </div>

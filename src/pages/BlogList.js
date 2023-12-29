@@ -17,11 +17,13 @@ const columns = [
     dataIndex: "title",
   },
   {
+    title: "Category",
+    dataIndex: "category",
+  },
+  {
     title: "Description",
     dataIndex: "description",
-    render: (text) => (
-      <span title={text}>{truncateDescription(text, 50)}</span>
-    ),
+    render: (text) => <span title={text}>{truncateDescription(text, 50)}</span>,
   },
   {
     title: "Event Banner",
@@ -53,6 +55,7 @@ const Bloglist = () => {
       key: index + 1,
       title: blog.title,
       description: blog.description,
+      category: blog.category,
       image: blog.image,
       action: (
         <>
