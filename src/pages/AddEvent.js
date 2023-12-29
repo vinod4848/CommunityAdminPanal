@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 
 const AddEvent = () => {
   const navigate = useNavigate();
+  const { eventId } = useParams();
 
   const [event, setEvent] = useState({
     title: "",
@@ -15,6 +16,29 @@ const AddEvent = () => {
     date: "",
     image: null,
   });
+
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      try {
+        if (eventId) {
+          const response = await axios.get(`${base_url}/events/${eventId}`);
+          const { title, description, address, category, date } = response.data;
+          setEvent({
+            title,
+            description,
+            address,
+            category,
+            date: new Date(date).toISOString().split("T")[0],
+            image: null,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      }
+    };
+
+    fetchEventDetails();
+  }, [eventId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -29,36 +53,54 @@ const AddEvent = () => {
     e.preventDefault();
 
     try {
-      const adResponse = await axios.post(`${base_url}/events`, {
-        title: event.title,
-        description: event.description,
-        address: event.address,
-        category: event.category,
-        date: event.date,
-      });
+      let response;
 
-      const adId = adResponse.data._id;
+      if (eventId) {
+        response = await axios.put(`${base_url}/events/${eventId}`, {
+          title: event.title,
+          description: event.description,
+          address: event.address,
+          category: event.category,
+          date: event.date,
+        });
 
-      const formData = new FormData();
-      formData.append("image", event.image);
+        console.log("Event updated successfully");
+        toast.success("Event updated successfully!");
+      } else {
+        // Create new event
+        response = await axios.post(`${base_url}/events`, {
+          title: event.title,
+          description: event.description,
+          address: event.address,
+          category: event.category,
+          date: event.date,
+        });
 
-      await axios.post(`${base_url}/uploadImage/event/${adId}`, formData);
+        console.log("Event added successfully");
+        toast.success("Event added successfully!");
+      }
 
-      console.log("Event and image added successfully");
+      // Handle image upload if needed
+      if (response.data._id && event.image) {
+        const formData = new FormData();
+        formData.append("image", event.image);
 
-      toast.success("Event and image added successfully!");
+        await axios.post(
+          `${base_url}/uploadImage/event/${response.data._id}`,
+          formData
+        );
+      }
 
       navigate("/admin/event-list");
     } catch (error) {
-      console.error("Error adding event:", error);
-
-      toast.error("Error adding event. Please try again.");
+      console.error("Error adding/updating event:", error);
+      toast.error("Error adding/updating event. Please try again.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1>Add Event</h1>
+      <h1>{eventId ? "Edit Event" : "Add Event"}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Title:</label>

@@ -61,7 +61,7 @@ function App() {
           <Route path="directory" element={<AddDirectory />} />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
-          <Route path="events/:id" element={<AddEvent />} />
+          <Route path="events/:eventId" element={<AddEvent />} />
           <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />
