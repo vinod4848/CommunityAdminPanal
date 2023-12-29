@@ -67,7 +67,7 @@ const AddEvent = () => {
         console.log("Event updated successfully");
         toast.success("Event updated successfully!");
       } else {
-        // Create new event
+
         response = await axios.post(`${base_url}/events`, {
           title: event.title,
           description: event.description,
@@ -79,8 +79,6 @@ const AddEvent = () => {
         console.log("Event added successfully");
         toast.success("Event added successfully!");
       }
-
-      // Handle image upload if needed
       if (response.data._id && event.image) {
         const formData = new FormData();
         formData.append("image", event.image);

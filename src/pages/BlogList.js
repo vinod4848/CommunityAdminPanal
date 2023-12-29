@@ -51,26 +51,31 @@ const Bloglist = () => {
   const blogState = useSelector((state) => state.blog.blogs);
 
   const transformBlogData = () => {
-    return blogState.map((blog, index) => ({
-      key: index + 1,
-      title: blog.title,
-      description: blog.description,
-      category: blog.category,
-      image: blog.image,
-      action: (
-        <>
-          <Link to={`/admin/blogs/${blog._id}`} className="fs-3 text-danger">
-            <BiEdit />
-          </Link>
-          <button
-            className="ms-2 fs-3 text-danger bg-transparent border-0"
-            onClick={() => showModal(blog._id)}
-          >
-            <MdOutlineDelete />
-          </button>
-        </>
-      ),
-    }));
+    return blogState.map((blog, index) => {
+      const doc = new DOMParser().parseFromString(blog.description, 'text/html');
+      const plainTextDescription = doc.body.textContent || "";
+
+      return {
+        key: index + 1,
+        title: blog.title,
+        description: plainTextDescription,
+        category: blog.category,
+        image: blog.image,
+        action: (
+          <>
+            <Link to={`/admin/blogs/${blog._id}`} className="fs-3 text-danger">
+              <BiEdit />
+            </Link>
+            <button
+              className="ms-2 fs-3 text-danger bg-transparent border-0"
+              onClick={() => showModal(blog._id)}
+            >
+              <MdOutlineDelete />
+            </button>
+          </>
+        ),
+      };
+    });
   };
 
   const showModal = (blogId) => {

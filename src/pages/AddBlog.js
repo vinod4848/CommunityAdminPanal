@@ -2,6 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import { base_url } from "../utils/base_url";
 
 const AddBlog = () => {
@@ -10,9 +22,9 @@ const AddBlog = () => {
 
   const initialBlogState = {
     title: "",
-    description: "",
+    description: EditorState.createEmpty(),
     category: "",
-    image: null,
+    image: "", 
   };
 
   const [blog, setBlog] = useState(initialBlogState);
@@ -22,7 +34,18 @@ const AddBlog = () => {
       try {
         if (blogId) {
           const response = await axios.get(`${base_url}/blogs/${blogId}`);
-          setBlog(response.data);
+          const blogData = response.data;
+
+          setBlog({
+            title: blogData.title,
+            description: EditorState.createWithContent(
+              ContentState.createFromBlockArray(
+                convertFromHTML(blogData.description)
+              )
+            ),
+            category: blogData.category,
+            image: blogData.image || "", 
+          });
         }
       } catch (error) {
         console.error("Error fetching blog:", error);
@@ -32,13 +55,8 @@ const AddBlog = () => {
     fetchBlog();
   }, [blogId]);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    setBlog((prevBlog) => ({
-      ...prevBlog,
-      [name]: name === "image" ? files[0] : value,
-    }));
+  const handleChange = (editorState) => {
+    setBlog((prevBlog) => ({ ...prevBlog, description: editorState }));
   };
 
   const handleFormReset = () => {
@@ -49,10 +67,13 @@ const AddBlog = () => {
     e.preventDefault();
 
     try {
+      const contentState = blog.description.getCurrentContent();
+      const rawContentState = convertToRaw(contentState);
+
       if (blogId) {
         await axios.put(`${base_url}/blogs/${blogId}`, {
           title: blog.title,
-          description: blog.description,
+          description: draftToHtml(rawContentState),
           category: blog.category,
           image: blog.image,
         });
@@ -62,7 +83,7 @@ const AddBlog = () => {
       } else {
         const blogResponse = await axios.post(`${base_url}/blogs`, {
           title: blog.title,
-          description: blog.description,
+          description: draftToHtml(rawContentState),
           category: blog.category,
         });
 
@@ -99,19 +120,25 @@ const AddBlog = () => {
             name="title"
             className="form-control"
             value={blog.title}
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...blog, title: e.target.value })}
           />
         </div>
         <div className="mb-3">
           <label>Description</label>
-          <input
-            type="text"
-            name="description"
-            className="form-control"
-            value={blog.description}
-            onChange={handleChange}
+          <Editor
+            editorState={blog.description}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor custom-editor-class" 
+            onEditorStateChange={handleChange}
+            editorStyle={{
+              backgroundColor: "white", 
+              height: "130px", 
+              border:"2px",
+              // eslint-disable-next-line no-dupe-keys
+              border: "1px solid #ccc",
+            }}
           />
-        </div>
+          </div>
         <div className="mb-3">
           <label>Category</label>
           <input
@@ -119,7 +146,7 @@ const AddBlog = () => {
             name="category"
             className="form-control"
             value={blog.category}
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...blog, category: e.target.value })}
           />
         </div>
         <div className="mb-3">
@@ -128,10 +155,10 @@ const AddBlog = () => {
             type="file"
             name="image"
             className="form-control"
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...blog, image: e.target.files[0] })}
           />
         </div>
-        {blogId && blog.image && (
+        {blogId && blog.image !== null && (
           <div>
             <label>Current Blog Image:</label>
             <img
