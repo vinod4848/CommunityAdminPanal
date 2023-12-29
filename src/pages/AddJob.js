@@ -30,9 +30,9 @@ const AddJob = () => {
     setJob((prevJob) => ({ ...prevJob, [name]: value }));
   };
 
-  const handleArrayChange = (e, key) => {
-    const { value } = e.target;
-    setJob((prevJob) => ({ ...prevJob, [key]: [...prevJob[key], value] }));
+  const handleArrayChange = (e, field) => {
+    const value = e.target.value;
+    setJob((prevJob) => ({ ...prevJob, [field]: [value] }));
   };
 
   const handleSubmit = async (e) => {
@@ -74,52 +74,35 @@ const AddJob = () => {
             onChange={handleChange}
           />
         </div>
+       
+       
         <div className="mb-3">
-          <label>Location:</label>
-          <input
-            type="text"
-            name="location"
-            className="form-control"
-            value={job.location}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Description:</label>
-          <textarea
-            name="description"
-            className="form-control"
-            value={job.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Responsibilities:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={job.responsibilities.join(",")}
+        <label>Responsibilities:</label>
+        <input
+          type="text"
+          className="form-control"
+          value={job.responsibilities[0]}
             onChange={(e) => handleArrayChange(e, "responsibilities")}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Qualifications:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={job.qualifications.join(",")}
+        />
+      </div>
+      <div className="mb-3">
+        <label>Qualifications:</label>
+        <input
+          type="text"
+          className="form-control"
+          value={job.qualifications[0]}
             onChange={(e) => handleArrayChange(e, "qualifications")}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Skills:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={job.skills.join(",")}
+        />
+      </div>
+      <div className="mb-3">
+        <label>Skills:</label>
+        <input
+          type="text"
+          className="form-control"
+          value={job.skills[0]}
             onChange={(e) => handleArrayChange(e, "skills")}
-          />
-        </div>
+        />
+      </div>
         <div className="mb-3">
           <label>Employment Type:</label>
           <input
@@ -177,6 +160,16 @@ const AddJob = () => {
             className="form-control"
             name="contactEmail"
             value={job.contactEmail}
+            onChange={handleChange}
+          />
+        </div>
+        
+        <div className="mb-3">
+          <label>Description:</label>
+          <textarea
+            name="description"
+            className="form-control"
+            value={job.description}
             onChange={handleChange}
           />
         </div>

@@ -33,7 +33,14 @@ const AddDirectory = () => {
           const response = await axios.get(
             `${base_url}/directories/${directoryId}`
           );
-          setDirectory(response.data);
+          const updatedData = {
+            ...response.data,
+            establishedDate: new Date(
+              response.data.establishedDate
+            ).toLocaleDateString(),
+          };
+
+          setDirectory(updatedData);
         }
       } catch (error) {
         console.error("Error fetching directory:", error);
@@ -100,7 +107,7 @@ const AddDirectory = () => {
     <div className="container mt-5">
       <h1>{directoryId ? "Edit Directory" : "Add Directory"}</h1>
       <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+        <div className="mb-3">
           <label> Name</label>
           <input
             type="text"

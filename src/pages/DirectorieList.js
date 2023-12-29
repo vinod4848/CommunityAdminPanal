@@ -17,6 +17,14 @@ const columns = [
     dataIndex: "key",
   },
   {
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+  },
+  {
     title: "Name",
     dataIndex: "name",
   },
@@ -87,6 +95,8 @@ const Directorielist = () => {
       establishedDate: directorie.establishedDate,
       socialMediaLinks: directorie.socialMediaLinks,
       tags: directorie.tags,
+      phone: directorie.userId.phone,
+      email: directorie.userId.email,
       action: (
         <>
           <Link
