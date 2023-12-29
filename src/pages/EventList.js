@@ -19,6 +19,10 @@ const columns = [
   {
     title: "Description",
     dataIndex: "description",
+    render: (description) => {
+      // Render HTML content safely
+      return <div dangerouslySetInnerHTML={{ __html: description }} />;
+    },
   },
   {
     title: "Category",
@@ -46,7 +50,7 @@ const columns = [
 ];
 
 const Eventlist = () => {
-  const [eventId, seteventId] = useState();
+  const [eventId, setEventId] = useState();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,36 +58,36 @@ const Eventlist = () => {
   }, [dispatch]);
   const eventState = useSelector((state) => state.event.events);
 
-  const transformeventData = () => {
+  const transformEventData = () => {
     return eventState
-    .filter((event) => event.isActive) 
-    .map((event, index) => ({
-      key: index + 1,
-      title: event.title,
-      description: event.description,
-      image: event.image,
-      category: event.category,
-      date: event.date,
-      address: event.address,
-      action: (
-        <>
-          <Link to={`/admin/events/${event._id}`} className="fs-3 text-danger">
-            <BiEdit />
-          </Link>
-          <button
-            className="ms-2 fs-3 text-danger bg-transparent border-0"
-            onClick={() => showModal(event._id)}
-          >
-            <MdOutlineDelete />
-          </button>
-        </>
-      ),
-    }));
+      .filter((event) => event.isActive)
+      .map((event, index) => ({
+        key: index + 1,
+        title: event.title,
+        description: event.description,
+        image: event.image,
+        category: event.category,
+        date: event.date,
+        address: event.address,
+        action: (
+          <>
+            <Link to={`/admin/events/${event._id}`} className="fs-3 text-danger">
+              <BiEdit />
+            </Link>
+            <button
+              className="ms-2 fs-3 text-danger bg-transparent border-0"
+              onClick={() => showModal(event._id)}
+            >
+              <MdOutlineDelete />
+            </button>
+          </>
+        ),
+      }));
   };
 
   const showModal = (eventId) => {
     setOpen(true);
-    seteventId(eventId);
+    setEventId(eventId);
   };
 
   const hideModal = () => {
@@ -102,7 +106,7 @@ const Eventlist = () => {
     <div>
       <h3 className="mb-4 title">Event</h3>
       <div>
-        <Table columns={columns} dataSource={transformeventData()} />
+        <Table columns={columns} dataSource={transformEventData()} />
       </div>
       <CustomModel
         hideModal={hideModal}

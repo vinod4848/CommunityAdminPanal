@@ -2,92 +2,113 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import { base_url } from "../utils/base_url";
 
 const AddEvent = () => {
   const navigate = useNavigate();
   const { eventId } = useParams();
 
-  const [event, setEvent] = useState({
+  const initialEventState = {
     title: "",
-    description: "",
-    address: "",
+    description: EditorState.createEmpty(),
     category: "",
+    image: "",
+    address: "",
     date: "",
-    image: null,
-  });
+  };
+
+  const [event, setBlog] = useState(initialEventState);
 
   useEffect(() => {
-    const fetchEventDetails = async () => {
+    const fetchBlog = async () => {
       try {
         if (eventId) {
           const response = await axios.get(`${base_url}/events/${eventId}`);
-          const { title, description, address, category, date } = response.data;
-          setEvent({
-            title,
-            description,
-            address,
-            category,
-            date: new Date(date).toISOString().split("T")[0],
-            image: null,
+          const eventdata = response.data;
+
+          setBlog({
+            title: eventdata.title,
+            description: EditorState.createWithContent(
+              ContentState.createFromBlockArray(
+                convertFromHTML(eventdata.description)
+              )
+            ),
+            category: eventdata.category,
+            date: eventdata.date,
+            address: eventdata.address,
+            image: eventdata.image || "",
           });
         }
       } catch (error) {
-        console.error("Error fetching event details:", error);
+        console.error("Error fetching event:", error);
       }
     };
 
-    fetchEventDetails();
+    fetchBlog();
   }, [eventId]);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  const handleChange = (editorState) => {
+    setBlog((prevEvent) => ({ ...prevEvent, description: editorState }));
+  };
 
-    setEvent((prevEvent) => ({
-      ...prevEvent,
-      [name]: name === "image" ? files[0] : value,
-    }));
+  const handleFormReset = () => {
+    setBlog(initialEventState);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      let response;
+      const contentState = event.description.getCurrentContent();
+      const rawContentState = convertToRaw(contentState);
 
       if (eventId) {
-        response = await axios.put(`${base_url}/events/${eventId}`, {
+        await axios.put(`${base_url}/events/${eventId}`, {
           title: event.title,
-          description: event.description,
-          address: event.address,
+          description: draftToHtml(rawContentState),
           category: event.category,
+          address: event.address,
           date: event.date,
+          image: event.image,
         });
 
         console.log("Event updated successfully");
         toast.success("Event updated successfully!");
       } else {
-
-        response = await axios.post(`${base_url}/events`, {
+        const blogResponse = await axios.post(`${base_url}/events`, {
           title: event.title,
-          description: event.description,
-          address: event.address,
+          description: draftToHtml(rawContentState),
           category: event.category,
+          address: event.address,
           date: event.date,
         });
 
-        console.log("Event added successfully");
-        toast.success("Event added successfully!");
-      }
-      if (response.data._id && event.image) {
+        const newEventId = blogResponse.data._id;
+
         const formData = new FormData();
         formData.append("image", event.image);
 
         await axios.post(
-          `${base_url}/uploadImage/event/${response.data._id}`,
+          `${base_url}/uploadImage/event/${newEventId}`,
           formData
         );
+
+        console.log("New event and image added successfully");
+        toast.success("New event and image added successfully!");
       }
+      handleFormReset();
 
       navigate("/admin/event-list");
     } catch (error) {
@@ -101,53 +122,60 @@ const AddEvent = () => {
       <h1>{eventId ? "Edit Event" : "Add Event"}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label>Title:</label>
+          <label>Title</label>
           <input
             type="text"
             name="title"
             className="form-control"
             value={event.title}
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...event, title: e.target.value })}
           />
         </div>
+        
         <div className="mb-3">
-          <label>Description:</label>
-          <input
-            type="text"
-            name="description"
-            className="form-control"
-            value={event.description}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Address:</label>
-          <input
-            type="text"
-            name="address"
-            className="form-control"
-            value={event.address}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label>Category:</label>
+          <label>Category</label>
           <input
             type="text"
             name="category"
             className="form-control"
             value={event.category}
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...event, category: e.target.value })}
           />
         </div>
         <div className="mb-3">
-          <label>Date:</label>
+          <label>Category</label>
+          <input
+            type="text"
+            name="address"
+            className="form-control"
+            value={event.address}
+            onChange={(e) => setBlog({ ...event, address: e.target.value })}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Category</label>
           <input
             type="date"
             name="date"
             className="form-control"
             value={event.date}
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...event, date: e.target.value })}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Description</label>
+          <Editor
+            editorState={event.description}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor custom-editor-class"
+            onEditorStateChange={handleChange}
+            editorStyle={{
+              backgroundColor: "white",
+              height: "130px",
+              border: "2px",
+              // eslint-disable-next-line no-dupe-keys
+              border: "1px solid #ccc",
+            }}
           />
         </div>
         <div className="mb-3">
@@ -156,12 +184,23 @@ const AddEvent = () => {
             type="file"
             name="image"
             className="form-control"
-            onChange={handleChange}
+            onChange={(e) => setBlog({ ...event, image: e.target.files[0] })}
           />
         </div>
+        {eventId && event.image !== null && (
+          <div>
+            <label>Current Event Image:</label>
+            <img
+              src={event.image}
+              alt="Current Event"
+              style={{ maxWidth: "100px" }}
+            />
+          </div>
+        )}
+
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
-            Add Event
+            {eventId ? "Update Event" : "Add Event"}
           </button>
         </div>
       </form>

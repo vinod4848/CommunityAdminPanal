@@ -123,22 +123,7 @@ const AddBlog = () => {
             onChange={(e) => setBlog({ ...blog, title: e.target.value })}
           />
         </div>
-        <div className="mb-3">
-          <label>Description</label>
-          <Editor
-            editorState={blog.description}
-            wrapperClassName="demo-wrapper"
-            editorClassName="demo-editor custom-editor-class" 
-            onEditorStateChange={handleChange}
-            editorStyle={{
-              backgroundColor: "white", 
-              height: "130px", 
-              border:"2px",
-              // eslint-disable-next-line no-dupe-keys
-              border: "1px solid #ccc",
-            }}
-          />
-          </div>
+       
         <div className="mb-3">
           <label>Category</label>
           <input
@@ -149,6 +134,7 @@ const AddBlog = () => {
             onChange={(e) => setBlog({ ...blog, category: e.target.value })}
           />
         </div>
+      
         <div className="mb-3">
           <label>Image:</label>
           <input
@@ -168,7 +154,22 @@ const AddBlog = () => {
             />
           </div>
         )}
-
+        <div className="mb-3">
+          <label>Description</label>
+          <Editor
+            editorState={blog.description}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor custom-editor-class" 
+            onEditorStateChange={handleChange}
+            editorStyle={{
+              backgroundColor: "white", 
+              height: "130px", 
+              border:"2px",
+              // eslint-disable-next-line no-dupe-keys
+              border: "1px solid #ccc",
+            }}
+          />
+          </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
             {blogId ? "Update Blog" : "Add Blog"}

@@ -25,6 +25,10 @@ const columns = [
   {
     title: "Description",
     dataIndex: "description",
+    render: (description) => {
+      // Render HTML content safely
+      return <div dangerouslySetInnerHTML={{ __html: description }} />;
+    },
   },
   {
     title: "Category",
