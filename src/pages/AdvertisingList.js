@@ -24,6 +24,14 @@ const columns = [
     dataIndex: "companyName",
   },
   {
+    title: "BannerSize",
+    dataIndex: "bannerSize",
+  },
+  {
+    title: "Click",
+    dataIndex: "click",
+  },
+  {
     title: "Banner",
     dataIndex: "image",
     render: (image) => <img src={image} alt="Banner" style={{ maxWidth: "100px" }} />,
@@ -51,6 +59,8 @@ const Advertisinglist = () => {
       clientName: advertising.clientName,
       companyName: advertising.companyName,
       image: advertising.image,
+      click: advertising.click,
+      bannerSize: advertising.bannerSize,
       action: (
         <>
           {/* <Link

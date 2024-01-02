@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAEvent, getEvent } from "../features/event/eventSlice";
 import { Link } from "react-router-dom";
@@ -49,20 +49,23 @@ const columns = [
   },
 ];
 
-const Eventlist = () => {
+const CompleteEventList = () => {
   const [eventId, setEventId] = useState();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const eventList = useSelector((state) => state.event.events);
+
   useEffect(() => {
     dispatch(getEvent());
   }, [dispatch]);
-  const eventState = useSelector((state) => state.event.events);
 
   const transformEventData = () => {
     const currentDate = new Date();
 
-    return eventState
-      .filter((event) => event.isActive && new Date(event.date) > currentDate)
+    return eventList
+      .filter(
+        (event) => event.isActive && isEventPassed(event.date, currentDate)
+      )
       .map((event, index) => ({
         key: index + 1,
         title: event.title,
@@ -75,12 +78,12 @@ const Eventlist = () => {
           <>
             <Link
               to={`/admin/events/${event._id}`}
-              className="fs-3 text-danger"
+              className="ms-2 fs-4 text-danger"
             >
               <BiEdit />
             </Link>
             <button
-              className="ms-2 fs-3 text-danger bg-transparent border-0"
+              className="fs-4 text-danger bg-transparent border-0"
               onClick={() => showModal(event._id)}
             >
               <MdOutlineDelete />
@@ -88,6 +91,11 @@ const Eventlist = () => {
           </>
         ),
       }));
+  };
+
+  const isEventPassed = (eventDate, currentDate) => {
+    const eventDateTime = new Date(eventDate);
+    return eventDateTime <= currentDate;
   };
 
   const showModal = (eventId) => {
@@ -109,8 +117,8 @@ const Eventlist = () => {
 
   return (
     <div>
-       <h3 className="mb-4 title" style={{ color: 'green' }}>
-        Upcoming Event
+      <h3 className="mb-4 title" style={{ color: "red" }}>
+        Completed Events
       </h3>
       <div>
         <Table columns={columns} dataSource={transformEventData()} />
@@ -127,4 +135,4 @@ const Eventlist = () => {
   );
 };
 
-export default Eventlist;
+export default CompleteEventList;

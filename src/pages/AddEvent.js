@@ -131,7 +131,7 @@ const AddEvent = () => {
             onChange={(e) => setBlog({ ...event, title: e.target.value })}
           />
         </div>
-        
+
         <div className="mb-3">
           <label>Category</label>
           <input
@@ -143,7 +143,7 @@ const AddEvent = () => {
           />
         </div>
         <div className="mb-3">
-          <label>Category</label>
+          <label>Address</label>
           <input
             type="text"
             name="address"
@@ -153,7 +153,7 @@ const AddEvent = () => {
           />
         </div>
         <div className="mb-3">
-          <label>Category</label>
+          <label>Date</label>
           <input
             type="date"
             name="date"

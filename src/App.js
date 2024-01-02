@@ -9,6 +9,7 @@ import Enquiries from "./pages/Enquiries";
 import BlogList from "./pages/BlogList";
 import Advertisinglist from "./pages/AdvertisingList";
 import Eventlist from "./pages/EventList";
+import CompleteEventList from "./pages/CompleteEventList";
 import Joblist from "./pages/JobList"
 import Newslist from "./pages/NewsList"
 import JobListApprovalPending from "./pages/JobListApprovalPending"
@@ -45,6 +46,7 @@ function App() {
           <Route path="blog-list" element={<BlogList />} />
           <Route path="advertising-list" element={<Advertisinglist />} />
           <Route path="event-list" element={<Eventlist />} />
+          <Route path="complete-event-list" element={<CompleteEventList />} />
           <Route path="job-list" element={<Joblist />} />
           <Route path="news-list" element={<Newslist />} />
           <Route path="approval-job-list" element={<JobListApprovalPending />} />

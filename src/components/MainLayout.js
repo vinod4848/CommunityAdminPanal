@@ -119,6 +119,11 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Approval Pending",
                 },
+                {
+                  key: "complete-event-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Complete List",
+                },
               ],
             },
 

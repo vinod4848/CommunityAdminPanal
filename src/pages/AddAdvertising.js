@@ -10,6 +10,8 @@ const AddAdvertisement = () => {
   const [advertisement, setAdvertisement] = useState({
     clientName: "",
     companyName: "",
+    bannerSize: "",
+    click: "",
     image: null,
   });
 
@@ -29,6 +31,8 @@ const AddAdvertisement = () => {
       const adResponse = await axios.post(`${base_url}/advertisements`, {
         clientName: advertisement.clientName,
         companyName: advertisement.companyName,
+        bannerSize: advertisement.bannerSize,
+        click: advertisement.click,
       });
 
       const adId = adResponse.data._id;
@@ -68,12 +72,32 @@ const AddAdvertisement = () => {
           />
         </div>
         <div className="mb-3">
-          <label>Campaign Name:</label>
+          <label>Company Name</label>
           <input
             type="text"
             name="companyName"
             className="form-control"
             value={advertisement.companyName}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Banner Size :</label>
+          <input
+            type="text"
+            name="bannerSize"
+            className="form-control"
+            value={advertisement.bannerSize}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Click:</label>
+          <input
+            type="text"
+            name="click"
+            className="form-control"
+            value={advertisement.click}
             onChange={handleChange}
           />
         </div>
