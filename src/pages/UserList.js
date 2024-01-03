@@ -1,7 +1,7 @@
-import { Table } from "antd";
+import { Table,Button } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAUser, GetUsers } from "../features/user/userSlice";
+import { deleteAUser, GetUsers ,updateAUser} from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
@@ -33,8 +33,8 @@ const columns = [
     dataIndex: "action",
   },
   {
-    title: "Activate/Deactivate",
-    dataIndex: "activateDeactivate",
+    title: "Activate",
+    dataIndex: "activate",
   },
 ];
 
@@ -51,7 +51,7 @@ const UserList = () => {
 
   const transformUserData = () => {
     return userState
-    .filter((user) => user.role !== "admin" && user.isPublished)
+    .filter((user) => user.role !== "admin" && user.isPublished && !user.isBlocked)
       .map((user, index) => ({
         key: index + 1,
         username: user.username,
@@ -70,10 +70,31 @@ const UserList = () => {
             </button>
           </>
         ),
+        activate: (
+          <Button
+            type="primary"
+            onClick={() => handleActivateDeactivate(user._id, !user.isBlocked)}
+          >
+            {user.isBlocked ? "" : "Blocked"}
+          </Button>
+        ),
+        
         
       }));
   };
-
+  const handleActivateDeactivate = async (userId, isBlocked) => {
+    try {
+      await axios.put(`${base_url}user/blockedUser/${userId}`, {
+        isBlocked: isBlocked,
+      });
+      dispatch(updateAUser({ userId, isBlocked }));
+      setTimeout(() => {
+        dispatch(GetUsers());
+      }, 100);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
   const showModal = (userId) => {
     setOpen(true);
     setUserId(userId);
