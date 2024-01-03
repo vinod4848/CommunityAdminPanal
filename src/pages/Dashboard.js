@@ -3,31 +3,31 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../features/auth/authSlice";
 import { BsArrowDownRight } from "react-icons/bs";
-import { Table } from "antd";
+// import { Table } from "antd";
 import { Column } from "@ant-design/plots";
 const Dashboard = () => {
-  const columns = [
-    {
-      title: "SN",
-      dataIndex: "key",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Product",
-      dataIndex: "product",
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-    },
-  ];
+  // const columns = [
+  //   {
+  //     title: "SN",
+  //     dataIndex: "key",
+  //   },
+  //   {
+  //     title: "Name",
+  //     dataIndex: "name",
+  //   },
+  //   {
+  //     title: "Product",
+  //     dataIndex: "product",
+  //   },
+  //   {
+  //     title: "Amount",
+  //     dataIndex: "amount",
+  //   },
+  //   {
+  //     title: "Date",
+  //     dataIndex: "date",
+  //   },
+  // ];
   const data1 = [];
   for (let i = 0; i < 46; i++) {
     data1.push({
@@ -184,7 +184,7 @@ const Dashboard = () => {
           <Column {...config} />;
         </div>
       </div>
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <h3 className="mt-5 title">Recent Post</h3>
         <div>
           <Table
@@ -193,7 +193,7 @@ const Dashboard = () => {
             dataSource={data2}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

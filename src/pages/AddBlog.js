@@ -1,179 +1,180 @@
-import { React, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { CustomInput } from "../components/CustomInput";
-import Dropzone from "react-dropzone";
-import "react-quill/dist/quill.snow.css";
-import { dellImages, uploadImages,uploadImageOfblog } from "../features/upload/uploadSlice";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getblogCats } from "../features/blogCat/blogCatSlice";
-import {
-  createBlog,
-  getABlog,
-  resetState,
-  updateABlog,
-} from "../features/blog/blogSlice";
 
-let userSchema = Yup.object().shape({
-  title: Yup.string().required("Title is Required"),
-  description: Yup.string().required("Description is Required"),
-});
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+import { base_url } from "../utils/base_url";
 
 const AddBlog = () => {
   const navigate = useNavigate();
-  const [images, setImages] = useState([]);
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const getblogId = location.pathname.split("/")[3];
+  const { blogId } = useParams();
 
-  useEffect(() => {
-    dispatch(getblogCats());
-  }, [dispatch]);
-
-  const imgState = useSelector((state) => state.upload.images);
-  const newBlog = useSelector((state) => state.blog.blog);
-
-  const {
-    isLoding,
-    isError,
-    isSuccess,
-    blogName,
-    blogDescription,
-
-    blogImage,
-  } = newBlog;
-
-  useEffect(() => {
-    if (getblogId !== undefined) {
-      dispatch(getABlog(getblogId));
-    } else {
-      dispatch(resetState);
-    }
-  }, [dispatch, getblogId]);
-
-  function getImage(images) {
-    if (Array.isArray(images)) {
-      let array = images.map((e) => e.public_id);
-      return array;
-    }
-  }
-  useEffect(() => {
-    if (isSuccess && createBlog) {
-      toast.success("Blog Added Successfully!");
-    }
-    if (updateABlog && isSuccess) {
-      toast.success("Blog Updated Successfully!");
-      navigate("/admin/blog-list");
-    }
-    if (isError) {
-      toast.error("Somthing want wrong!");
-    }
-  }, [isLoding, isError, isSuccess, navigate]);
-
-  const img = [];
-  imgState.forEach((i) => {
-    img.push({
-      public_id: i.public_id,
-      url: i.url,
-    });
-  });
-  useEffect(() => {
-    formik.values.images = img;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, img]);
-
-  const initialValues = {
-    title: blogName || "",
-    description: blogDescription || "",
-    images: getImage(blogImage),
+  const initialBlogState = {
+    title: "",
+    description: EditorState.createEmpty(),
+    category: "",
+    image: "", 
   };
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: userSchema,
-    onSubmit: (values) => {
-      if (getblogId !== undefined) {
-        const data = { id: getblogId, blogData: values };
-        dispatch(updateABlog(data));
-      } else {
-        dispatch(createBlog(values));
+
+  const [blog, setBlog] = useState(initialBlogState);
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        if (blogId) {
+          const response = await axios.get(`${base_url}/blogs/${blogId}`);
+          const blogData = response.data;
+
+          setBlog({
+            title: blogData.title,
+            description: EditorState.createWithContent(
+              ContentState.createFromBlockArray(
+                convertFromHTML(blogData.description)
+              )
+            ),
+            category: blogData.category,
+            image: blogData.image || "", 
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching blog:", error);
       }
-      alert(JSON.stringify(values));
-      formik.resetForm();
-      setImages(null);
-      setTimeout(() => {
-        dispatch(resetState());
-        navigate("/admin/blog-list");
-      }, 3000);
-    },
-  });
+    };
+
+    fetchBlog();
+  }, [blogId]);
+
+  const handleChange = (editorState) => {
+    setBlog((prevBlog) => ({ ...prevBlog, description: editorState }));
+  };
+
+  const handleFormReset = () => {
+    setBlog(initialBlogState);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const contentState = blog.description.getCurrentContent();
+      const rawContentState = convertToRaw(contentState);
+
+      if (blogId) {
+        await axios.put(`${base_url}/blogs/${blogId}`, {
+          title: blog.title,
+          description: draftToHtml(rawContentState),
+          category: blog.category,
+          image: blog.image,
+        });
+
+        console.log("Blog updated successfully");
+        toast.success("Blog updated successfully!");
+      } else {
+        const blogResponse = await axios.post(`${base_url}/blogs`, {
+          title: blog.title,
+          description: draftToHtml(rawContentState),
+          category: blog.category,
+        });
+
+        const newBlogId = blogResponse.data._id;
+
+        const formData = new FormData();
+        formData.append("image", blog.image);
+
+        await axios.post(
+          `${base_url}/uploadImage/blogs/${newBlogId}`,
+          formData
+        );
+
+        console.log("New blog and image added successfully");
+        toast.success("New blog and image added successfully!");
+      }
+      handleFormReset();
+
+      navigate("/admin/blog-list");
+    } catch (error) {
+      console.error("Error adding/updating blog:", error);
+      toast.error("Error adding/updating blog. Please try again.");
+    }
+  };
+
   return (
-    <div>
-      <h3 className="mb-4 title">Add Blog</h3>
-      <form onSubmit={formik.handleSubmit} className="d-flex gap-3 flex-column">
-        <CustomInput
-          type="text"
-          name="title"
-          onChange={formik.handleChange("title")}
-          onBlur={formik.handleBlur("title")}
-          val={formik.values.title}
-          label="Enter Blog Title"
-        />
-        <div className="error">
-          {formik.touched.title && formik.errors.title}
-        </div>
-        <div>
-          <CustomInput
-            theme="snow"
-            label="Enter Blog Description"
-            name="description"
-            onChange={formik.handleChange("description")}
-            val={formik.values.description}
+    <div className="container mt-5">
+      <h1>{blogId ? "Edit Blog" : "Add Blog"}</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            className="form-control"
+            value={blog.title}
+            onChange={(e) => setBlog({ ...blog, title: e.target.value })}
           />
         </div>
-        <div className="error">
-          {formik.touched.description && formik.errors.description}
+       
+        <div className="mb-3">
+          <label>Category</label>
+          <input
+            type="text"
+            name="category"
+            className="form-control"
+            value={blog.category}
+            onChange={(e) => setBlog({ ...blog, category: e.target.value })}
+          />
         </div>
-        <div className="bg-white border-1 p-5 text-center">
-          <Dropzone
-            onDrop={(acceptedFiles) => dispatch(uploadImageOfblog(acceptedFiles))}
-          >
-            {({ getRootProps, getInputProps }) => (
-              <section>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
-                </div>
-              </section>
-            )}
-          </Dropzone>
+      
+        <div className="mb-3">
+          <label>Image:</label>
+          <input
+            type="file"
+            name="image"
+            className="form-control"
+            onChange={(e) => setBlog({ ...blog, image: e.target.files[0] })}
+          />
         </div>
-        <div className="showimage d-flex flex-wrap gap-3">
-          {imgState?.map((i, j) => {
-            return (
-              <div className="position-relative " key={j}>
-                <button
-                  type="button"
-                  onClick={() => dispatch(dellImages(i.public_id))}
-                  className="btn-close position-absolute"
-                  style={{
-                    top: "10px",
-                    right: "10px",
-                    backgroundColor: "white",
-                  }}
-                ></button>
-                <img src={i.url} alt="" width={200} height={200}></img>
-              </div>
-            );
-          })}
+        {blogId && blog.image !== null && (
+          <div>
+            <label>Current Blog Image:</label>
+            <img
+              src={blog.image}
+              alt="Current Blog"
+              style={{ maxWidth: "100px" }}
+            />
+          </div>
+        )}
+        <div className="mb-3">
+          <label>Description</label>
+          <Editor
+            editorState={blog.description}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor custom-editor-class" 
+            onEditorStateChange={handleChange}
+            editorStyle={{
+              backgroundColor: "white", 
+              height: "130px", 
+              border:"2px",
+              // eslint-disable-next-line no-dupe-keys
+              border: "1px solid #ccc",
+            }}
+          />
+          </div>
+        <div className="mb-3">
+          <button type="submit" className="btn btn-success form-control">
+            {blogId ? "Update Blog" : "Add Blog"}
+          </button>
         </div>
-        <button
-          className="btn btn-success border-0 rounde-3 my-5"
-          type="submit"
-        >
-          Add Blog
-        </button>
       </form>
     </div>
   );

@@ -9,6 +9,13 @@ const login = async (userdata) => {
   }
   return response.data;
 };
+const updateService = async (user) => {
+  const response = await axios.put(
+    `${base_url}user/updateUser/${user.id}`,
+    { status: user.enqData },
+  );
+  return response.data;
+};
 const getOrders = async () => {
   const response = await axios.get(`${base_url}user/getAllOrder`, Config);
   return response.data;
@@ -24,5 +31,6 @@ const authService = {
   login,
   getOrders,
   getOrder,
+  updateService,
 };
 export default authService;

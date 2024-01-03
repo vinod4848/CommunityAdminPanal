@@ -1,24 +1,11 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import {
-  AiOutlineDashboard,
-  // AiOutlineShoppingCart,
-  AiOutlineUser,
-  // AiOutlineBgColors,
-} from "react-icons/ai";
+import { AiOutlineDashboard } from "react-icons/ai";
 import { Link, Outlet } from "react-router-dom";
 import { IoMdNotifications } from "react-icons/io";
-// import { SiBrandfolder } from "react-icons/si";
+
 import { ImBlog } from "react-icons/im";
-// import { BiCategoryAlt } from "react-icons/bi";
-// import { SiGooglemarketingplatform } from "react-icons/si";
-// import { RiCoupon3Fill } from "react-icons/ri";
-// import { GrUnorderedList } from "react-icons/gr";
-import {
-  FaBlogger,
-  FaEnvelope,
-  FaEnvelopeOpen,
-  FaPortrait,
-} from "react-icons/fa";
+
+import { FaBlogger, FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
 import { Layout, Menu, theme } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +36,6 @@ const MainLayout = () => {
   };
 
   return (
-    // <Layout contextMenu={(e) => e.preventDefault}>
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
@@ -74,63 +60,38 @@ const MainLayout = () => {
               icon: <AiOutlineDashboard className="fs-4" />,
               label: "Dashbord",
             },
-            {
-              key: "customers",
-              icon: <AiOutlineUser className="fs-4" />,
+
+
+// for usery Manegment start
+
+{
+              key: "user",
+              icon: <FaEnvelope className="fs-4" />,
               label: "Users",
+              children: [
+                {
+                  key: "users",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add User",
+                },
+                {
+                  key: "user-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Users List",
+                },
+                {
+                  key: "approval-list-User",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Approval Pending",
+                },
+                {
+                  key: "block-user-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Block User",
+                },
+              ],
             },
-            // {
-            //   key: "catalog",
-            //   icon: <AiOutlineShoppingCart className="fs-4" />,
-            //   label: "Catalog",
-            //   children: [
-            //     {
-            //       key: "product",
-            //       icon: <AiOutlineShoppingCart className="fs-4" />,
-            //       label: "Add Product",
-            //     },
-            //     {
-            //       key: "product-list",
-            //       icon: <AiOutlineShoppingCart className="fs-4" />,
-            //       label: "Product List",
-            //     },
-            //     {
-            //       key: "brand",
-            //       icon: <SiBrandfolder className="fs-4" />,
-            //       label: "Brand",
-            //     },
-            //     {
-            //       key: "list-brand",
-            //       icon: <SiBrandfolder className="fs-4" />,
-            //       label: "Brand-List",
-            //     },
-            //     {
-            //       key: "category",
-            //       icon: <BiCategoryAlt className="fs-4" />,
-            //       label: "Category",
-            //     },
-            //     {
-            //       key: "list-category",
-            //       icon: <BiCategoryAlt className="fs-4" />,
-            //       label: "Category-list",
-            //     },
-            //     {
-            //       key: "color",
-            //       icon: <AiOutlineBgColors className="fs-4" />,
-            //       label: "Color",
-            //     },
-            //     {
-            //       key: "list-color",
-            //       icon: <AiOutlineBgColors className="fs-4" />,
-            //       label: "Color-list",
-            //     },
-            //   ],
-            // },
-            // {
-            //   key: "orders",
-            //   icon: <GrUnorderedList className="fs-4" />,
-            //   label: "Orders",
-            // },
+
             {
               key: "blog",
               icon: <FaBlogger className="fs-4" />,
@@ -163,16 +124,25 @@ const MainLayout = () => {
                   icon: <FaEnvelopeOpen className="fs-4" />,
                   label: "Event List",
                 },
+                {
+                  key: "approval-list-event",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Approval Pending",
+                },
+                {
+                  key: "complete-event-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Complete List",
+                },
               ],
             },
-           
             {
               key: "News",
               icon: <FaBlogger className="fs-4" />,
               label: "News",
               children: [
                 {
-                  key: "newa",
+                  key: "news",
                   icon: <FaBlogger className="fs-4" />,
                   label: "Add News",
                 },
@@ -189,7 +159,7 @@ const MainLayout = () => {
               label: "Advertising ",
               children: [
                 {
-                  key: "advertising ",
+                  key: "advertising",
                   icon: <FaBlogger className="fs-4" />,
                   label: "Add Advertising ",
                 },
@@ -215,6 +185,11 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Job  List",
                 },
+                {
+                  key: "approval-job-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Approval Pending",
+                },
               ],
             },
             {
@@ -225,7 +200,7 @@ const MainLayout = () => {
                 {
                   key: "directory",
                   icon: <FaBlogger className="fs-4" />,
-                  label: "Add Job ",
+                  label: "Add Directory ",
                 },
                 {
                   key: "directory-list",
@@ -235,51 +210,41 @@ const MainLayout = () => {
               ],
             },
 
-            {
-              key: "gallery",
-              icon: <FaBlogger className="fs-4" />,
-              label: "Gallery",
-              children: [
-                {
-                  key: "gallery",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Gallery ",
-                },
-                {
-                  key: "gallery-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Gallery  List",
-                },
-              ],
-            },
-            {
-              key: "event-list",
-              icon: <FaPortrait className="fs-4" />,
-              label: "Matrimonial List",
-            },
-            
             // {
-            //   key: "marketing",
-            //   icon: <SiGooglemarketingplatform className="fs-4" />,
-            //   label: "Marketing",
+            //   key: "gallery",
+            //   icon: <FaBlogger className="fs-4" />,
+            //   label: "Gallery",
             //   children: [
             //     {
-            //       key: "coupon",
-            //       icon: <RiCoupon3Fill className="fs-4" />,
-            //       label: "Add Coupon",
+            //       key: "gallery",
+            //       icon: <FaBlogger className="fs-4" />,
+            //       label: "Add Gallery ",
             //     },
             //     {
-            //       key: "coupon-list",
-            //       icon: <RiCoupon3Fill className="fs-4" />,
-            //       label: "Coupon List",
+            //       key: "gallery-list",
+            //       icon: <ImBlog className="fs-4" />,
+            //       label: "Gallery  List",
             //     },
             //   ],
             // },
-            // {
-            //   key: "enquiries",
-            //   icon: <GrUnorderedList className="fs-4" />,
-            //   label: "Enquiries",
-            // },
+
+            {
+              key: "Matrimonial",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Matrimonial",
+              children: [
+                {
+                  key: "matrimonial-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Matrimonial  List",
+                },
+                {
+                  key: "approval-list-matrimonial",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Approval Pending",
+                },
+              ],
+            },
           ]}
         />
       </Sider>
@@ -326,7 +291,7 @@ const MainLayout = () => {
                 <p className="mb-0">{getUserData?.email}</p>
               </div>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li>
+                {/* <li>
                   <Link
                     className="dropdown-item py-1 mb-1"
                     style={{ height: "auto", lineHeight: "20px" }}
@@ -334,7 +299,7 @@ const MainLayout = () => {
                   >
                     Profile
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     className="dropdown-item py-1 mb-1"

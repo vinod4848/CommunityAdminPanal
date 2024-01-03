@@ -17,10 +17,19 @@ const columns = [
     dataIndex: "title",
   },
   {
+    title: "Category",
+    dataIndex: "category",
+  },
+  {
     title: "Description",
     dataIndex: "description",
-    render: (text) => (
-      <span title={text}>{truncateDescription(text, 50)}</span>
+    render: (text) => <span title={text}>{truncateDescription(text, 50)}</span>,
+  },
+  {
+    title: "Event Banner",
+    dataIndex: "image",
+    render: (image) => (
+      <img src={image} alt="EventBanner" style={{ maxWidth: "100px" }} />
     ),
   },
   {
@@ -42,24 +51,31 @@ const Bloglist = () => {
   const blogState = useSelector((state) => state.blog.blogs);
 
   const transformBlogData = () => {
-    return blogState.map((blog, index) => ({
-      key: index + 1,
-      title: blog.title,
-      description: blog.description,
-      action: (
-        <>
-          <Link to={`/admin/blog/${blog._id}`} className="fs-3 text-danger">
-            <BiEdit />
-          </Link>
-          <button
-            className="ms-2 fs-3 text-danger bg-transparent border-0"
-            onClick={() => showModal(blog._id)}
-          >
-            <MdOutlineDelete />
-          </button>
-        </>
-      ),
-    }));
+    return blogState.map((blog, index) => {
+      const doc = new DOMParser().parseFromString(blog.description, 'text/html');
+      const plainTextDescription = doc.body.textContent || "";
+
+      return {
+        key: index + 1,
+        title: blog.title,
+        description: plainTextDescription,
+        category: blog.category,
+        image: blog.image,
+        action: (
+          <>
+            <Link to={`/admin/blogs/${blog._id}`} className="fs-3 text-danger">
+              <BiEdit />
+            </Link>
+            <button
+              className="ms-2 fs-3 text-danger bg-transparent border-0"
+              onClick={() => showModal(blog._id)}
+            >
+              <MdOutlineDelete />
+            </button>
+          </>
+        ),
+      };
+    });
   };
 
   const showModal = (blogId) => {

@@ -33,6 +33,7 @@ const Customers = () => {
   const customerstate = useSelector((state) => state.customer.customers);
   const data1 = customerstate
     .filter((customer) => customer.role !== "admin")
+    .filter((customer) => customer.isPublished)
     .map((customer, index) => ({
       key: index + 1,
       name: customer.username,
