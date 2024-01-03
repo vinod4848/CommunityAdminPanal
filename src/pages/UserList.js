@@ -1,0 +1,119 @@
+import { Table } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAUser, GetUsers } from "../features/user/userSlice";
+import { Link } from "react-router-dom";
+import { BiEdit } from "react-icons/bi";
+import { MdOutlineDelete } from "react-icons/md";
+import CustomModel from "../components/CustomModel";
+import axios from "axios";
+import { base_url } from "../utils/base_url";
+
+const columns = [
+  {
+    title: "SN",
+    dataIndex: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "username",
+    defaultSortOrder: "descend",
+    sorter: (a, b) => a.username.length - b.username.length,
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+  },
+  {
+    title: "Actions",
+    dataIndex: "action",
+  },
+  {
+    title: "Activate/Deactivate",
+    dataIndex: "activateDeactivate",
+  },
+];
+
+const UserList = () => {
+  const [userId, setUserId] = useState();
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(GetUsers());
+  }, [dispatch]);
+
+  const userState = useSelector((state) => state.user.users);
+
+  const transformUserData = () => {
+    return userState
+    .filter((user) => user.role !== "admin" && user.isPublished)
+      .map((user, index) => ({
+        key: index + 1,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        action: (
+          <>
+            <Link to={`/admin/users/${user._id}`} className="fs-3 text-danger">
+              <BiEdit />
+            </Link>
+            <button
+              className="ms-2 fs-3 text-danger bg-transparent border-0"
+              onClick={() => showModal(user._id)}
+            >
+              <MdOutlineDelete />
+            </button>
+          </>
+        ),
+        
+      }));
+  };
+
+  const showModal = (userId) => {
+    setOpen(true);
+    setUserId(userId);
+  };
+
+  const hideModal = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`${base_url}user/deleteUser/${userId}`);
+
+      dispatch(deleteAUser(userId));
+      setOpen(false);
+
+      dispatch(GetUsers());
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  return (
+    <div>
+      <h3 className="mb-4 title" style={{ color: "green" }}>
+        Active Users
+      </h3>
+      <div>
+        <Table columns={columns} dataSource={transformUserData()} />
+      </div>
+      <CustomModel
+        hideModal={hideModal}
+        open={open}
+        PerformAction={() => {
+          handleDeleteUser(userId);
+        }}
+        title="Are you sure you want to delete this User"
+      />
+    </div>
+  );
+};
+
+export default UserList;

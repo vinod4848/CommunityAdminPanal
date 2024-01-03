@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 
 const AddUser = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [userdata, setUser] = useState({
     username: "",
@@ -13,6 +14,22 @@ const AddUser = () => {
     phone: "",
     password: "",
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${base_url}user/getUserbyId/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast.error("Error fetching user data. Please try again.");
+      }
+    };
+
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,22 +40,32 @@ const AddUser = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${base_url}user/signup`, userdata);
-      console.log("User Added Successfully:", response.data);
+      
+      const apiEndpoint = userId
+        ? `${base_url}user/updateUser/${userId}`
+        : `${base_url}user/signup`;
 
-      toast.success("User Added Successfully!");
+      const response = await axios.post(apiEndpoint, userdata);
 
-      navigate("/admin/customers");
+      if (userId) {
+        console.log("User Updated Successfully:", response.data);
+        toast.success("User Updated Successfully!");
+      } else {
+        console.log("User Added Successfully:", response.data);
+        toast.success("User Added Successfully!");
+      }
+
+      navigate("/admin/user-list");
     } catch (error) {
-      console.error("Error Adding User:", error);
+      console.error("Error:", error);
 
-      toast.error("Error Adding User. Please try again.");
+      toast.error("Error. Please try again.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1>Add User</h1>
+      <h1>{userId ? "Update User" : "Add User"}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label>Username</label>
@@ -51,7 +78,7 @@ const AddUser = () => {
           />
         </div>
         <div className="mb-3">
-          <label> Email</label>
+          <label>Email</label>
           <input
             type="email"
             name="email"
@@ -61,7 +88,7 @@ const AddUser = () => {
           />
         </div>
         <div className="mb-3">
-          <label> Password</label>
+          <label>Password</label>
           <input
             type="password"
             name="password"
@@ -82,7 +109,7 @@ const AddUser = () => {
         </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
-            Add User
+            {userId ? "Update User" : "Add User"}
           </button>
         </div>
       </form>

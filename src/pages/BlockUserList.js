@@ -31,7 +31,7 @@ const columns = [
   },
 ];
 
-const UserListApprovalPending = () => {
+const BlockUserList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const UserListApprovalPending = () => {
   return (
     <div>
       <h3 className="mb-4 title" style={{ color: "green" }}>
-        Users Waiting for Approval
+      Blockd Users
       </h3>
       <div>
         <Table columns={columns} dataSource={transformUserData()} />
@@ -87,4 +87,4 @@ const UserListApprovalPending = () => {
   );
 };
 
-export default UserListApprovalPending;
+export default BlockUserList;

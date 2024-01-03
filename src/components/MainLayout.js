@@ -60,9 +60,13 @@ const MainLayout = () => {
               icon: <AiOutlineDashboard className="fs-4" />,
               label: "Dashbord",
             },
-            {
-              key: "customers",
-              icon: <FaBlogger className="fs-4" />,
+
+
+// for usery Manegment start
+
+{
+              key: "user",
+              icon: <FaEnvelope className="fs-4" />,
               label: "Users",
               children: [
                 {
@@ -71,17 +75,23 @@ const MainLayout = () => {
                   label: "Add User",
                 },
                 {
-                  key: "customers",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "User List",
+                  key: "user-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Users List",
                 },
                 {
-                  key: "approval-list-user",
+                  key: "approval-list-User",
                   icon: <ImBlog className="fs-4" />,
                   label: "Approval Pending",
                 },
+                {
+                  key: "block-user-list",
+                  icon: <FaEnvelopeOpen className="fs-4" />,
+                  label: "Block User",
+                },
               ],
             },
+
             {
               key: "blog",
               icon: <FaBlogger className="fs-4" />,
@@ -126,7 +136,6 @@ const MainLayout = () => {
                 },
               ],
             },
-
             {
               key: "News",
               icon: <FaBlogger className="fs-4" />,
@@ -201,23 +210,23 @@ const MainLayout = () => {
               ],
             },
 
-            {
-              key: "gallery",
-              icon: <FaBlogger className="fs-4" />,
-              label: "Gallery",
-              children: [
-                {
-                  key: "gallery",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Gallery ",
-                },
-                {
-                  key: "gallery-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Gallery  List",
-                },
-              ],
-            },
+            // {
+            //   key: "gallery",
+            //   icon: <FaBlogger className="fs-4" />,
+            //   label: "Gallery",
+            //   children: [
+            //     {
+            //       key: "gallery",
+            //       icon: <FaBlogger className="fs-4" />,
+            //       label: "Add Gallery ",
+            //     },
+            //     {
+            //       key: "gallery-list",
+            //       icon: <ImBlog className="fs-4" />,
+            //       label: "Gallery  List",
+            //     },
+            //   ],
+            // },
 
             {
               key: "Matrimonial",

@@ -16,10 +16,12 @@ import jobReducer from "../features/job/jobSlice";
 import newsReducer from "../features/news/newSlice";
 import matrimonialReducer from "../features/matrimonial/matrimonialSlice";
 import directorieReducer from "../features/directory/directorySlice";
+import userReducer from "../features/user/userSlice"
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    user:userReducer,
     customer: customerReducer,
     product: productReducer,
     brand: brandReducer,

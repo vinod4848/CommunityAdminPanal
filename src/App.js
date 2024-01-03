@@ -30,6 +30,8 @@ import AddAdvertisement from "./pages/AddAdvertising";
 import AddDirectory from "./pages/AddDirectorie";
 import AddUser from "./pages/AddUser";
 import UserListApprovalPending from "./pages/UserListApprovalPending";
+import UserList from "./pages/UserList";
+import BlockUserListss from "./pages/BlockUserList";
 
 
 function App() {
@@ -63,6 +65,9 @@ function App() {
           <Route path="directory" element={<AddDirectory />} />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
+          <Route path="users/:userId" element={<AddUser />} />
+          <Route path="user-list" element={<UserList />} />
+          <Route path="block-user-list" element={<BlockUserListss />} />
           <Route path="events/:eventId" element={<AddEvent />} />
           <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
