@@ -62,6 +62,7 @@ function App() {
           <Route path="events" element={<AddEvent />} />
           <Route path="job" element={<AddJob />} />
           <Route path="advertising" element={<AddAdvertisement />} />
+          <Route path="advertising/:id" element={<AddAdvertisement />} />
           <Route path="directory" element={<AddDirectory />} />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
