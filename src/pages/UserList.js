@@ -136,10 +136,20 @@ const UserList = () => {
       <h3 className="mb-4 title" style={{ color: "green" }}>
         Active Users
       </h3>
-      <div className="mb-2">
-        <input
+      <div
+        className="mb-2"
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          gap: "17px",
+          width:"260",
+          height:"37px",
+        }}
+      >
+        <input 
           type="text"
-          placeholder="Search by Email or Phone or username"
+          placeholder=" Search By Email Phone Username"
           value={searchEmail || searchPhone || searchUsername}
           onChange={(e) => {
             const inputValue = e.target.value;
