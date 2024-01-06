@@ -245,6 +245,23 @@ const MainLayout = () => {
                 },
               ],
             },
+             {
+              key: "magazines",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Magazines",
+              children: [
+                {
+                  key: "magazines",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Magazines ",
+                },
+                {
+                  key: "magazines-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Magazines  List",
+                },
+              ],
+            },
           ]}
         />
       </Sider>
