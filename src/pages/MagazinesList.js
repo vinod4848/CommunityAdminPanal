@@ -37,7 +37,7 @@ const MagazinesList = () => {
   const confirmDelete = async () => {
     try {
       await axios.delete(`${base_url}/magazines/${deleteMagazineId}`);
-      // Update the state after successful deletion
+
       setMagazines((prevMagazines) =>
         prevMagazines.filter((magazine) => magazine._id !== deleteMagazineId)
       );
@@ -55,7 +55,7 @@ const MagazinesList = () => {
   return (
     <div className="container mt-5">
       <h1>Magazines List</h1>
-      <ul>
+      <ul style={{ listStyleType: "none", padding: 0 }}>
         {magazines.map((magazine) => (
           <li key={magazine._id}>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -69,7 +69,7 @@ const MagazinesList = () => {
                   style={{ marginRight: "7px" }}
                   onClick={() => downloadPdf(magazine.image)}
                 >
-                  Download PDF
+                  Download
                 </button>
 
                 <button

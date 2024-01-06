@@ -262,6 +262,23 @@ const MainLayout = () => {
                 },
               ],
             },
+            {
+              key: "announcements",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Announcements",
+              children: [
+                {
+                  key: "announcements",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Announcements ",
+                },
+                {
+                  key: "announcements-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Announcements  List",
+                },
+              ],
+            },
           ]}
         />
       </Sider>
