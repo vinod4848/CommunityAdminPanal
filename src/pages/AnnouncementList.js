@@ -58,29 +58,31 @@ const AnnouncementList = () => {
           </tr>
         </thead>
         <tbody>
-          {announcements.map((announcement) => (
-            <tr key={announcement._id}>
-              <td>{announcement.announcementType}</td>
-              <td>{announcement.createdBy.username}</td>
-              <td>{announcement.description}</td>
-              <td>{announcement.date}</td>
-              <td>
-                <img
-                  src={announcement.image}
-                  alt="Announcement"
-                  style={{ maxWidth: "100px", maxHeight: "100px" }}
-                />
-              </td>
-              <td>
-                <Button
-                  variant="danger"
-                  onClick={() => handleShowModal(announcement)}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {announcements
+            .filter((announcement) => announcement.isApproved)
+            .map((filteredAnnouncement) => (
+              <tr key={filteredAnnouncement._id}>
+                <td>{filteredAnnouncement.announcementType}</td>
+                <td>{filteredAnnouncement.createdBy.username}</td>
+                <td>{filteredAnnouncement.description}</td>
+                <td>{filteredAnnouncement.date}</td>
+                <td>
+                  <img
+                    src={filteredAnnouncement.image}
+                    alt="Announcement"
+                    style={{ maxWidth: "100px", maxHeight: "100px" }}
+                  />
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleShowModal(filteredAnnouncement)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -110,6 +112,7 @@ const AnnouncementList = () => {
       </Modal>
     </div>
   );
+  
 };
 
 export default AnnouncementList;
