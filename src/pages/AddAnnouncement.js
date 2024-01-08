@@ -12,7 +12,7 @@ const Addannouncements = () => {
   const [announcements, setAnnouncements] = useState({
     announcementType: "",
     description: "",
-    createdBy: getUserData?._id || "", // Set createdBy to the username of the logged-in user
+    createdBy: getUserData?._id || "", 
     date: "",
     image: null,
   });

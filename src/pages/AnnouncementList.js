@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base_url } from "../utils/base_url";
 import { Modal, Button } from "react-bootstrap";
+import axios from "axios";
 
 const AnnouncementList = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -8,18 +9,17 @@ const AnnouncementList = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
   useEffect(() => {
-    fetch(`${base_url}/announcements`)
-      .then((response) => response.json())
-      .then((data) => setAnnouncements(data))
+    axios
+      .get(`${base_url}/announcements`)
+      .then((response) => setAnnouncements(response.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   const handleDelete = (announcementId) => {
-    fetch(`${base_url}/announcements/${announcementId}`, {
-      method: "DELETE",
-    })
+    axios
+      .delete(`${base_url}/announcements/${announcementId}`)
       .then((response) => {
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Failed to delete announcement");
         }
         setAnnouncements((prevAnnouncements) =>
@@ -31,6 +31,7 @@ const AnnouncementList = () => {
       })
       .catch((error) => console.error("Error deleting announcement:", error));
   };
+  
 
   const handleShowModal = (announcement) => {
     setSelectedAnnouncement(announcement);
