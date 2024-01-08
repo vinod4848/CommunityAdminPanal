@@ -59,7 +59,7 @@ const AnnouncementList = () => {
         </thead>
         <tbody>
           {announcements
-            .filter((announcement) => announcement.isApproved)
+            .filter((announcement) => announcement.isActive)
             .map((filteredAnnouncement) => (
               <tr key={filteredAnnouncement._id}>
                 <td>{filteredAnnouncement.announcementType}</td>
