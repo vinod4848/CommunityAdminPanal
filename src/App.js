@@ -36,6 +36,8 @@ import AddMagazines from "./pages/AddMagazines";
 import MagazinesList from "./pages/MagazinesList";
 import AnnouncementList from "./pages/AnnouncementList";
 import Addannouncements from "./pages/AddAnnouncement";
+import AnnouncementApprovalPendingList from "./pages/AnnouncementApprovalPendingList";
+import CompleteAnnouncementsList from "./pages/CompleteAnnouncementsList";
 
 
 function App() {
@@ -72,6 +74,8 @@ function App() {
           <Route path="magazines-list" element={<MagazinesList />} />
           <Route path="announcements-list" element={<AnnouncementList />} />
           <Route path="announcements" element={<Addannouncements />} />
+          <Route path="approvalpending-list" element={<AnnouncementApprovalPendingList />} />
+          <Route path="completed-list" element={<CompleteAnnouncementsList />} />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="users/:userId" element={<AddUser />} />

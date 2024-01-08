@@ -61,10 +61,9 @@ const MainLayout = () => {
               label: "Dashbord",
             },
 
+            // for usery Manegment start
 
-// for usery Manegment start
-
-{
+            {
               key: "user",
               icon: <FaEnvelope className="fs-4" />,
               label: "Users",
@@ -245,7 +244,7 @@ const MainLayout = () => {
                 },
               ],
             },
-             {
+            {
               key: "magazines",
               icon: <FaBlogger className="fs-4" />,
               label: "Magazines",
@@ -277,6 +276,17 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Announcements  List",
                 },
+                {
+                  key: "approvalpending-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "ApprovalPending List",
+                },
+                {
+                  key: "completed-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "completed  List",
+                },
+                
               ],
             },
           ]}

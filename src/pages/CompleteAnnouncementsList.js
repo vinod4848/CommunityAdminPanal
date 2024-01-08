@@ -3,7 +3,7 @@ import { base_url } from "../utils/base_url";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
-const AnnouncementList = () => {
+const CompleteAnnouncementsList = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -45,7 +45,7 @@ const AnnouncementList = () => {
 
   return (
     <div>
-      <h2 style={{ color: 'green' }}>Announcements List</h2>
+     <h2 style={{ color: 'red' }}>Complete Announcements List</h2>
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
@@ -112,4 +112,4 @@ const AnnouncementList = () => {
   );
 };
 
-export default AnnouncementList;
+export default CompleteAnnouncementsList;

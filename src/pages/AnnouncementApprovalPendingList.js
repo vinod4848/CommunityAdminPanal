@@ -3,7 +3,7 @@ import { base_url } from "../utils/base_url";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
-const AnnouncementList = () => {
+const AnnouncementApprovalPendingList = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -31,7 +31,6 @@ const AnnouncementList = () => {
       })
       .catch((error) => console.error("Error deleting announcement:", error));
   };
-  
 
   const handleShowModal = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -45,7 +44,7 @@ const AnnouncementList = () => {
 
   return (
     <div>
-      <h2 style={{ color: 'green' }}>Announcements List</h2>
+      <h2>Announcements Approval Pending List</h2>
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
@@ -112,4 +111,4 @@ const AnnouncementList = () => {
   );
 };
 
-export default AnnouncementList;
+export default AnnouncementApprovalPendingList;
