@@ -35,6 +35,7 @@ import BlockUserListss from "./pages/BlockUserList";
 import AddMagazines from "./pages/AddMagazines";
 import MagazinesList from "./pages/MagazinesList";
 import AnnouncementList from "./pages/AnnouncementList";
+import Addannouncements from "./pages/AddAnnouncement";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path="magazines" element={<AddMagazines />} />
           <Route path="magazines-list" element={<MagazinesList />} />
           <Route path="announcements-list" element={<AnnouncementList />} />
+          <Route path="announcements" element={<Addannouncements />} />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="users/:userId" element={<AddUser />} />

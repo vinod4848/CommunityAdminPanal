@@ -1,98 +1,108 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { base_url } from "../utils/base_url";
-import { Modal, Button, Table } from "antd";
+import { Modal, Button } from "react-bootstrap";
 
 const AnnouncementList = () => {
   const [announcements, setAnnouncements] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteAnnouncementId, setDeleteAnnouncementId] = useState(null);
-
-  const handleDelete = (id) => {
-    setDeleteAnnouncementId(id);
-    setShowDeleteModal(true);
-  };
-
-  const confirmDelete = async () => {
-    try {
-      await axios.delete(`${base_url}/announcements/${deleteAnnouncementId}`);
-      setAnnouncements((prevAnnouncements) =>
-        prevAnnouncements.filter(
-          (announcement) => announcement._id !== deleteAnnouncementId
-        )
-      );
-    } catch (error) {
-      console.error("Error deleting announcement:", error);
-    } finally {
-      setShowDeleteModal(false);
-    }
-  };
-
-  const cancelDelete = () => {
-    setShowDeleteModal(false);
-  };
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
   useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await axios.get(`${base_url}/announcements`);
-        setAnnouncements(response.data);
-      } catch (error) {
-        console.error("Error fetching announcements:", error);
-      }
-    };
-
-    fetchAnnouncements();
+    fetch(`${base_url}/announcements`)
+      .then((response) => response.json())
+      .then((data) => setAnnouncements(data))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const columns = [
-    {
-      title: "Announcement Type",
-      dataIndex: "announcementType",
-      key: "announcementType",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Image",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <img src={image} alt="Announcement" style={{ maxWidth: "100px" }} />
-      ),
-    },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      key: "action",
-      render: (text, record) => (
-        <Button type="danger" onClick={() => handleDelete(record._id)}>
-          Delete
-        </Button>
-      ),
-    },
-  ];
+  const handleDelete = (announcementId) => {
+    fetch(`${base_url}/announcements/${announcementId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete announcement");
+        }
+        setAnnouncements((prevAnnouncements) =>
+          prevAnnouncements.filter(
+            (announcement) => announcement._id !== announcementId
+          )
+        );
+        handleCloseModal();
+      })
+      .catch((error) => console.error("Error deleting announcement:", error));
+  };
+
+  const handleShowModal = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedAnnouncement(null);
+    setShowModal(false);
+  };
 
   return (
-    <div className="container mt-5">
-      <h3 className="mb-4 title">Announcements Lis</h3>
-
-      <Table dataSource={announcements} columns={columns} />
-      <Modal show={showDeleteModal} onHide={cancelDelete}>
+    <div>
+      <h2>Announcements List</h2>
+      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Announcement Type</th>
+            <th>Created By</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Image</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {announcements.map((announcement) => (
+            <tr key={announcement._id}>
+              <td>{announcement.announcementType}</td>
+              <td>{announcement.createdBy.username}</td>
+              <td>{announcement.description}</td>
+              <td>{announcement.date}</td>
+              <td>
+                <img
+                  src={announcement.image}
+                  alt="Announcement"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              </td>
+              <td>
+                <Button
+                  variant="danger"
+                  onClick={() => handleShowModal(announcement)}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete Announcement</Modal.Title>
+          <Modal.Title>Confirm Deletion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete this Announcement?
+          Are you sure you want to delete the announcement?
+          {selectedAnnouncement && (
+            <p>
+              Announcement Type: {selectedAnnouncement.announcementType}, Date:{" "}
+              {selectedAnnouncement.date}
+            </p>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={cancelDelete}>
-            Cancel
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
           </Button>
-          <Button variant="danger" onClick={confirmDelete}>
+          <Button
+            variant="danger"
+            onClick={() => handleDelete(selectedAnnouncement?._id)}
+          >
             Delete
           </Button>
         </Modal.Footer>
