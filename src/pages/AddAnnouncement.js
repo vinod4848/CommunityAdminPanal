@@ -44,7 +44,7 @@ const Addannouncements = () => {
         formData.append("image", announcements.image);
 
         await axios.post(
-          `${base_url}/announcements/${adId}/upload-image`,
+          `${base_url}/announcements/${adId}`,
           formData
         );
       }
