@@ -42,6 +42,27 @@ const AnnouncementApprovalPendingList = () => {
     setShowModal(false);
   };
 
+  const handleActivate = (announcementId) => {
+    axios
+      .put(`${base_url}/updateAnnouncementStatus/${announcementId}`, {
+        isActive: true,
+      })
+      .then((response) => {
+        if (response.status !== 200) {
+          throw new Error("Failed to activate announcement");
+        }
+        setAnnouncements((prevAnnouncements) =>
+          prevAnnouncements.map((announcement) =>
+            announcement._id === announcementId
+              ? { ...announcement, isActive: true }
+              : announcement
+          )
+        );
+        handleCloseModal();
+      })
+      .catch((error) => console.error("Error activating announcement:", error));
+  };
+
   return (
     <div>
       <h2>Announcements Approval Pending List</h2>
@@ -79,6 +100,12 @@ const AnnouncementApprovalPendingList = () => {
                   >
                     Delete
                   </Button>
+                  <Button
+                    variant="success"
+                    onClick={() => handleActivate(filteredAnnouncement._id)}
+                  >
+                    Activate
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -111,7 +138,6 @@ const AnnouncementApprovalPendingList = () => {
       </Modal>
     </div>
   );
-  
 };
 
 export default AnnouncementApprovalPendingList;
