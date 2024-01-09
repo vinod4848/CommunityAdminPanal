@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 import { useSelector } from "react-redux";
 
-const Addannouncements = () => {
+const AddAnnouncements = () => {
   const navigate = useNavigate();
   const getUserData = useSelector((state) => state.auth.user);
 
   const [announcements, setAnnouncements] = useState({
     announcementType: "",
     description: "",
-    createdBy: getUserData?._id || "", 
+    createdBy: getUserData?._id || "",
     date: "",
     image: null,
   });
+
+  const [announcementCategories, setAnnouncementCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${base_url}/announcement-categories`)
+      .then((response) => setAnnouncementCategories(response.data))
+      .catch((error) => console.error("Error fetching announcement categories:", error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -43,10 +52,7 @@ const Addannouncements = () => {
         const formData = new FormData();
         formData.append("image", announcements.image);
 
-        await axios.post(
-          `${base_url}/announcements/${adId}`,
-          formData
-        );
+        await axios.post(`${base_url}/announcements/${adId}`, formData);
       }
 
       console.log("Announcement and image added successfully");
@@ -66,14 +72,20 @@ const Addannouncements = () => {
       <h1>Add Announcement</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label>Announcement Type</label>
-          <input
-            type="text"
+          <label>Category</label>
+          <select
             name="announcementType"
             className="form-control"
             value={announcements.announcementType}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select Category</option>
+            {announcementCategories.map((category) => (
+              <option key={category._id} value={category.announcementCategoryName}>
+                {category.announcementCategoryName}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label>Description</label>
@@ -114,4 +126,4 @@ const Addannouncements = () => {
   );
 };
 
-export default Addannouncements;
+export default AddAnnouncements;

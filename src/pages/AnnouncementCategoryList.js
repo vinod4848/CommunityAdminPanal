@@ -50,7 +50,7 @@ const AnnouncementCategoryList = () => {
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
-            <th>Announcement Category</th>
+            <th>Category</th>
             <th>Date</th>
             <th>Action</th>
           </tr>
