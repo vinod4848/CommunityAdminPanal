@@ -31,7 +31,6 @@ const AnnouncementList = () => {
       })
       .catch((error) => console.error("Error deleting announcement:", error));
   };
-  
 
   const handleShowModal = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -41,6 +40,13 @@ const AnnouncementList = () => {
   const handleCloseModal = () => {
     setSelectedAnnouncement(null);
     setShowModal(false);
+  };
+
+  // Function to check if the announcement date is in the future
+  const isFutureDate = (dateString) => {
+    const currentDate = new Date();
+    const announcementDate = new Date(dateString);
+    return announcementDate > currentDate;
   };
 
   return (
@@ -59,7 +65,7 @@ const AnnouncementList = () => {
         </thead>
         <tbody>
           {announcements
-            .filter((announcement) => announcement.isActive)
+            .filter((announcement) => announcement.isActive && isFutureDate(announcement.date))
             .map((filteredAnnouncement) => (
               <tr key={filteredAnnouncement._id}>
                 <td>{filteredAnnouncement.announcementType}</td>
@@ -112,7 +118,6 @@ const AnnouncementList = () => {
       </Modal>
     </div>
   );
-  
 };
 
 export default AnnouncementList;

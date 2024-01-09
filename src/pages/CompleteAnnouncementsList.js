@@ -11,7 +11,16 @@ const CompleteAnnouncementsList = () => {
   useEffect(() => {
     axios
       .get(`${base_url}/announcements`)
-      .then((response) => setAnnouncements(response.data))
+      .then((response) => {
+        const currentDate = new Date();
+        const filteredAnnouncements = response.data.filter((announcement) => {
+          // Check if the announcement date is completed
+          const announcementDate = new Date(announcement.date);
+          return announcementDate < currentDate;
+        });
+
+        setAnnouncements(filteredAnnouncements);
+      })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
