@@ -38,6 +38,8 @@ import AnnouncementList from "./pages/AnnouncementList";
 import Addannouncements from "./pages/AddAnnouncement";
 import AnnouncementApprovalPendingList from "./pages/AnnouncementApprovalPendingList";
 import CompleteAnnouncementsList from "./pages/CompleteAnnouncementsList";
+import AddAnnouncementCategory from "./pages/AddAnnouncementCategory";
+import AnnouncementCategoryList from "./pages/AnnouncementCategoryList";
 
 
 function App() {
@@ -72,6 +74,8 @@ function App() {
           <Route path="directory" element={<AddDirectory />} />
           <Route path="magazines" element={<AddMagazines />} />
           <Route path="magazines-list" element={<MagazinesList />} />
+          <Route path="announcementCategoryName" element={<AddAnnouncementCategory />} />
+          <Route path="announcementCategoryName-list" element={<AnnouncementCategoryList />} />
           <Route path="announcements-list" element={<AnnouncementList />} />
           <Route path="announcements" element={<Addannouncements />} />
           <Route path="approvalpending-list" element={<AnnouncementApprovalPendingList />} />

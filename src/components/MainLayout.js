@@ -267,14 +267,20 @@ const MainLayout = () => {
               label: "Announcements",
               children: [
                 {
+                  key: "announcementCategoryName",
+                  icon: <ImBlog className="fs-4" />,
+                  label: " Add CategoryAnnouncement",
+                },
+                {
+                  key: "announcementCategoryName-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Category Announcement List",
+                },
+                
+                {
                   key: "announcements",
                   icon: <FaBlogger className="fs-4" />,
                   label: "Add Announcements ",
-                },
-                {
-                  key: "announcements-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Announcements  List",
                 },
                 {
                   key: "approvalpending-list",
@@ -282,10 +288,16 @@ const MainLayout = () => {
                   label: "ApprovalPending List",
                 },
                 {
+                  key: "announcements-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "List Announcements ",
+                },
+               
+                {
                   key: "completed-list",
                   icon: <ImBlog className="fs-4" />,
-                  label: "completed  List",
-                },
+                  label: "Completed  List",
+                },             
                 
               ],
             },
