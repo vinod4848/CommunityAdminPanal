@@ -31,7 +31,6 @@ const CompleteAnnouncementsList = () => {
       })
       .catch((error) => console.error("Error deleting announcement:", error));
   };
-  
 
   const handleShowModal = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -45,11 +44,11 @@ const CompleteAnnouncementsList = () => {
 
   return (
     <div>
-     <h2 style={{ color: 'red' }}>Complete Announcements List</h2>
+      <h2 style={{ color: "red" }}>Complete Announcements List</h2>
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
-            <th>Announcement Type</th>
+            <th>Category</th>
             <th>Created By</th>
             <th>Description</th>
             <th>Date</th>
@@ -91,7 +90,7 @@ const CompleteAnnouncementsList = () => {
           Are you sure you want to delete the announcement?
           {selectedAnnouncement && (
             <p>
-              Announcement Type: {selectedAnnouncement.announcementType}, Date:{" "}
+              Category: {selectedAnnouncement.announcementType}, Date:{" "}
               {selectedAnnouncement.date}
             </p>
           )}

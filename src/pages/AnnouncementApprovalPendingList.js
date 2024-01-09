@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base_url } from "../utils/base_url";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Table, Image } from "react-bootstrap";
 import axios from "axios";
 
 const AnnouncementApprovalPendingList = () => {
@@ -64,13 +64,13 @@ const AnnouncementApprovalPendingList = () => {
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       <h2>Announcements Approval Pending List</h2>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Category</th>
-            <th>Created By</th>
+            <th>CreatedBy</th>
             <th>Description</th>
             <th>Date</th>
             <th>Image</th>
@@ -87,21 +87,24 @@ const AnnouncementApprovalPendingList = () => {
                 <td>{filteredAnnouncement.description}</td>
                 <td>{filteredAnnouncement.date}</td>
                 <td>
-                  <img
+                  <Image
                     src={filteredAnnouncement.image}
                     alt="Announcement"
                     style={{ maxWidth: "100px", maxHeight: "100px" }}
+                    thumbnail
                   />
                 </td>
                 <td>
                   <Button
                     variant="danger"
+                    style={{ width: "83px", marginLeft: "5px" }}
                     onClick={() => handleShowModal(filteredAnnouncement)}
                   >
                     Delete
                   </Button>
                   <Button
                     variant="success"
+                    style={{ marginLeft: "5px", marginTop: "5px" }}
                     onClick={() => handleActivate(filteredAnnouncement._id)}
                   >
                     Activate
@@ -110,7 +113,7 @@ const AnnouncementApprovalPendingList = () => {
               </tr>
             ))}
         </tbody>
-      </table>
+      </Table>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Deletion</Modal.Title>
