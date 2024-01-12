@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { base_url } from "../utils/base_url";
 
 const AddAdvertisement = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [advertisement, setAdvertisement] = useState({
     clientName: "",
@@ -14,6 +15,22 @@ const AddAdvertisement = () => {
     click: "",
     image: null,
   });
+
+  useEffect(() => {
+    if (id) {
+      const fetchAdvertisement = async () => {
+        try {
+          const response = await axios.get(`${base_url}/advertisements/${id}`);
+          const existingAd = response.data;
+          setAdvertisement(existingAd);
+        } catch (error) {
+          console.error("Error fetching advertisement details:", error);
+        }
+      };
+
+      fetchAdvertisement();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -28,40 +45,54 @@ const AddAdvertisement = () => {
     e.preventDefault();
 
     try {
-      const adResponse = await axios.post(`${base_url}/advertisements`, {
-        clientName: advertisement.clientName,
-        companyName: advertisement.companyName,
-        bannerSize: advertisement.bannerSize,
-        click: advertisement.click,
-      });
+      let adResponse;
+
+      if (id) {
+        adResponse = await axios.put(`${base_url}/advertisements/${id}`, {
+          clientName: advertisement.clientName,
+          companyName: advertisement.companyName,
+          bannerSize: advertisement.bannerSize,
+          click: advertisement.click,
+        });
+      } else {
+        adResponse = await axios.post(`${base_url}/advertisements`, {
+          clientName: advertisement.clientName,
+          companyName: advertisement.companyName,
+          bannerSize: advertisement.bannerSize,
+          click: advertisement.click,
+        });
+      }
 
       const adId = adResponse.data._id;
 
-      const formData = new FormData();
-      formData.append("image", advertisement.image);
+      if (advertisement.image && advertisement.image instanceof File) {
+        // Check if a new image has been selected
+        const formData = new FormData();
+        formData.append("image", advertisement.image);
 
-      await axios.post(
-        `${base_url}/uploadImage/advertisements/${adId}`,
-        formData
-      );
+        await axios.post(
+          `${base_url}/uploadImage/advertisements/${adId}`,
+          formData
+        );
+      }
 
-      console.log("Advertisement and image added successfully");
+      console.log("Advertisement and image added/updated successfully");
 
-      toast.success("Advertisement and image added successfully!");
+      toast.success("Advertisement and image added/updated successfully!");
 
       navigate("/admin/advertising-list");
     } catch (error) {
-      console.error("Error adding advertisement:", error);
+      console.error("Error adding/updating advertisement:", error);
 
-      toast.error("Error adding advertisement. Please try again.");
+      toast.error("Error adding/updating advertisement. Please try again.");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h1>Add Advertisement</h1>
+      <h1>{id ? "Update" : "Add"} Advertisement</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+      <div className="mb-3">
           <label>Client Name:</label>
           <input
             type="text"
@@ -107,12 +138,24 @@ const AddAdvertisement = () => {
             type="file"
             name="image"
             className="form-control"
-            onChange={handleChange}
+            onChange={(e) =>
+              setAdvertisement({ ...advertisement, image: e.target.files[0] })
+            }
           />
         </div>
+        {id && advertisement.image !== null && (
+          <div>
+            <label>Current Blog Image:</label>
+            <img
+              src={advertisement.image}
+              alt="Current Blog"
+              style={{ maxWidth: "100px" }}
+            />
+          </div>
+        )}
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
-            Add Advertisement
+            {id ? "Update" : "Add"} Advertisement
           </button>
         </div>
       </form>

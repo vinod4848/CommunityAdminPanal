@@ -1,7 +1,7 @@
-import { Table,Button } from "antd";
+import { Table, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAUser, GetUsers ,updateAUser} from "../features/user/userSlice";
+import { deleteAUser, GetUsers, updateAUser } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
@@ -41,6 +41,10 @@ const columns = [
 const UserList = () => {
   const [userId, setUserId] = useState();
   const [open, setOpen] = useState(false);
+  const [searchEmail, setSearchEmail] = useState("");
+  const [searchPhone, setSearchPhone] = useState("");
+  const [searchUsername, setSearchUsername] = useState("");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -51,7 +55,9 @@ const UserList = () => {
 
   const transformUserData = () => {
     return userState
-    .filter((user) => user.role !== "admin" && user.isPublished && !user.isBlocked)
+      .filter(
+        (user) => user.role !== "admin" && user.isPublished && !user.isBlocked
+      )
       .map((user, index) => ({
         key: index + 1,
         username: user.username,
@@ -75,12 +81,21 @@ const UserList = () => {
             type="primary"
             onClick={() => handleActivateDeactivate(user._id, !user.isBlocked)}
           >
-            {user.isBlocked ? "" : "Blocked"}
+            {user.isBlocked ? "Activate" : "Block"}
           </Button>
         ),
-        
-        
       }));
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}user/searchUser?email=${searchEmail}&phone=${searchPhone}&username=${searchUsername}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error searching user:", error);
+    }
   };
   const handleActivateDeactivate = async (userId, isBlocked) => {
     try {
@@ -95,6 +110,7 @@ const UserList = () => {
       console.error("Error updating user:", error);
     }
   };
+
   const showModal = (userId) => {
     setOpen(true);
     setUserId(userId);
@@ -107,10 +123,8 @@ const UserList = () => {
   const handleDeleteUser = async (userId) => {
     try {
       await axios.delete(`${base_url}user/deleteUser/${userId}`);
-
       dispatch(deleteAUser(userId));
       setOpen(false);
-
       dispatch(GetUsers());
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -122,6 +136,42 @@ const UserList = () => {
       <h3 className="mb-4 title" style={{ color: "green" }}>
         Active Users
       </h3>
+      <div
+        className="mb-2"
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          gap: "17px",
+          width:"260",
+          height:"37px",
+        }}
+      >
+        <input 
+          type="text"
+          placeholder=" Search By Email Phone Username"
+          value={searchEmail || searchPhone || searchUsername}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+            if (inputValue.includes("@")) {
+              setSearchEmail(inputValue);
+              setSearchPhone("");
+              setSearchUsername("");
+            } else if (inputValue.length > 0) {
+              setSearchPhone("");
+              setSearchUsername(inputValue);
+              setSearchEmail("");
+            } else {
+              setSearchPhone("");
+              setSearchUsername("");
+              setSearchEmail("");
+            }
+          }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Search
+        </Button>
+      </div>
       <div>
         <Table columns={columns} dataSource={transformUserData()} />
       </div>

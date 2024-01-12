@@ -61,10 +61,9 @@ const MainLayout = () => {
               label: "Dashbord",
             },
 
+            // for usery Manegment start
 
-// for usery Manegment start
-
-{
+            {
               key: "user",
               icon: <FaEnvelope className="fs-4" />,
               label: "Users",
@@ -243,6 +242,63 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Approval Pending",
                 },
+              ],
+            },
+            {
+              key: "magazines",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Magazines",
+              children: [
+                {
+                  key: "magazines",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Magazines ",
+                },
+                {
+                  key: "magazines-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Magazines  List",
+                },
+              ],
+            },
+            {
+              key: "announcements",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Announcements",
+              children: [
+                {
+                  key: "announcementCategoryName",
+                  icon: <ImBlog className="fs-4" />,
+                  label: " Add CategoryAnnouncement",
+                },
+                {
+                  key: "announcementCategoryName-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Category Announcement List",
+                },
+                
+                {
+                  key: "announcements",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Announcements ",
+                },
+                {
+                  key: "approvalpending-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "ApprovalPending List",
+                },
+                {
+                  key: "announcements-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "List Announcements ",
+                },
+               
+                {
+                  key: "completed-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Completed  List",
+                },             
+                
               ],
             },
           ]}
