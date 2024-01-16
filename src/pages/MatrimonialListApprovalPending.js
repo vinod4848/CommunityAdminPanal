@@ -13,10 +13,12 @@ const columns = [
   {
     title: "SN",
     dataIndex: "key",
+    className: "column-sn",
   },
   {
     title: "FirstName",
     dataIndex: "firstName",
+    className: "column-firstName",
   },
   {
     title: "LastName",
@@ -44,10 +46,6 @@ const columns = [
     dataIndex: "profession",
   },
   {
-    title: "Income",
-    dataIndex: "income",
-  },
-  {
     title: "NativePlace",
     dataIndex: "nativePlace",
   },
@@ -57,52 +55,32 @@ const columns = [
   },
 
   {
-    title: "Family",
-    dataIndex: "family",
-    render: (family) => (
-      <span>
-        {family ? (
-          <>
-            <strong>Father:</strong> {family.fatherName},{" "}
-            <strong>Mother:</strong> {family.motherName},{" "}
-            <strong>Brothers:</strong> {family.siblings.brothers},{" "}
-            <strong>Sisters:</strong> {family.siblings.sisters}
-          </>
-        ) : (
-          <strong>No family information available</strong>
-        )}
-      </span>
-    ),
-  },
-
-  {
-    title: "Address",
-    dataIndex: "address",
-    render: (address) => (
-      <span>
-        <strong>Street:</strong> {address.street}, <strong>City:</strong>{" "}
-        {address.city}, <strong>State:</strong> {address.state},
-        <strong>Country:</strong> {address.country},{" "}
-        <strong>Postal Code:</strong> {address.postalCode}
-      </span>
-    ),
-  },
-
-  {
-    title: "Education",
-    dataIndex: "education",
-    render: (education) => (
-      <span>
-        <strong>Degree:</strong> {education.degree},{" "}
-        <strong>Institution:</strong> {education.institution},
-        <strong>Completion Year:</strong> {education.completionYear}
-      </span>
-    ),
-  },
-
-  {
     title: "AboutMe",
     dataIndex: "aboutMe",
+  },
+  {
+    title: "MaritalStatus",
+    dataIndex: "maritalStatus",
+  },
+  {
+    title: "ProfileCreatedBy",
+    dataIndex: "profileCreatedBy",
+  },
+  {
+    title: "AnyDisability",
+    dataIndex: "anyDisability",
+  },
+  {
+    title: "BloodGroup",
+    dataIndex: "bloodGroup",
+  },
+  {
+    title: "Lifestyle",
+    dataIndex: "lifestyle",
+  },
+  {
+    title: "moreAboutYourselfPartnerAndFamily",
+    dataIndex: "moreAboutYourselfPartnerAndFamily",
   },
   {
     title: "Hobbies",
@@ -120,30 +98,32 @@ const columns = [
   {
     title: "Partner Preferences",
     dataIndex: "partnerPreferences",
-    render: (partnerPreferences) => (
-      <span className="partner-preferences">
-        <strong>Age Range:</strong>{" "}
-        {partnerPreferences && partnerPreferences.ageRange
-          ? `${partnerPreferences.ageRange.min} - ${partnerPreferences.ageRange.max}`
-          : "Not specified"}
-        , <strong>Gender:</strong>{" "}
-        {partnerPreferences && (partnerPreferences.gender || "Not specified")},{" "}
-        <strong>Education:</strong>{" "}
-        {partnerPreferences &&
-          (partnerPreferences.education || "Not specified")}
-        , <strong>Profession:</strong>{" "}
-        {partnerPreferences &&
-          (partnerPreferences.profession || "Not specified")}
-        , <strong>Min Height:</strong>{" "}
-        {partnerPreferences &&
-          (partnerPreferences.minHeight || "Not specified")}
-        , <strong>Max Income:</strong>{" "}
-        {partnerPreferences &&
-          (partnerPreferences.maxIncome || "Not specified")}
-      </span>
-    ),
   },
 
+  {
+    title: "ReligiousBackground",
+    dataIndex: "religiousBackground",
+  },
+  {
+    title: "Family",
+    dataIndex: "family",
+  },
+  {
+    title: "AstroDetails",
+    dataIndex: "astroDetails",
+  },
+  {
+    title: "EducationAndCareer",
+    dataIndex: "educationAndCareer",
+  },
+  {
+    title: "HealthInformation",
+    dataIndex: "healthInformation",
+  },
+  {
+    title: "LocationOfGroom",
+    dataIndex: "locationOfGroom",
+  },
   {
     title: "Profile",
     dataIndex: "image",
@@ -151,7 +131,6 @@ const columns = [
       <img src={image} alt="profileBanner" style={{ maxWidth: "100px" }} />
     ),
   },
-
   {
     title: "Activate",
     dataIndex: "activateDeactivate",
@@ -174,24 +153,113 @@ const MatrimonialListApprovalPending = () => {
       .filter((matrimonial) => !matrimonial.isApproved)
       .map((matrimonial, index) => ({
         key: index + 1,
-        firstName: matrimonial.firstName,
-        lastName: matrimonial.lastName,
+        firstName: matrimonial.profileId.firstName,
+        lastName: matrimonial.profileId.lastName,
         image: matrimonial.image,
-        email: matrimonial.email,
-        phone: matrimonial.phone,
-        dateOfBirth: matrimonial.dateOfBirth,
-        profession: matrimonial.profession,
-        income: matrimonial.income,
+        email: matrimonial.userId.email,
+        phone: matrimonial.userId.phone,
+        dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
+        profession: matrimonial.profileId.profession,
         nativePlace: matrimonial.nativePlace,
-        family: matrimonial.family,
+        maritalStatus: matrimonial.maritalStatus,
         address: matrimonial.address,
         education: matrimonial.education,
-        hobbies: matrimonial.hobbies,
-        gender: matrimonial.gender,
-        createdAt: matrimonial.createdAt,
+        hobbies: Array.isArray(matrimonial.hobbies)
+          ? matrimonial.hobbies.join(", ")
+          : "",
+        gender: matrimonial.profileId.gender,
+        createdAt: moment(matrimonial.createdAt).format("YYYY-MM-DD"),
         aboutMe: matrimonial.aboutMe,
         height: matrimonial.height,
-        partnerPreferences: matrimonial.partnerPreferences,
+        profileCreatedBy: matrimonial.profileCreatedBy,
+        healthInformation: matrimonial.healthInformation,
+        anyDisability: matrimonial.anyDisability,
+        bloodGroup: matrimonial.bloodGroup,
+        lifestyle: matrimonial.lifestyle,
+        moreAboutYourselfPartnerAndFamily:
+          matrimonial.moreAboutYourselfPartnerAndFamily,
+        religiousBackground: (
+          <span>
+            <strong>Religion:</strong>{" "}
+            {matrimonial.religiousBackground.religion},{" "}
+            <strong>Mother Tongue:</strong>{" "}
+            {matrimonial.religiousBackground.motherTongue},{" "}
+            <strong>Community:</strong>{" "}
+            {matrimonial.religiousBackground.community},{" "}
+            <strong>Sub Community:</strong>{" "}
+            {matrimonial.religiousBackground.subCommunity},{" "}
+            <strong>Gothra/Gothram:</strong>{" "}
+            {matrimonial.religiousBackground.gothraGothram}
+          </span>
+        ),
+        family: (
+          <span>
+            <strong>Number of Siblings:</strong>{" "}
+            {matrimonial.family.numberOfSiblings},{" "}
+            <strong>Father Status:</strong> {matrimonial.family.fatherStatus},{" "}
+            <strong>Living with:</strong> {matrimonial.family.with},{" "}
+            <strong>Occupation:</strong> {matrimonial.family.as},{" "}
+            <strong>Nature of Business:</strong>{" "}
+            {matrimonial.family.natureOfBusiness},{" "}
+            <strong>Mother Status:</strong> {matrimonial.family.motherStatus},{" "}
+            <strong>Family Location:</strong>{" "}
+            {matrimonial.family.familyLocation}, <strong>Family Type:</strong>{" "}
+            {matrimonial.family.familyType}, <strong>Family Values:</strong>{" "}
+            {matrimonial.family.familyValues},{" "}
+            <strong>Family Affluence:</strong>{" "}
+            {matrimonial.family.familyAffluence}
+          </span>
+        ),
+        astroDetails: (
+          <span>
+            <strong>Manglik/Chevva Dosham:</strong>{" "}
+            {matrimonial.astroDetails.manglikChevvaidosham},{" "}
+            <strong>Nakshatra:</strong> {matrimonial.astroDetails.nakshatra}
+          </span>
+        ),
+        partnerPreferences: (
+          <span>
+            <strong>Age Range:</strong>{" "}
+            {matrimonial.partnerPreferences.ageRange.min} -{" "}
+            {matrimonial.partnerPreferences.ageRange.max},{" "}
+            <strong>Gender:</strong> {matrimonial.partnerPreferences.gender},{" "}
+            <strong>Education:</strong>{" "}
+            {matrimonial.partnerPreferences.education},{" "}
+            <strong>Profession:</strong>{" "}
+            {matrimonial.partnerPreferences.profession},{" "}
+            <strong>Min Height:</strong>{" "}
+            {matrimonial.partnerPreferences.minHeight},{" "}
+            <strong>Max Income:</strong>{" "}
+            {matrimonial.partnerPreferences.maxIncome}
+          </span>
+        ),
+        educationAndCareer: (
+          <span>
+            <strong>Highest Qualification:</strong>{" "}
+            {matrimonial.educationAndCareer.highestQualification},{" "}
+            <strong>College Attended:</strong>{" "}
+            {matrimonial.educationAndCareer.collegeAttended},{" "}
+            <strong>Working With:</strong>{" "}
+            {matrimonial.educationAndCareer.workingWith},{" "}
+            <strong>Annual Income:</strong>{" "}
+            {matrimonial.educationAndCareer.annualIncome}
+          </span>
+        ),
+        locationOfGroom: (
+          <span>
+            <strong>Country Living In:</strong>{" "}
+            {matrimonial.locationOfGroom.countryLivingIn},{" "}
+            <strong>State Living In:</strong>{" "}
+            {matrimonial.locationOfGroom.stateLivingIn},{" "}
+            <strong>City Living In:</strong>{" "}
+            {matrimonial.locationOfGroom.cityLivingIn},{" "}
+            <strong>Grew Up In:</strong> {matrimonial.locationOfGroom.grewUpIn},{" "}
+            <strong>Ethnic Origin:</strong>{" "}
+            {matrimonial.locationOfGroom.ethnicOrigin},{" "}
+            <strong>Zip/Pin Code:</strong>{" "}
+            {matrimonial.locationOfGroom.zipPinCode}
+          </span>
+        ),
         action: <></>,
         activateDeactivate: (
           <Button
@@ -208,12 +276,9 @@ const MatrimonialListApprovalPending = () => {
 
   const handleActivateDeactivate = async (matrimonialId, isApproved) => {
     try {
-      await axios.put(
-        `${base_url}/matrimonial/profiles/${matrimonialId}`,
-        {
-          isApproved: isApproved,
-        }
-      );
+      await axios.put(`${base_url}/matrimonial/profiles/${matrimonialId}`, {
+        isApproved: isApproved,
+      });
       dispatch(updateAMatrimonial({ matrimonialId, isApproved }));
       setTimeout(() => {
         dispatch(getMatrimonial());

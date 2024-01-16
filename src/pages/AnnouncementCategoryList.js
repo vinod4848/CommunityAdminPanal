@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { base_url } from "../utils/base_url";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { BiEdit } from "react-icons/bi";
+import { MdOutlineDelete } from "react-icons/md";
 
 const AnnouncementCategoryList = () => {
   const [announcementCategories, setAnnouncementCategories] = useState([]);
@@ -62,11 +65,17 @@ const AnnouncementCategoryList = () => {
               <td>{filteredCategory.date}</td>
               <td>
                 <Button
-                  variant="danger"
+                  className="ms-2 fs-2 text-danger bg-transparent border-0"
                   onClick={() => handleShowModal(filteredCategory)}
                 >
-                  Delete
+                  <MdOutlineDelete />
                 </Button>
+                <Link
+                  to={`/admin/announcementCategoryName/${filteredCategory._id}`}
+                  className=" ms-2 fs-3 text-danger"
+                >
+                  <BiEdit />
+                </Link>
               </td>
             </tr>
           ))}

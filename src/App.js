@@ -10,18 +10,18 @@ import BlogList from "./pages/BlogList";
 import Advertisinglist from "./pages/AdvertisingList";
 import Eventlist from "./pages/EventList";
 import CompleteEventList from "./pages/CompleteEventList";
-import Joblist from "./pages/JobList"
-import Newslist from "./pages/NewsList"
-import JobListApprovalPending from "./pages/JobListApprovalPending"
-import MatrimonialListApprovalPending from "./pages/MatrimonialListApprovalPending"
-import EventListApprovalPending from "./pages/EventListApprovalPending"
-import Directorielist from "./pages/DirectorieList"
-import Matrimoniallist from "./pages/Matrimonial.List"
+import Joblist from "./pages/JobList";
+import Newslist from "./pages/NewsList";
+import JobListApprovalPending from "./pages/JobListApprovalPending";
+import MatrimonialListApprovalPending from "./pages/MatrimonialListApprovalPending";
+import EventListApprovalPending from "./pages/EventListApprovalPending";
+import Directorielist from "./pages/DirectorieList";
+import Matrimoniallist from "./pages/Matrimonial.List";
 import Blogcatlist from "./pages/Blogcatlist";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Colorlist from "./pages/Colorlist";
-import Categorylist from "./pages/Categorylist"
+import Categorylist from "./pages/Categorylist";
 import AddBlog from "./pages/AddBlog";
 import AddEvent from "./pages/AddEvent";
 import AddNews from "./pages/AddNews";
@@ -41,7 +41,6 @@ import CompleteAnnouncementsList from "./pages/CompleteAnnouncementsList";
 import AddAnnouncementCategory from "./pages/AddAnnouncementCategory";
 import AnnouncementCategoryList from "./pages/AnnouncementCategoryList";
 
-
 function App() {
   return (
     <Router>
@@ -59,10 +58,22 @@ function App() {
           <Route path="complete-event-list" element={<CompleteEventList />} />
           <Route path="job-list" element={<Joblist />} />
           <Route path="news-list" element={<Newslist />} />
-          <Route path="approval-job-list" element={<JobListApprovalPending />} />
-          <Route path="approval-list-matrimonial" element={<MatrimonialListApprovalPending />} />
-          <Route path="approval-list-user" element={<UserListApprovalPending />} />
-          <Route path="approval-list-event" element={<EventListApprovalPending />} />
+          <Route
+            path="approval-job-list"
+            element={<JobListApprovalPending />}
+          />
+          <Route
+            path="approval-list-matrimonial"
+            element={<MatrimonialListApprovalPending />}
+          />
+          <Route
+            path="approval-list-user"
+            element={<UserListApprovalPending />}
+          />
+          <Route
+            path="approval-list-event"
+            element={<EventListApprovalPending />}
+          />
           <Route path="directory-list" element={<Directorielist />} />
           <Route path="matrimonial-list" element={<Matrimoniallist />} />
           <Route path="blogs" element={<AddBlog />} />
@@ -74,12 +85,28 @@ function App() {
           <Route path="directory" element={<AddDirectory />} />
           <Route path="magazines" element={<AddMagazines />} />
           <Route path="magazines-list" element={<MagazinesList />} />
-          <Route path="announcementCategoryName" element={<AddAnnouncementCategory />} />
-          <Route path="announcementCategoryName-list" element={<AnnouncementCategoryList />} />
+          <Route
+            path="announcementCategoryName"
+            element={<AddAnnouncementCategory />}
+          />
+          <Route
+            path="announcementCategoryName/:id"
+            element={<AddAnnouncementCategory />}
+          />
+          <Route
+            path="announcementCategoryName-list"
+            element={<AnnouncementCategoryList />}
+          />
           <Route path="announcements-list" element={<AnnouncementList />} />
           <Route path="announcements" element={<Addannouncements />} />
-          <Route path="approvalpending-list" element={<AnnouncementApprovalPendingList />} />
-          <Route path="completed-list" element={<CompleteAnnouncementsList />} />
+          <Route
+            path="approvalpending-list"
+            element={<AnnouncementApprovalPendingList />}
+          />
+          <Route
+            path="completed-list"
+            element={<CompleteAnnouncementsList />}
+          />
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="users/:userId" element={<AddUser />} />
