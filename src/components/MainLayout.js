@@ -209,23 +209,23 @@ const MainLayout = () => {
               ],
             },
 
-            // {
-            //   key: "gallery",
-            //   icon: <FaBlogger className="fs-4" />,
-            //   label: "Gallery",
-            //   children: [
-            //     {
-            //       key: "gallery",
-            //       icon: <FaBlogger className="fs-4" />,
-            //       label: "Add Gallery ",
-            //     },
-            //     {
-            //       key: "gallery-list",
-            //       icon: <ImBlog className="fs-4" />,
-            //       label: "Gallery  List",
-            //     },
-            //   ],
-            // },
+            {
+              key: "gallery",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Gallery",
+              children: [
+                {
+                  key: "gallery",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Gallery ",
+                },
+                {
+                  key: "gallery-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Gallery  List",
+                },
+              ],
+            },
 
             {
               key: "Matrimonial",
@@ -276,7 +276,7 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Category Announcement List",
                 },
-                
+
                 {
                   key: "announcements",
                   icon: <FaBlogger className="fs-4" />,
@@ -292,13 +292,29 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "List Announcements ",
                 },
-               
+
                 {
                   key: "completed-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Completed  List",
-                },             
-                
+                },
+              ],
+            },
+            {
+              key: "Property",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Property",
+              children: [
+                {
+                  key: "property",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Property ",
+                },
+                {
+                  key: "property-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Property  List",
+                },
               ],
             },
           ]}
