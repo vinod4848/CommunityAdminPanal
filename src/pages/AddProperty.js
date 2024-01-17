@@ -171,7 +171,7 @@ const AddProperty = () => {
         </div>
 
         <div className="mb-3">
-          <label>Super Builtup Area:</label>
+          <label>Super Builtup Area (sq.ft):</label>
           <input
             type="number"
             name="superBuiltupArea"
@@ -182,7 +182,7 @@ const AddProperty = () => {
         </div>
 
         <div className="mb-3">
-          <label>Carpet Area:</label>
+          <label>Carpet Area (sq.ft) :</label>
           <input
             type="number"
             name="carpetArea"
