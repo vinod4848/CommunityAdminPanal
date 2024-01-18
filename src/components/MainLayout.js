@@ -349,6 +349,23 @@ const MainLayout = () => {
                 },
               ],
             },
+            {
+              key: "sellAndbuy ",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Sell/Buy",
+              children: [
+                {
+                  key: "sellAndbuy",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Sell/Buy ",
+                },
+                {
+                  key: "sellAndbuy-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Sell/Buy  List",
+                },
+              ],
+            },
           ]}
         />
       </Sider>

@@ -45,6 +45,7 @@ import AddProperty from "./pages/AddProperty";
 import LandsPlotsList from "./pages/landsPlotsList";
 import ShopOfficeList from "./pages/ShopOfficeList";
 import PgGuestHouseList from "./pages/pgGuestHouseList";
+import SellAndbuyList from "./pages/SellAndbuyList";
 
 function App() {
   return (
@@ -95,6 +96,7 @@ function App() {
           <Route path="landPlot-list" element={<LandsPlotsList />} />
           <Route path="shopOffice-list" element={<ShopOfficeList />} />
           <Route path="pgGuestHouse-list" element={<PgGuestHouseList />} />
+          <Route path="sellAndbuy-list" element={<SellAndbuyList />} />
           <Route
             path="announcementCategoryName"
             element={<AddAnnouncementCategory />}
