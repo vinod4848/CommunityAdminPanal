@@ -315,6 +315,38 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Property  List",
                 },
+
+                {
+                  key: "landPlot",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Lands_Plots",
+                },
+                {
+                  key: "landPlot-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "List Lands_Plots ",
+                },
+                {
+                  key: "shopOffice",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add ShopOffice ",
+                },
+                {
+                  key: "shopOffice-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "List ShopOffice ",
+                },
+
+                {
+                  key: "pgGuestHouse",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add PgGuestHouse ",
+                },
+                {
+                  key: "pgGuestHouse-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "List PgGuestHouse ",
+                },
               ],
             },
           ]}

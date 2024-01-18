@@ -3,7 +3,7 @@ import { base_url } from "../utils/base_url";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const AddProperty = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const getUserData = useSelector((state) => state.auth.user);
   const [propertyData, setPropertyData] = useState({
     userId: getUserData?._id || "",
@@ -13,6 +13,7 @@ const AddProperty = () => {
     proprietorshipTypes: "",
     propertyType: "",
     bathrooms: "",
+    bedrooms: "",
     furnishing: "",
     superBuiltupArea: "",
     carpetArea: "",
@@ -147,6 +148,22 @@ const AddProperty = () => {
             onChange={handleInputChange}
           >
             <option value="">Select Bathrooms</option>
+            <option value={0}>0</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value="3+">3+</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label>Bedrooms:</label>
+          <select
+            name="bedrooms"
+            className="form-control"
+            value={propertyData.bedrooms}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Bedrooms</option>
             <option value={0}>0</option>
             <option value={1}>1</option>
             <option value={2}>2</option>
