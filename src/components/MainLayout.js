@@ -319,43 +319,43 @@ const MainLayout = () => {
               icon: <FaBlogger className="fs-4" />,
               label: "Property",
               children: [
-                {
-                  key: "property",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Property ",
-                },
+                // {
+                //   key: "property",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Property ",
+                // },
                 {
                   key: "property-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Property  List",
                 },
 
-                {
-                  key: "landPlot",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Lands_Plots",
-                },
+                // {
+                //   key: "landPlot",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Lands_Plots",
+                // },
                 {
                   key: "landPlot-list",
                   icon: <FaBlogger className="fs-4" />,
                   label: "List Lands_Plots ",
                 },
-                {
-                  key: "shopOffice",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add ShopOffice ",
-                },
+                // {
+                //   key: "shopOffice",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add ShopOffice ",
+                // },
                 {
                   key: "shopOffice-list",
                   icon: <FaBlogger className="fs-4" />,
                   label: "List ShopOffice ",
                 },
 
-                {
-                  key: "pgGuestHouse",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add PgGuestHouse ",
-                },
+                // {
+                //   key: "pgGuestHouse",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add PgGuestHouse ",
+                // },
                 {
                   key: "pgGuestHouse-list",
                   icon: <FaBlogger className="fs-4" />,
@@ -382,6 +382,11 @@ const MainLayout = () => {
                   key: "fashion-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Fashion  List",
+                },
+                {
+                  key: "furniture-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Furniture  List",
                 },
               ],
             },

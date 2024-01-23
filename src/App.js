@@ -49,6 +49,7 @@ import SellAndbuyList from "./pages/SellAndbuyList";
 import UserListV1 from "./pages/UserListV1";
 import GalleryList from "./pages/GalleryList";
 import FashionList from "./pages/FashionList";
+import FurnitureList from "./pages/FurnitureList";
 
 function App() {
   return (
@@ -127,6 +128,7 @@ function App() {
           <Route path="users/:userId" element={<AddUser />} />
           {/* <Route path="user-list" element={<UserList />} /> */}
           <Route path="user-list" element={<UserListV1 />} />
+          <Route path="furniture-list" element={<FurnitureList />} />
           <Route path="fashion-list" element={<FashionList />} />
           <Route path="gallery-list" element={<GalleryList />} />
           <Route path="block-user-list" element={<BlockUserListss />} />

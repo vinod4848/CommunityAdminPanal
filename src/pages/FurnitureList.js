@@ -4,15 +4,15 @@ import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
 import { Table, Image, Space, Button, Modal, message } from "antd";
 
-const FashionList = () => {
-  const [fashion, setFashion] = useState([]);
+const FurnitureList = () => {
+  const [furniture, setFashion] = useState([]);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchFashion = async () => {
       try {
-        const response = await axios.get(`${base_url}/fashion`);
+        const response = await axios.get(`${base_url}/furniture`);
         const data = response.data;
         setFashion(data);
       } catch (error) {
@@ -26,9 +26,9 @@ const FashionList = () => {
   const handleDelete = async () => {
     try {
       if (deleteRecord) {
-        await axios.delete(`${base_url}/fashion/${deleteRecord._id}`);
+        await axios.delete(`${base_url}/furniture/${deleteRecord._id}`);
         message.success("Fashion item deleted successfully");
-        // Refresh the fashion list after deletion
+        // Refresh the furniture list after deletion
         setFashion((prevFashion) =>
           prevFashion.filter((item) => item._id !== deleteRecord._id)
         );
@@ -37,7 +37,7 @@ const FashionList = () => {
       }
     } catch (error) {
       console.error(error);
-      message.error("Failed to delete fashion item");
+      message.error("Failed to delete furniture item");
       setDeleteRecord(null);
       setIsDeleteModalVisible(false);
     }
@@ -64,13 +64,18 @@ const FashionList = () => {
       dataIndex: "firstName",
     },
     {
-      title: "AdTitle",
+      title: "adTitle",
       dataIndex: "adTitle",
     },
     {
-      title: "Fashion for",
-      dataIndex: "fashionType",
+        title: "Used",
+        dataIndex: "used",
+      },
+    {
+      title: "Furniture Type",
+      dataIndex: "furnitureType",
     },
+    
     {
       title: "Price",
       dataIndex: "price",
@@ -115,6 +120,7 @@ const FashionList = () => {
           <Button
             type="danger"
             onClick={() => showModal(record)}
+            danger
             icon={<AiFillDelete style={{ color: "#da3838" }} />}
           />
           <Modal
@@ -125,14 +131,14 @@ const FashionList = () => {
             okText="Yes"
             cancelText="No"
           >
-            <p>Are you sure you want to delete this fashion item?</p>
+            <p>Are you sure you want to delete this furniture item?</p>
           </Modal>
         </>
       ),
     },
   ];
 
-  const data = fashion.map((fashionItem, index) => ({
+  const data = furniture.map((fashionItem, index) => ({
     key: index,
     ...fashionItem,
     firstName: fashionItem.profileId.firstName,
@@ -140,10 +146,10 @@ const FashionList = () => {
 
   return (
     <div>
-      <h1>Fashion List</h1>
+      <h1>Furniture List</h1>
       <Table dataSource={data} columns={columns} />
     </div>
   );
 };
 
-export default FashionList;
+export default FurnitureList;
