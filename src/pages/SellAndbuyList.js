@@ -27,6 +27,72 @@ const SellAndbuyList = () => {
     fetchProducts();
   }, [selectedProductType]);
 
+  const generateColumns = (schema) => {
+    const genericColumns = [
+      { title: "Post By", dataIndex: "username" },
+      { title: "Ad Title", dataIndex: "adTitle" },
+      { title: "Description", dataIndex: "description" },
+      { title: "Address", dataIndex: "address" },
+      { title: "Landmark", dataIndex: "landmark" },
+      { title: "Price", dataIndex: "price" },
+      { title: "Brand", dataIndex: "brand" },
+      {
+        title: "Images",
+        dataIndex: "images",
+        render: (images, record) => (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {Array.isArray(images) ? (
+              images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Product ${record.key + 1}`}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    margin: "5px",
+                  }}
+                />
+              ))
+            ) : (
+              <p>No images available</p>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: "Action",
+        dataIndex: "action",
+        render: (text, record) => (
+          <div>
+            <Button
+              onClick={() => showDeleteModal(record._id)}
+              type="text"
+              danger
+            >
+              <AiFillDelete />
+            </Button>
+            <Link
+              to={`/admin/${selectedProductType}/${record._id}`}
+              className="fs-3 text-danger"
+            >
+              <Button type="text">
+                <BiEdit />
+              </Button>
+            </Link>
+          </div>
+        ),
+      },
+    ];
+
+    const specificColumns = schema.map((field) => ({
+      title: field.title,
+      dataIndex: field.dataIndex,
+    }));
+
+    return [...genericColumns, ...specificColumns];
+  };
+
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
@@ -64,7 +130,8 @@ const SellAndbuyList = () => {
     setSelectedProductType(value);
   };
 
-  const columns = [
+  const columns = generateColumns([]);
+  const columnsOfCar = [
     { title: "Post By", dataIndex: "username" },
     { title: "Ad Title", dataIndex: "adTitle" },
     { title: "Description", dataIndex: "description" },
@@ -72,6 +139,11 @@ const SellAndbuyList = () => {
     { title: "Landmark", dataIndex: "landmark" },
     { title: "Price", dataIndex: "price" },
     { title: "Brand", dataIndex: "brand" },
+    { title: "Year", dataIndex: "year" },
+    { title: "Fuel Type", dataIndex: "fuelType" },
+    { title: "Transmission", dataIndex: "transmission" },
+    { title: "KM Driven", dataIndex: "kmDriven" },
+    { title: "No. Owners", dataIndex: "numberOfOwners" },
     {
       title: "Images",
       dataIndex: "images",
@@ -120,6 +192,65 @@ const SellAndbuyList = () => {
       ),
     },
   ];
+  const columnsOfBike =([
+  
+    { title: "Post By", dataIndex: "username" },
+    { title: "Ad Title", dataIndex: "adTitle" },
+    { title: "Description", dataIndex: "description" },
+    { title: "Address", dataIndex: "address" },
+    { title: "Landmark", dataIndex: "landmark" },
+    { title: "Price", dataIndex: "price" },
+    { title: "Brand", dataIndex: "brand" },
+    { title: "Year", dataIndex: "year" },
+    { title: "KM Driven", dataIndex: "kmDriven" },
+    {
+      title: "Images",
+      dataIndex: "images",
+      render: (images, record) => (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {Array.isArray(images) ? (
+            images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Product ${record.key + 1}`}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  margin: "5px",
+                }}
+              />
+            ))
+          ) : (
+            <p>No images available</p>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (text, record) => (
+        <div>
+          <Button
+            onClick={() => showDeleteModal(record._id)}
+            type="text"
+            danger
+          >
+            <AiFillDelete />
+          </Button>
+          <Link
+            to={`/admin/${selectedProductType}/${record._id}`}
+            className="fs-3 text-danger"
+          >
+            <Button type="text">
+              <BiEdit />
+            </Button>
+          </Link>
+        </div>
+      ),
+    },
+  ]);
 
   const data = products.map((product, index) => ({
     key: index,
@@ -142,7 +273,16 @@ const SellAndbuyList = () => {
         <Option value="bikes">Bikes</Option>
         <Option value="cars">Cars</Option>
       </Select>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={
+          selectedProductType === "cars"
+            ? columnsOfCar
+            : selectedProductType === "bikes"
+            ? columnsOfBike
+            : columns
+        }
+        dataSource={data}
+      />
       <Modal
         title="Confirm Delete"
         visible={deleteModalVisible}

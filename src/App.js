@@ -30,7 +30,7 @@ import AddAdvertisement from "./pages/AddAdvertising";
 import AddDirectory from "./pages/AddDirectorie";
 import AddUser from "./pages/AddUser";
 import UserListApprovalPending from "./pages/UserListApprovalPending";
-import UserList from "./pages/UserList";
+// import UserList from "./pages/UserList";
 import BlockUserListss from "./pages/BlockUserList";
 import AddMagazines from "./pages/AddMagazines";
 import MagazinesList from "./pages/MagazinesList";
@@ -46,6 +46,9 @@ import LandsPlotsList from "./pages/landsPlotsList";
 import ShopOfficeList from "./pages/ShopOfficeList";
 import PgGuestHouseList from "./pages/pgGuestHouseList";
 import SellAndbuyList from "./pages/SellAndbuyList";
+import UserListV1 from "./pages/UserListV1";
+import GalleryList from "./pages/GalleryList";
+import FashionList from "./pages/FashionList";
 
 function App() {
   return (
@@ -122,7 +125,10 @@ function App() {
           <Route path="directorie/:directoryId" element={<AddDirectory />} />
           <Route path="users" element={<AddUser />} />
           <Route path="users/:userId" element={<AddUser />} />
-          <Route path="user-list" element={<UserList />} />
+          {/* <Route path="user-list" element={<UserList />} /> */}
+          <Route path="user-list" element={<UserListV1 />} />
+          <Route path="fashion-list" element={<FashionList />} />
+          <Route path="gallery-list" element={<GalleryList />} />
           <Route path="block-user-list" element={<BlockUserListss />} />
           <Route path="events/:eventId" element={<AddEvent />} />
           <Route path="news" element={<AddNews />} />

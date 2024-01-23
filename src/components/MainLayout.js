@@ -63,30 +63,44 @@ const MainLayout = () => {
 
             // for usery Manegment start
 
+            // {
+            //   key: "user",
+            //   icon: <FaEnvelope className="fs-4" />,
+            //   label: "Users",
+            //   children: [
+            //     {
+            //       key: "users",
+            //       icon: <FaBlogger className="fs-4" />,
+            //       label: "Add User",
+            //     },
+            //     {
+            //       key: "user-list",
+            //       icon: <FaEnvelopeOpen className="fs-4" />,
+            //       label: "Users List",
+            //     },
+            //     {
+            //       key: "approval-list-User",
+            //       icon: <ImBlog className="fs-4" />,
+            //       label: "Approval Pending",
+            //     },
+            //     {
+            //       key: "block-user-list",
+            //       icon: <FaEnvelopeOpen className="fs-4" />,
+            //       label: "Block User",
+            //     },
+            //   ],
+            // },
+
+
             {
               key: "user",
-              icon: <FaEnvelope className="fs-4" />,
+              icon: <FaBlogger className="fs-4" />,
               label: "Users",
               children: [
                 {
-                  key: "users",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add User",
-                },
-                {
                   key: "user-list",
-                  icon: <FaEnvelopeOpen className="fs-4" />,
-                  label: "Users List",
-                },
-                {
-                  key: "approval-list-User",
                   icon: <ImBlog className="fs-4" />,
-                  label: "Approval Pending",
-                },
-                {
-                  key: "block-user-list",
-                  icon: <FaEnvelopeOpen className="fs-4" />,
-                  label: "Block User",
+                  label: "User List",
                 },
               ],
             },
@@ -354,15 +368,20 @@ const MainLayout = () => {
               icon: <FaBlogger className="fs-4" />,
               label: "Sell/Buy",
               children: [
-                {
-                  key: "sellAndbuy",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Sell/Buy ",
-                },
+                // {
+                //   key: "sellAndbuy",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Sell/Buy ",
+                // },
                 {
                   key: "sellAndbuy-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Sell/Buy  List",
+                },
+                {
+                  key: "fashion-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Fashion  List",
                 },
               ],
             },

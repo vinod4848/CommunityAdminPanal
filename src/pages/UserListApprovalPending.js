@@ -42,7 +42,7 @@ const UserListApprovalPending = () => {
 
   const transformUserData = () => {
     return userState
-    .filter((user) => user.role !== "admin" && !user.isPublished)
+      .filter((user) => user.role !== "admin" && !user.isPublished)
       .map((user, index) => ({
         key: index + 1,
         username: user.username,
