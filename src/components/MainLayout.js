@@ -338,7 +338,7 @@ const MainLayout = () => {
                 {
                   key: "landPlot-list",
                   icon: <FaBlogger className="fs-4" />,
-                  label: "List Lands_Plots ",
+                  label: "Lands & Plots List ",
                 },
                 // {
                 //   key: "shopOffice",
@@ -348,7 +348,7 @@ const MainLayout = () => {
                 {
                   key: "shopOffice-list",
                   icon: <FaBlogger className="fs-4" />,
-                  label: "List ShopOffice ",
+                  label: "Shop & Office  List",
                 },
 
                 // {
@@ -359,7 +359,7 @@ const MainLayout = () => {
                 {
                   key: "pgGuestHouse-list",
                   icon: <FaBlogger className="fs-4" />,
-                  label: "List PgGuestHouse ",
+                  label: "PG & GuestHouse List",
                 },
               ],
             },

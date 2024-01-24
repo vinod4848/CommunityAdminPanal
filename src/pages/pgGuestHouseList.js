@@ -3,8 +3,8 @@ import { Table, message, Modal, Button } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
-import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
 
 const PgGuestHouseList = () => {
   const [pgGuestHouses, setPgGuestHouses] = useState([]);
@@ -59,7 +59,7 @@ const PgGuestHouseList = () => {
   const columns = [
     {
       title: "Post By",
-      dataIndex: "username",
+      dataIndex: "firstName",
     },
     {
       title: "Property Type",
@@ -133,14 +133,14 @@ const PgGuestHouseList = () => {
           >
             <AiFillDelete />
           </Button>
-          <Link
+          {/* <Link
             to={`/admin/pgGuestHouses/${record._id}`}
             className="fs-3 text-danger"
           >
             <Button type="text">
               <BiEdit />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -149,12 +149,12 @@ const PgGuestHouseList = () => {
   const data = pgGuestHouses.map((pgGuestHouse, index) => ({
     key: index,
     ...pgGuestHouse,
-    username: pgGuestHouse.userId.username,
+    firstName: pgGuestHouse.profileId.firstName,
   }));
 
   return (
     <div>
-      <h2>PG Guest Houses List</h2>
+      <h2>PG & Guest Houses</h2>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"

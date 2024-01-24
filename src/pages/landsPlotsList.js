@@ -3,8 +3,8 @@ import { Table, message, Modal, Button } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
-import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
 
 const LandsPlotsList = () => {
   const [landPlots, setLandPlots] = useState([]);
@@ -60,7 +60,7 @@ const LandsPlotsList = () => {
   const columns = [
     {
       title: "Post By",
-      dataIndex: "username",
+      dataIndex: "firstName",
     },
     {
       title: "Ad Title",
@@ -122,14 +122,14 @@ const LandsPlotsList = () => {
           >
             <AiFillDelete />
           </Button>
-          <Link
+          {/* <Link
             to={`/admin/landPlots/${record._id}`}
             className="fs-3 text-danger"
           >
             <Button type="text">
               <BiEdit />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -138,12 +138,12 @@ const LandsPlotsList = () => {
   const data = landPlots.map((landPlot, index) => ({
     key: index,
     ...landPlot,
-    username: landPlot.userId.username,
+    firstName: landPlot.profileId.firstName,
   }));
 
   return (
     <div>
-      <h2>Land Plots List</h2>
+      <h2>Lands & Plots</h2>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"
