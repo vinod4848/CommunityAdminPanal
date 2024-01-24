@@ -1,62 +1,94 @@
 import React, { useState, useEffect } from "react";
-import { Table, message, Modal, Button } from "antd";
+import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-// import { BiEdit } from "react-icons/bi";
-// import { Link } from "react-router-dom";
+
+const { Option } = Select;
 
 const ShopOfficeList = () => {
-  const [shopOffices, setLandPlots] = useState([]);
+  const [shopOffices, setPgGuestHouses] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [landPlotsToDelete, setLandPlotsToDelete] = useState(null);
+  const [pgGuestHousesToDelete, setPgGuestHousesToDelete] = useState(null);
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
-    const fetchLandPlots = async () => {
+    const fetchPgGuestHouses = async () => {
       try {
         const response = await axios.get(`${base_url}/shopOffices`);
-        setLandPlots(response.data);
+        setPgGuestHouses(response.data);
       } catch (error) {
         console.error("Error fetching shopOffices:", error);
       }
     };
 
-    fetchLandPlots();
+    fetchPgGuestHouses();
   }, []);
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/shopOffices/${landPlotsToDelete}`
+        `${base_url}/shopOffices/${pgGuestHousesToDelete}`
       );
       if (response.status === 200) {
         message.success("Land plot deleted successfully");
-        // Update the shopOffices list after deletion
-        const updatedLandPlots = shopOffices.filter(
-          (landPlot) => landPlot._id !== landPlotsToDelete
+        const updatedPgGuestHouses = shopOffices.filter(
+          (pgGuestHouse) => pgGuestHouse._id !== pgGuestHousesToDelete
         );
-        setLandPlots(updatedLandPlots);
+        setPgGuestHouses(updatedPgGuestHouses);
         setDeleteModalVisible(false);
-        setLandPlotsToDelete(null);
+        setPgGuestHousesToDelete(null);
       } else {
-        message.error("Failed to delete land plot");
+        message.error("Failed to delete shopOffices");
       }
     } catch (error) {
-      console.error("Error deleting land plot:", error);
-      message.error("Failed to delete land plot");
+      console.error("Error deleting shopOffices:", error);
+      message.error("Failed to delete shopOffices");
     }
   };
 
   const showDeleteModal = (landPlotId) => {
     setDeleteModalVisible(true);
-    setLandPlotsToDelete(landPlotId);
+    setPgGuestHousesToDelete(landPlotId);
   };
 
   const hideDeleteModal = () => {
     setDeleteModalVisible(false);
-    setLandPlotsToDelete(null);
+    setPgGuestHousesToDelete(null);
   };
 
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  const handleToggleActive = async (record) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/shopOffices/${record._id}`,
+        {
+          isActive: !record.isActive,
+        }
+      );
+      if (response.status === 200) {
+        message.success(
+          `shops & Offices ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
+        );
+        const updatedPgGuestHouses = shopOffices.map((pgGuestHouse) =>
+          pgGuestHouse._id === record._id
+            ? { ...pgGuestHouse, isActive: !record.isActive }
+            : pgGuestHouse
+        );
+        setPgGuestHouses(updatedPgGuestHouses);
+      } else {
+        message.error("Failed to toggle shops & Offices activation status");
+      }
+    } catch (error) {
+      console.error("Error toggling shops & Offices activation status:", error);
+      message.error("Failed to toggle shops & Offices activation status");
+    }
+  };
   const columns = [
     {
       title: "Post By",
@@ -153,17 +185,43 @@ const ShopOfficeList = () => {
         </div>
       ),
     },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive, record) => (
+        <Button type="primary" onClick={() => handleToggleActive(record)}>
+          {isActive ? "Deactivate" : "Activate"}
+        </Button>
+      ),
+    },
   ];
-
-  const data = shopOffices.map((landPlot, index) => ({
-    key: index,
-    ...landPlot,
-    firstName: landPlot.profileId.firstName,
-  }));
+  
+  const data = shopOffices
+    .filter((pgGuestHouse) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return pgGuestHouse.isActive === (filterValue === "true");
+      }
+    })
+    .map((pgGuestHouse, index) => ({
+      key: index,
+      ...pgGuestHouse,
+      firstName: pgGuestHouse.profileId.firstName,
+    }));
 
   return (
     <div>
-      <h2>Shop & Office</h2>
+      <h2>Shops & Office</h2>
+      <Select
+        defaultValue="all"
+        style={{ width: 120, marginBottom: 16 }}
+        onChange={handleFilterChange}
+      >
+        <Option value="all">Show All</Option>
+        <Option value="true">Show Active</Option>
+        <Option value="false">Show Inactive</Option>
+      </Select>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"
@@ -173,7 +231,7 @@ const ShopOfficeList = () => {
         okText="Yes"
         cancelText="No"
       >
-        <p>Are you sure you want to delete this shop Offices?</p>
+        <p>Are you sure you want to delete this Shops & Office?</p>
       </Modal>
     </div>
   );

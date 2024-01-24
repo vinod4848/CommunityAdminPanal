@@ -1,66 +1,96 @@
 import React, { useState, useEffect } from "react";
-import { Table, message, Modal, Button } from "antd";
+import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
-import { Link } from "react-router-dom";
 
-const PropertyList = () => {
-  const [properties, setProperties] = useState([]);
+const { Option } = Select;
+
+const LandsPlotsList = () => {
+  const [properties, setproperties] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState(null);
+  const [PropertiesToDelete, setPropertiesToDelete] = useState(null);
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchLandPlots = async () => {
       try {
         const response = await axios.get(`${base_url}/properties`);
-        setProperties(response.data);
+        setproperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
     };
 
-    fetchProperties();
+    fetchLandPlots();
   }, []);
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/properties/${propertyToDelete}`
+        `${base_url}/properties/${PropertiesToDelete}`
       );
       if (response.status === 200) {
-        message.success("Property deleted successfully");
-        // Update the property list after deletion
-        const updatedProperties = properties.filter(
-          (property) => property._id !== propertyToDelete
+        message.success("Land plot deleted successfully");
+        const updatedLandPlots = properties.filter(
+          (Propertie) => Propertie._id !== PropertiesToDelete
         );
-        setProperties(updatedProperties);
+        setproperties(updatedLandPlots);
         setDeleteModalVisible(false);
-        setPropertyToDelete(null);
+        setPropertiesToDelete(null);
       } else {
-        message.error("Failed to delete property");
+        message.error("Failed to delete Propertie");
       }
     } catch (error) {
-      console.error("Error deleting property:", error);
-      message.error("Failed to delete property");
+      console.error("Error deleting properties:", error);
+      message.error("Failed to delete properties");
     }
   };
 
-  const showDeleteModal = (propertyId) => {
+  const showDeleteModal = (PropertieId) => {
     setDeleteModalVisible(true);
-    setPropertyToDelete(propertyId);
+    setPropertiesToDelete(PropertieId);
   };
 
   const hideDeleteModal = () => {
     setDeleteModalVisible(false);
-    setPropertyToDelete(null);
+    setPropertiesToDelete(null);
+  };
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  const handleToggleActive = async (record) => {
+    try {
+      const response = await axios.put(`${base_url}/properties/${record._id}`, {
+        isActive: !record.isActive,
+      });
+      if (response.status === 200) {
+        message.success(
+          `Land & Plots ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
+        );
+        const updatedLandPlots = properties.map((Propertie) =>
+          Propertie._id === record._id
+            ? { ...Propertie, isActive: !record.isActive }
+            : Propertie
+        );
+        setproperties(updatedLandPlots);
+      } else {
+        message.error("Failed to toggle Land & Plots activation status");
+      }
+    } catch (error) {
+      console.error("Error toggling Land & Plots activation status:", error);
+      message.error("Failed to toggle Land & Plots activation status");
+    }
   };
 
   const columns = [
     {
       title: "Post By",
-      dataIndex: "username",
+      dataIndex: "firstName",
     },
     {
       title: "Ad Title",
@@ -83,15 +113,11 @@ const PropertyList = () => {
       dataIndex: "propertyType",
     },
     {
-      title: "Construction Status",
-      dataIndex: "constructionStatus",
-    },
-    {
       title: "Furnishing",
       dataIndex: "furnishing",
     },
     {
-      title: "Super Builtup Area (sq.ft)",
+      title: "Builtup Area (sq.ft)",
       dataIndex: "superBuiltupArea",
     },
     {
@@ -156,28 +182,54 @@ const PropertyList = () => {
           >
             <AiFillDelete />
           </Button>
-          <Link
+          {/* <Link
             to={`/admin/property/${record._id}`}
             className="fs-3 text-danger"
           >
             <Button type="text">
               <BiEdit />
             </Button>
-          </Link>
+          </Link> */}
         </div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive, record) => (
+        <Button type="primary" onClick={() => handleToggleActive(record)}>
+          {isActive ? "Deactivate" : "Activate"}
+        </Button>
       ),
     },
   ];
 
-  const data = properties.map((property, index) => ({
-    key: index,
-    ...property,
-    username: property.userId.username,
-  }));
+  const data = properties
+    .filter((Propertie) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return Propertie.isActive === (filterValue === "true");
+      }
+    })
+    .map((Propertie, index) => ({
+      key: index,
+      ...Propertie,
+      firstName: Propertie.profileId.firstName,
+    }));
 
   return (
     <div>
-      <h2>Property List</h2>
+      <h2>Properties</h2>
+      <Select
+        defaultValue="all"
+        style={{ width: 120, marginBottom: 16 }}
+        onChange={handleFilterChange}
+      >
+        <Option value="all">Show All</Option>
+        <Option value="true">Show Active</Option>
+        <Option value="false">Show Inactive</Option>
+      </Select>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"
@@ -187,10 +239,10 @@ const PropertyList = () => {
         okText="Yes"
         cancelText="No"
       >
-        <p>Are you sure you want to delete this property?</p>
+        <p>Are you sure you want to delete this Propertie?</p>
       </Modal>
     </div>
   );
 };
 
-export default PropertyList;
+export default LandsPlotsList;

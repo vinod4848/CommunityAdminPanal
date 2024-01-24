@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, message, Modal, Button } from "antd";
+import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-// import { BiEdit } from "react-icons/bi";
-// import { Link } from "react-router-dom";
+
+const { Option } = Select;
 
 const PgGuestHouseList = () => {
   const [pgGuestHouses, setPgGuestHouses] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [pgGuestHousesToDelete, setPgGuestHousesToDelete] = useState(null);
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
     const fetchPgGuestHouses = async () => {
@@ -54,6 +55,39 @@ const PgGuestHouseList = () => {
   const hideDeleteModal = () => {
     setDeleteModalVisible(false);
     setPgGuestHousesToDelete(null);
+  };
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  const handleToggleActive = async (record) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/pgGuestHouses/${record._id}`,
+        {
+          isActive: !record.isActive,
+        }
+      );
+      if (response.status === 200) {
+        message.success(
+          `PG Guest House ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
+        );
+        const updatedPgGuestHouses = pgGuestHouses.map((pgGuestHouse) =>
+          pgGuestHouse._id === record._id
+            ? { ...pgGuestHouse, isActive: !record.isActive }
+            : pgGuestHouse
+        );
+        setPgGuestHouses(updatedPgGuestHouses);
+      } else {
+        message.error("Failed to toggle PG Guest House activation status");
+      }
+    } catch (error) {
+      console.error("Error toggling PG Guest House activation status:", error);
+      message.error("Failed to toggle PG Guest House activation status");
+    }
   };
 
   const columns = [
@@ -144,17 +178,43 @@ const PgGuestHouseList = () => {
         </div>
       ),
     },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive, record) => (
+        <Button type="primary" onClick={() => handleToggleActive(record)}>
+          {isActive ? "Deactivate" : "Activate"}
+        </Button>
+      ),
+    },
   ];
 
-  const data = pgGuestHouses.map((pgGuestHouse, index) => ({
-    key: index,
-    ...pgGuestHouse,
-    firstName: pgGuestHouse.profileId.firstName,
-  }));
+  const data = pgGuestHouses
+    .filter((pgGuestHouse) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return pgGuestHouse.isActive === (filterValue === "true");
+      }
+    })
+    .map((pgGuestHouse, index) => ({
+      key: index,
+      ...pgGuestHouse,
+      firstName: pgGuestHouse.profileId.firstName,
+    }));
 
   return (
     <div>
       <h2>PG & Guest Houses</h2>
+      <Select
+        defaultValue="all"
+        style={{ width: 120, marginBottom: 16 }}
+        onChange={handleFilterChange}
+      >
+        <Option value="all">Show All</Option>
+        <Option value="true">Show Active</Option>
+        <Option value="false">Show Inactive</Option>
+      </Select>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"

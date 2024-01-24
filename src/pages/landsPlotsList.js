@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, message, Modal, Button } from "antd";
+import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-// import { BiEdit } from "react-icons/bi";
-// import { Link } from "react-router-dom";
+
+const { Option } = Select;
 
 const LandsPlotsList = () => {
   const [landPlots, setLandPlots] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [landPlotsToDelete, setLandPlotsToDelete] = useState(null);
+  const [LandPlotsToDelete, setLandPlotsToDelete] = useState(null);
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
     const fetchLandPlots = async () => {
@@ -27,23 +28,22 @@ const LandsPlotsList = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/landPlots/${landPlotsToDelete}`
+        `${base_url}/landPlots/${LandPlotsToDelete}`
       );
       if (response.status === 200) {
         message.success("Land plot deleted successfully");
-        // Update the landPlots list after deletion
         const updatedLandPlots = landPlots.filter(
-          (landPlot) => landPlot._id !== landPlotsToDelete
+          (landPlot) => landPlot._id !== LandPlotsToDelete
         );
         setLandPlots(updatedLandPlots);
         setDeleteModalVisible(false);
         setLandPlotsToDelete(null);
       } else {
-        message.error("Failed to delete land plot");
+        message.error("Failed to delete land & Plots");
       }
     } catch (error) {
-      console.error("Error deleting land plot:", error);
-      message.error("Failed to delete land plot");
+      console.error("Error deleting landPlots:", error);
+      message.error("Failed to delete landPlots");
     }
   };
 
@@ -55,6 +55,36 @@ const LandsPlotsList = () => {
   const hideDeleteModal = () => {
     setDeleteModalVisible(false);
     setLandPlotsToDelete(null);
+  };
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  const handleToggleActive = async (record) => {
+    try {
+      const response = await axios.put(`${base_url}/landPlots/${record._id}`, {
+        isActive: !record.isActive,
+      });
+      if (response.status === 200) {
+        message.success(
+          `Land & Plots ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
+        );
+        const updatedLandPlots = landPlots.map((landPlot) =>
+          landPlot._id === record._id
+            ? { ...landPlot, isActive: !record.isActive }
+            : landPlot
+        );
+        setLandPlots(updatedLandPlots);
+      } else {
+        message.error("Failed to toggle Land & Plots activation status");
+      }
+    } catch (error) {
+      console.error("Error toggling Land & Plots activation status:", error);
+      message.error("Failed to toggle Land & Plots activation status");
+    }
   };
 
   const columns = [
@@ -86,13 +116,14 @@ const LandsPlotsList = () => {
       title: "Property Type",
       dataIndex: "type",
     },
+
     {
       title: "Images",
-      dataIndex: "image",
-      render: (image, record) => (
+      dataIndex: "images",
+      render: (images, record) => (
         <div style={{ display: "flex", justifyContent: "center" }}>
-          {Array.isArray(image) ? (
-            image.map((img, index) => (
+          {Array.isArray(images) ? (
+            images.map((img, index) => (
               <img
                 key={index}
                 src={img}
@@ -105,7 +136,7 @@ const LandsPlotsList = () => {
               />
             ))
           ) : (
-            <p>No image available</p>
+            <p>No images available</p>
           )}
         </div>
       ),
@@ -122,28 +153,46 @@ const LandsPlotsList = () => {
           >
             <AiFillDelete />
           </Button>
-          {/* <Link
-            to={`/admin/landPlots/${record._id}`}
-            className="fs-3 text-danger"
-          >
-            <Button type="text">
-              <BiEdit />
-            </Button>
-          </Link> */}
         </div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive, record) => (
+        <Button type="primary" onClick={() => handleToggleActive(record)}>
+          {isActive ? "Deactivate" : "Activate"}
+        </Button>
       ),
     },
   ];
 
-  const data = landPlots.map((landPlot, index) => ({
-    key: index,
-    ...landPlot,
-    firstName: landPlot.profileId.firstName,
-  }));
+  const data = landPlots
+    .filter((landPlot) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return landPlot.isActive === (filterValue === "true");
+      }
+    })
+    .map((landPlot, index) => ({
+      key: index,
+      ...landPlot,
+      firstName: landPlot.profileId.firstName,
+    }));
 
   return (
     <div>
-      <h2>Lands & Plots</h2>
+      <h2>Land & Plots</h2>
+      <Select
+        defaultValue="all"
+        style={{ width: 120, marginBottom: 16 }}
+        onChange={handleFilterChange}
+      >
+        <Option value="all">Show All</Option>
+        <Option value="true">Show Active</Option>
+        <Option value="false">Show Inactive</Option>
+      </Select>
       <Table columns={columns} dataSource={data} />
       <Modal
         title="Confirm Delete"
@@ -153,7 +202,7 @@ const LandsPlotsList = () => {
         okText="Yes"
         cancelText="No"
       >
-        <p>Are you sure you want to delete this land plot?</p>
+        <p>Are you sure you want to delete this Land & Plots?</p>
       </Modal>
     </div>
   );
