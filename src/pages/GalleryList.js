@@ -23,10 +23,10 @@ const GalleryList = () => {
   const columns = [
     {
       title: "Images",
-      dataIndex: "images",
-      render: (images) => (
+      dataIndex: "image",
+      render: (image) => (
         <Space size={[8, 8]} wrap>
-          {images.map((imageUrl, index) => (
+          {image.map((imageUrl, index) => (
             <Image
               key={index}
               src={imageUrl}

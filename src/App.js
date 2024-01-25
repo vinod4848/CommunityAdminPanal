@@ -50,6 +50,7 @@ import UserListV1 from "./pages/UserListV1";
 import GalleryList from "./pages/GalleryList";
 import FashionList from "./pages/FashionList";
 import FurnitureList from "./pages/FurnitureList";
+import AddGallery from "./pages/AddGallery";
 
 function App() {
   return (
@@ -131,6 +132,7 @@ function App() {
           <Route path="furniture-list" element={<FurnitureList />} />
           <Route path="fashion-list" element={<FashionList />} />
           <Route path="gallery-list" element={<GalleryList />} />
+          <Route path="gallery" element={<AddGallery />} />
           <Route path="block-user-list" element={<BlockUserListss />} />
           <Route path="events/:eventId" element={<AddEvent />} />
           <Route path="news" element={<AddNews />} />
