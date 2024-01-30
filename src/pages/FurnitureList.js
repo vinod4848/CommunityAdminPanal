@@ -1,56 +1,89 @@
 import React, { useState, useEffect } from "react";
-import { base_url } from "../utils/base_url";
+import { Table, message, Modal, Button, Select, Space, Image } from "antd";
 import axios from "axios";
+import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { Table, Image, Space, Button, Modal, message } from "antd";
+
+const { Option } = Select;
 
 const FurnitureList = () => {
-  const [furniture, setFashion] = useState([]);
-  const [deleteRecord, setDeleteRecord] = useState(null);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [furniture, setFurniture] = useState([]);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [furnitureToDelete, setFurnitureToDelete] = useState(null);
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
-    const fetchFashion = async () => {
+    const fetchFurniture = async () => {
       try {
         const response = await axios.get(`${base_url}/furniture`);
-        const data = response.data;
-        setFashion(data);
+        setFurniture(response.data);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching furniture:", error);
       }
     };
 
-    fetchFashion();
+    fetchFurniture();
   }, []);
 
   const handleDelete = async () => {
     try {
-      if (deleteRecord) {
-        await axios.delete(`${base_url}/furniture/${deleteRecord._id}`);
-        message.success("Fashion item deleted successfully");
-        // Refresh the furniture list after deletion
-        setFashion((prevFashion) =>
-          prevFashion.filter((item) => item._id !== deleteRecord._id)
+      const response = await axios.delete(
+        `${base_url}/furniture/${furnitureToDelete._id}`
+      );
+      if (response.status === 200) {
+        message.success("Furniture deleted successfully");
+        const updatedFurniture = furniture.filter(
+          (item) => item._id !== furnitureToDelete._id
         );
-        setDeleteRecord(null);
-        setIsDeleteModalVisible(false);
+        setFurniture(updatedFurniture);
+        setDeleteModalVisible(false);
+        setFurnitureToDelete(null);
+      } else {
+        message.error("Failed to delete furniture");
       }
     } catch (error) {
-      console.error(error);
-      message.error("Failed to delete furniture item");
-      setDeleteRecord(null);
-      setIsDeleteModalVisible(false);
+      console.error("Error deleting furniture:", error);
+      message.error("Failed to delete furniture");
     }
   };
 
-  const showModal = (record) => {
-    setDeleteRecord(record);
-    setIsDeleteModalVisible(true);
+  const showDeleteModal = (record) => {
+    setDeleteModalVisible(true);
+    setFurnitureToDelete(record);
   };
 
-  const handleCancel = () => {
-    setDeleteRecord(null);
-    setIsDeleteModalVisible(false);
+  const hideDeleteModal = () => {
+    setDeleteModalVisible(false);
+    setFurnitureToDelete(null);
+  };
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  const handleToggleActive = async (record) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/furniture/${record._id}`,
+        {
+          isActive: !record.isActive,
+        }
+      );
+      if (response.status === 200) {
+        message.success(
+          `Furniture ${record.isActive ? "deactivated" : "activated"} successfully`
+        );
+        const updatedFurniture = furniture.map((item) =>
+          item._id === record._id ? { ...item, isActive: !record.isActive } : item
+        );
+        setFurniture(updatedFurniture);
+      } else {
+        message.error("Failed to toggle furniture activation status");
+      }
+    } catch (error) {
+      console.error("Error toggling furniture activation status:", error);
+      message.error("Failed to toggle furniture activation status");
+    }
   };
 
   const columns = [
@@ -64,18 +97,17 @@ const FurnitureList = () => {
       dataIndex: "firstName",
     },
     {
-      title: "adTitle",
+      title: "Ad Title",
       dataIndex: "adTitle",
     },
     {
-        title: "Used",
-        dataIndex: "used",
-      },
+      title: "Used",
+      dataIndex: "used",
+    },
     {
       title: "Furniture Type",
       dataIndex: "furnitureType",
     },
-    
     {
       title: "Price",
       dataIndex: "price",
@@ -119,35 +151,61 @@ const FurnitureList = () => {
         <>
           <Button
             type="danger"
-            onClick={() => showModal(record)}
+            onClick={() => showDeleteModal(record)}
             danger
             icon={<AiFillDelete style={{ color: "#da3838" }} />}
           />
-          <Modal
-            title="Confirm Delete"
-            visible={isDeleteModalVisible}
-            onOk={handleDelete}
-            onCancel={handleCancel}
-            okText="Yes"
-            cancelText="No"
-          >
-            <p>Are you sure you want to delete this furniture item?</p>
-          </Modal>
         </>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      render: (isActive, record) => (
+        <Button type="primary" onClick={() => handleToggleActive(record)}>
+          {isActive ? "Deactivate" : "Activate"}
+        </Button>
       ),
     },
   ];
 
-  const data = furniture.map((fashionItem, index) => ({
-    key: index,
-    ...fashionItem,
-    firstName: fashionItem.profileId.firstName,
-  }));
+  const data = furniture
+    .filter((item) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return item.isActive === (filterValue === "true");
+      }
+    })
+    .map((item, index) => ({
+      key: index,
+      ...item,
+      firstName: item.profileId.firstName,
+    }));
 
   return (
     <div>
-      <h1>Furniture List</h1>
-      <Table dataSource={data} columns={columns} />
+      <h2>Furniture List</h2>
+      <Select
+        defaultValue="all"
+        style={{ width: 120, marginBottom: 16 }}
+        onChange={handleFilterChange}
+      >
+        <Option value="all">Show All</Option>
+        <Option value="true">Show Active</Option>
+        <Option value="false">Show Inactive</Option>
+      </Select>
+      <Table columns={columns} dataSource={data} />
+      <Modal
+        title="Confirm Delete"
+        visible={deleteModalVisible}
+        onOk={handleDelete}
+        onCancel={hideDeleteModal}
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>Are you sure you want to delete this furniture item?</p>
+      </Modal>
     </div>
   );
 };
