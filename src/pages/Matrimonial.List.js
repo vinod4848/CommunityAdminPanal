@@ -125,9 +125,9 @@ const columns = [
   },
   {
     title: "Profile",
-    dataIndex: "image",
-    render: (image) => (
-      <img src={image} alt="profileBanner" style={{ maxWidth: "100px" }} />
+    dataIndex: "images",
+    render: (images) => (
+      <img src={images} alt="profileBanner" style={{ maxWidth: "100px" }} />
     ),
   },
   {
@@ -157,7 +157,7 @@ const MatrimonialList = () => {
         key: index + 1,
         firstName: matrimonial.profileId.firstName,
         lastName: matrimonial.profileId.lastName,
-        image: matrimonial.image,
+        images: matrimonial.images,
         email: matrimonial.userId.email,
         phone: matrimonial.userId.phone,
         dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),

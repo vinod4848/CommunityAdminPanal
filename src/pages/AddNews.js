@@ -71,14 +71,32 @@ const AddNews = () => {
 
         <div className="mb-3">
           <label>Category:</label>
-          <input
-            type="text"
+          <select
             name="category"
             className="form-control"
             value={news.category}
             onChange={handleChange}
-          />
+          >
+          <option value="">Select a Category</option>
+            <option value="Politics">Politics</option>
+            <option value="World News">World News</option>
+            <option value="Business and Finance">Business and Finance</option>
+            <option value="Technology">Technology</option>
+            <option value="Science">Science</option>
+            <option value="Health">Health</option>
+            <option value="Environment">Environment</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Sports">Sports</option>
+            <option value="Education">Education</option>
+            <option value="Crime and Justice">Crime and Justice</option>
+            <option value="Social Issues">Social Issues</option>
+            <option value="Travel">Travel</option>
+            <option value="Opinion and Analysis">Opinion and Analysis</option>
+            <option value="Breaking News">Breaking News</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
+
         <div className="mb-3">
           <label>Tags:</label>
           <input

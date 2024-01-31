@@ -24,7 +24,7 @@ const AddBlog = () => {
     title: "",
     description: EditorState.createEmpty(),
     category: "",
-    image: "", 
+    image: "",
   };
 
   const [blog, setBlog] = useState(initialBlogState);
@@ -44,7 +44,7 @@ const AddBlog = () => {
               )
             ),
             category: blogData.category,
-            image: blogData.image || "", 
+            image: blogData.image || "",
           });
         }
       } catch (error) {
@@ -123,18 +123,45 @@ const AddBlog = () => {
             onChange={(e) => setBlog({ ...blog, title: e.target.value })}
           />
         </div>
-       
+
         <div className="mb-3">
           <label>Category</label>
-          <input
-            type="text"
+          <select
             name="category"
             className="form-control"
             value={blog.category}
             onChange={(e) => setBlog({ ...blog, category: e.target.value })}
-          />
+          >
+            <option value="" disabled selected>
+              Select Category
+            </option>
+            <option value="Fashion & Style">Fashion & Style</option>
+            <option value="Travel & Adventure">Travel & Adventure</option>
+            <option value="Food & Cooking">Food & Cooking</option>
+            <option value="Health & Wellness">Health & Wellness</option>
+            <option value="Personal Development">Personal Development</option>
+            <option value="Parenting & Family">Parenting & Family</option>
+            <option value="Technology & Gadgets">Technology & Gadgets</option>
+            <option value="Finance & Money Management">
+              Finance & Money Management
+            </option>
+            <option value="Home Decor & DIY">Home Decor & DIY</option>
+            <option value="Entertainment & Pop Culture">
+              Entertainment & Pop Culture
+            </option>
+            <option value="Lifestyle & Culture">Lifestyle & Culture</option>
+            <option value="Fitness & Exercise">Fitness & Exercise</option>
+            <option value="DIY & Crafts">DIY & Crafts</option>
+            <option value="Photography & Visual Arts">
+              Photography & Visual Arts
+            </option>
+            <option value="Environment & Sustainability">
+              Environment & Sustainability
+            </option>
+            <option value="Other">Other</option>
+          </select>
         </div>
-      
+
         <div className="mb-3">
           <label>Image:</label>
           <input
@@ -159,17 +186,17 @@ const AddBlog = () => {
           <Editor
             editorState={blog.description}
             wrapperClassName="demo-wrapper"
-            editorClassName="demo-editor custom-editor-class" 
+            editorClassName="demo-editor custom-editor-class"
             onEditorStateChange={handleChange}
             editorStyle={{
-              backgroundColor: "white", 
-              height: "130px", 
-              border:"2px",
+              backgroundColor: "white",
+              height: "130px",
+              border: "2px",
               // eslint-disable-next-line no-dupe-keys
               border: "1px solid #ccc",
             }}
           />
-          </div>
+        </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-success form-control">
             {blogId ? "Update Blog" : "Add Blog"}
