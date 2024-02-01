@@ -5,9 +5,9 @@ import {
   deleteADirectorie,
   getDirectorie,
 } from "../features/directory/directorySlice";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import moment from "moment";
-import { BiEdit } from "react-icons/bi";
+// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 
@@ -17,25 +17,43 @@ const columns = [
     dataIndex: "key",
   },
   {
-    title: "Email",
-    dataIndex: "email",
+    title: "Company Name",
+    dataIndex: "companyName",
   },
   {
-    title: "Phone",
-    dataIndex: "phone",
+    title: "Company Logo",
+    dataIndex: "companyLogo",
+    render: (companyLogo) => (
+      <img src={companyLogo} alt="EventBanner" style={{ maxWidth: "100px" }} />
+    ),
+  },
+
+  {
+    title: "Company Email",
+    dataIndex: "companyEmail",
+  },
+
+  {
+    title: "Contact Number",
+    dataIndex: "contactNumber",
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: "GST Number",
+    dataIndex: "gstNumber",
   },
   {
-    title: "FirstName",
-    dataIndex: "firstName",
+    title: "Website",
+    dataIndex: "website",
   },
   {
-    title: "LastName",
-    dataIndex: "lastName",
+    title: "Locality",
+    dataIndex: "locality",
   },
+  {
+    title: "Business Area",
+    dataIndex: "businessArea",
+  },
+
   {
     title: "Description",
     dataIndex: "description",
@@ -44,25 +62,22 @@ const columns = [
     title: "Address",
     dataIndex: "address",
   },
-  {
-    title: "Company Name",
-    dataIndex: "companyName",
-  },
+
   {
     title: "Established Date",
     dataIndex: "establishedDate",
     render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
   },
-  {
-    title: "Social Media Links",
-    dataIndex: "socialMediaLinks",
-    render: (socialMediaLinks) => (
-      <span>
-        Facebook: {socialMediaLinks.facebook}, Twitter:{" "}
-        {socialMediaLinks.twitter}, LinkedIn: {socialMediaLinks.linkedin}
-      </span>
-    ),
-  },
+  // {
+  //   title: "Social Media Links",
+  //   dataIndex: "socialMediaLinks",
+  //   render: (socialMediaLinks) => (
+  //     <span>
+  //       Facebook: {socialMediaLinks.facebook}, Twitter:{" "}
+  //       {socialMediaLinks.twitter}, LinkedIn: {socialMediaLinks.linkedin}
+  //     </span>
+  //   ),
+  // },
   {
     title: "Tags",
     dataIndex: "tags",
@@ -86,25 +101,27 @@ const Directorielist = () => {
   const transformDirectorieData = () => {
     return directorieState.map((directorie, index) => ({
       key: index + 1,
-      name: directorie.name,
-      firstName: directorie.firstName,
-      lastName: directorie.lastName,
+      gstNumber: directorie.gstNumber,
       address: directorie.address,
       description: directorie.description,
       companyName: directorie.companyName,
       establishedDate: directorie.establishedDate,
       socialMediaLinks: directorie.socialMediaLinks,
       tags: directorie.tags,
-      phone: directorie.userId.phone,
-      email: directorie.userId.email,
+      locality: directorie.locality,
+      website: directorie.website,
+      businessArea: directorie.businessArea,
+      contactNumber: directorie.contactNumber,
+      companyLogo: directorie.companyLogo,
+      companyEmail: directorie.companyEmail,
       action: (
         <>
-          <Link
+          {/* <Link
             to={`/admin/directorie/${directorie._id}`}
             className="ms-1 fs-4 text-danger"
           >
             <BiEdit />
-          </Link>
+          </Link> */}
           <button
             className=" fs-4 text-danger bg-transparent border-0"
             onClick={() => showModal(directorie._id)}

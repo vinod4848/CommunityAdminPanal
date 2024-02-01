@@ -51,6 +51,7 @@ import GalleryList from "./pages/GalleryList";
 import FashionList from "./pages/FashionList";
 import FurnitureList from "./pages/FurnitureList";
 import AddGallery from "./pages/AddGallery";
+import ElectronicsList from "./pages/ElectronicsList";
 
 function App() {
   return (
@@ -101,6 +102,7 @@ function App() {
           <Route path="landPlot-list" element={<LandsPlotsList />} />
           <Route path="shopOffice-list" element={<ShopOfficeList />} />
           <Route path="pgGuestHouse-list" element={<PgGuestHouseList />} />
+          <Route path="electronicsList-list" element={<ElectronicsList />} />
           <Route path="sellAndbuy-list" element={<SellAndbuyList />} />
           <Route
             path="announcementCategoryName"

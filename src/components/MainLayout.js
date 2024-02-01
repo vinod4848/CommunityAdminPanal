@@ -184,15 +184,15 @@ const MainLayout = () => {
               ],
             },
             {
-              key: "job",
+              key: "Job",
               icon: <FaBlogger className="fs-4" />,
               label: "Job",
               children: [
-                {
-                  key: "job",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Job ",
-                },
+                // {
+                //   key: "job",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Job ",
+                // },
                 {
                   key: "job-list",
                   icon: <ImBlog className="fs-4" />,
@@ -210,11 +210,11 @@ const MainLayout = () => {
               icon: <FaBlogger className="fs-4" />,
               label: "Directory",
               children: [
-                {
-                  key: "directory",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Directory ",
-                },
+                // {
+                //   key: "directory",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Directory ",
+                // },
                 {
                   key: "directory-list",
                   icon: <ImBlog className="fs-4" />,
@@ -387,6 +387,11 @@ const MainLayout = () => {
                   key: "furniture-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Furniture  List",
+                },
+                {
+                  key: "electronicsList-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "ElectronicsList  List",
                 },
               ],
             },

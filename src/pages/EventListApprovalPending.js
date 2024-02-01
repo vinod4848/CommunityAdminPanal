@@ -7,8 +7,8 @@ import {
   getEvent,
   updateAEvent,
 } from "../features/event/eventSlice";
-import { Link } from "react-router-dom";
-import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 import axios from "axios";
@@ -51,8 +51,12 @@ const columns = [
   },
  
   {
-    title: "Action",
+    title: "Activate",
     dataIndex: "activateDeactivate",
+  },
+  {
+    title: "Actions",
+    dataIndex: "action",
   },
 ];
 
@@ -80,9 +84,9 @@ const EventListApprovalPending = () => {
         address: event.address,
         action: (
           <>
-            <Link to={`/admin/event/${event._id}`} className="fs-3 text-danger">
+            {/* <Link to={`/admin/event/${event._id}`} className="fs-3 text-danger">
               <BiEdit />
-            </Link>
+            </Link> */}
             <button
               className="ms-2 fs-3 text-danger bg-transparent border-0"
               onClick={() => showModal(event._id)}
