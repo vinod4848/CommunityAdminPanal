@@ -31,7 +31,7 @@ const TabletsList = () => {
         `${base_url}/tablets/${PhoneToDelete._id}`
       );
       if (response.status === 200) {
-        message.success("Phone deleted successfully");
+        message.success("tablets deleted successfully");
         const upadtePhone = tablets.filter(
           (item) => item._id !== PhoneToDelete._id
         );
@@ -68,7 +68,7 @@ const TabletsList = () => {
       });
       if (response.status === 200) {
         message.success(
-          `Phone ${record.isActive ? "deactivated" : "activated"} successfully`
+          `tablets ${record.isActive ? "deactivated" : "activated"} successfully`
         );
         const upadtePhone = tablets.map((item) =>
           item._id === record._id

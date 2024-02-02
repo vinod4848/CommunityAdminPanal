@@ -91,6 +91,11 @@ const ShopOfficeList = () => {
   };
   const columns = [
     {
+      title: "SN",
+      dataIndex: "",
+      render: (_, record, index) => index + 1,
+    },
+    {
       title: "Post By",
       dataIndex: "firstName",
     },
@@ -195,7 +200,7 @@ const ShopOfficeList = () => {
       ),
     },
   ];
-  
+
   const data = shopOffices
     .filter((pgGuestHouse) => {
       if (filterValue === "all") {

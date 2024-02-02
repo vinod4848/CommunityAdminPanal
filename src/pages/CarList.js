@@ -27,8 +27,9 @@ const CarList = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${base_url}/cars/${carToDelete._id}`);
-      console.log("Delete Response:", response);  // Add this line to log the response
+      const response = await axios.delete(
+        `${base_url}/cars/${carToDelete._id}`);
+      console.log("Delete Response:", response); 
   
       if (response.status === 200) {
         message.success("Car deleted successfully");

@@ -89,6 +89,11 @@ const LandsPlotsList = () => {
 
   const columns = [
     {
+      title: "SN",
+      dataIndex: "",
+      render: (_, record, index) => index + 1,
+    },
+    {
       title: "Post By",
       dataIndex: "firstName",
     },
