@@ -52,6 +52,12 @@ import FashionList from "./pages/FashionList";
 import FurnitureList from "./pages/FurnitureList";
 import AddGallery from "./pages/AddGallery";
 import ElectronicsList from "./pages/ElectronicsList";
+import PhoneList from "./pages/PhoneList";
+import AccessoriesList from "./pages/AccessoriesList";
+import TabletsList from "./pages/TabletsList";
+import BicyclesList from "./pages/BicyclesList";
+import BikeList from "./pages/BikeList";
+import CarList from "./pages/CarList";
 
 function App() {
   return (
@@ -104,6 +110,13 @@ function App() {
           <Route path="pgGuestHouse-list" element={<PgGuestHouseList />} />
           <Route path="electronicsList-list" element={<ElectronicsList />} />
           <Route path="sellAndbuy-list" element={<SellAndbuyList />} />
+          <Route path="phone-list" element={<PhoneList />} />
+          <Route path="accessories-list" element={<AccessoriesList />} />
+          <Route path="tablets-list" element={<TabletsList />} />
+          <Route path="bicycles-list" element={<BicyclesList />} />
+          <Route path="bike-list" element={<BikeList />} />
+          <Route path="car-list" element={<CarList />} />
+
           <Route
             path="announcementCategoryName"
             element={<AddAnnouncementCategory />}

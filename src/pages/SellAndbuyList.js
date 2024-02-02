@@ -3,8 +3,8 @@ import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
-import { Link } from "react-router-dom";
+// import { BiEdit } from "react-icons/bi";
+// import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -29,7 +29,7 @@ const SellAndbuyList = () => {
 
   const generateColumns = (schema) => {
     const genericColumns = [
-      { title: "Post By", dataIndex: "username" },
+      { title: "Post By", dataIndex: "firstName" },
       { title: "Ad Title", dataIndex: "adTitle" },
       { title: "Description", dataIndex: "description" },
       { title: "Address", dataIndex: "address" },
@@ -72,14 +72,14 @@ const SellAndbuyList = () => {
             >
               <AiFillDelete />
             </Button>
-            <Link
+            {/* <Link
               to={`/admin/${selectedProductType}/${record._id}`}
               className="fs-3 text-danger"
             >
               <Button type="text">
                 <BiEdit />
               </Button>
-            </Link>
+            </Link> */}
           </div>
         ),
       },
@@ -132,7 +132,7 @@ const SellAndbuyList = () => {
 
   const columns = generateColumns([]);
   const columnsOfCar = [
-    { title: "Post By", dataIndex: "username" },
+    { title: "Post By", dataIndex: "firstName" },
     { title: "Ad Title", dataIndex: "adTitle" },
     { title: "Description", dataIndex: "description" },
     { title: "Address", dataIndex: "address" },
@@ -180,21 +180,21 @@ const SellAndbuyList = () => {
           >
             <AiFillDelete />
           </Button>
-          <Link
+          {/* <Link
             to={`/admin/${selectedProductType}/${record._id}`}
             className="fs-3 text-danger"
           >
             <Button type="text">
               <BiEdit />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       ),
     },
   ];
   const columnsOfBike =([
   
-    { title: "Post By", dataIndex: "username" },
+    { title: "Post By", dataIndex: "firstName" },
     { title: "Ad Title", dataIndex: "adTitle" },
     { title: "Description", dataIndex: "description" },
     { title: "Address", dataIndex: "address" },
@@ -239,14 +239,14 @@ const SellAndbuyList = () => {
           >
             <AiFillDelete />
           </Button>
-          <Link
+          {/* <Link
             to={`/admin/${selectedProductType}/${record._id}`}
             className="fs-3 text-danger"
           >
             <Button type="text">
               <BiEdit />
             </Button>
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -255,7 +255,7 @@ const SellAndbuyList = () => {
   const data = products.map((product, index) => ({
     key: index,
     ...product,
-    username: product.userId.username,
+    firstName: product.profileId.firstName,
   }));
 
   return (

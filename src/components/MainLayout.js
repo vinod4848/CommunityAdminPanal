@@ -91,7 +91,6 @@ const MainLayout = () => {
             //   ],
             // },
 
-
             {
               key: "user",
               icon: <FaBlogger className="fs-4" />,
@@ -364,20 +363,20 @@ const MainLayout = () => {
               ],
             },
             {
-              key: "sellAndbuy ",
+              key: "product ",
               icon: <FaBlogger className="fs-4" />,
-              label: "Sell/Buy",
+              label: "Products",
               children: [
                 // {
                 //   key: "sellAndbuy",
                 //   icon: <FaBlogger className="fs-4" />,
                 //   label: "Add Sell/Buy ",
                 // },
-                {
-                  key: "sellAndbuy-list",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Sell/Buy  List",
-                },
+                // {
+                //   key: "sellAndbuy-list",
+                //   icon: <ImBlog className="fs-4" />,
+                //   label: "Sell/Buy  List",
+                // },
                 {
                   key: "fashion-list",
                   icon: <ImBlog className="fs-4" />,
@@ -392,6 +391,43 @@ const MainLayout = () => {
                   key: "electronicsList-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "ElectronicsList  List",
+                },
+                {
+                  key: "phone-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Phone List",
+                },
+                {
+                  key: "accessories-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Accessories  List",
+                },
+                {
+                  key: "tablets-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Tablets  List",
+                },
+              ],
+            },
+            {
+              key: "vehicle",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Vehicle",
+              children: [
+                {
+                  key: "car-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Car  List",
+                },
+                {
+                  key: "bike-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Bike  List",
+                },
+                {
+                  key: "bicycles-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Bicycles  List",
                 },
               ],
             },
