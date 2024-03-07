@@ -1,33 +1,7 @@
 import React from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOrders } from "../features/auth/authSlice";
 import { BsArrowDownRight } from "react-icons/bs";
-// import { Table } from "antd";
 import { Column } from "@ant-design/plots";
 const Dashboard = () => {
-  // const columns = [
-  //   {
-  //     title: "SN",
-  //     dataIndex: "key",
-  //   },
-  //   {
-  //     title: "Name",
-  //     dataIndex: "name",
-  //   },
-  //   {
-  //     title: "Product",
-  //     dataIndex: "product",
-  //   },
-  //   {
-  //     title: "Amount",
-  //     dataIndex: "amount",
-  //   },
-  //   {
-  //     title: "Date",
-  //     dataIndex: "date",
-  //   },
-  // ];
   const data1 = [];
   for (let i = 0; i < 46; i++) {
     data1.push({
@@ -43,7 +17,7 @@ const Dashboard = () => {
       sales: 38,
     },
     {
-      type: "Fab",
+      type: "Feb",
       sales: 52,
     },
     {
@@ -87,13 +61,12 @@ const Dashboard = () => {
       sales: 38,
     },
   ];
+
   const config = {
     data,
     xField: "type",
     yField: "sales",
-    color: ({ type }) => {
-      return "#399889";
-    },
+    color: ({ type }) => "#399889",
     label: {
       position: "middle",
       style: {
@@ -109,31 +82,14 @@ const Dashboard = () => {
     },
     meta: {
       type: {
-        alias: "months",
+        title: "months",
       },
       sales: {
-        alias: "income",
+        title: "income",
       },
     },
   };
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getOrders());
-  }, [dispatch]);
-  const orderState = useSelector((state) => state.auth.orders);
-  console.log(orderState, "orderState");
-  const data2 = [];
-  for (let i = 0; i < orderState.length; i++) {
-    data2.push({
-      key: i + 1,
-      name: orderState[i].orderby.firstName,
-      product: orderState[i].products.map((i, j) => {
-        return <p key={j}>{i.product?.title}</p>;
-      }),
-      amount: orderState[i].paymentintent.amount,
-      date: new Date(orderState[i].createdAt).toLocaleString(),
-    });
-  }
+
   return (
     <div>
       <h3 className="mb-4 title">Dashboard</h3>
@@ -184,16 +140,6 @@ const Dashboard = () => {
           <Column {...config} />;
         </div>
       </div>
-      {/* <div className="mt-4">
-        <h3 className="mt-5 title">Recent Post</h3>
-        <div>
-          <Table
-            style={{ width: "100%" }}
-            columns={columns}
-            dataSource={data2}
-          />
-        </div>
-      </div> */}
     </div>
   );
 };

@@ -27,10 +27,10 @@ const columns = [
     title: "Gender",
     dataIndex: "gender",
   },
-  {
-    title: "Email",
-    dataIndex: "email",
-  },
+  // {
+  //   title: "Email",
+  //   dataIndex: "email",
+  // },
   {
     title: "Phone",
     dataIndex: "phone",
@@ -153,126 +153,137 @@ const MatrimonialList = () => {
   const transformMatrimonialData = () => {
     return matrimonialState
       .filter((matrimonial) => matrimonial.isApproved)
-      .map((matrimonial, index) => ({
-        key: index + 1,
-        firstName: matrimonial.profileId.firstName,
-        lastName: matrimonial.profileId.lastName,
-        images: matrimonial.images,
-        email: matrimonial.userId.email,
-        phone: matrimonial.userId.phone,
-        dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
-        profession: matrimonial.profileId.profession,
-        nativePlace: matrimonial.nativePlace,
-        maritalStatus: matrimonial.maritalStatus,
-        address: matrimonial.address,
-        education: matrimonial.education,
-        hobbies: Array.isArray(matrimonial.hobbies)
-          ? matrimonial.hobbies.join(", ")
-          : "",
-        gender: matrimonial.profileId.gender,
-        createdAt: moment(matrimonial.createdAt).format("YYYY-MM-DD"),
-        aboutMe: matrimonial.aboutMe,
-        height: matrimonial.height,
-        profileCreatedBy: matrimonial.profileCreatedBy,
-        healthInformation: matrimonial.healthInformation,
-        anyDisability: matrimonial.anyDisability,
-        bloodGroup: matrimonial.bloodGroup,
-        lifestyle: matrimonial.lifestyle,
-        moreAboutYourselfPartnerAndFamily:
-          matrimonial.moreAboutYourselfPartnerAndFamily,
-        religiousBackground: (
-          <span>
-            <strong>Religion:</strong>{" "}
-            {matrimonial.religiousBackground.religion},{" "}
-            <strong>Mother Tongue:</strong>{" "}
-            {matrimonial.religiousBackground.motherTongue},{" "}
-            <strong>Community:</strong>{" "}
-            {matrimonial.religiousBackground.community},{" "}
-            <strong>Sub Community:</strong>{" "}
-            {matrimonial.religiousBackground.subCommunity},{" "}
-            <strong>Gothra/Gothram:</strong>{" "}
-            {matrimonial.religiousBackground.gothraGothram}
-          </span>
-        ),
-        family: (
-          <span>
-            <strong>Number of Siblings:</strong>{" "}
-            {matrimonial.family.numberOfSiblings},{" "}
-            <strong>Father Status:</strong> {matrimonial.family.fatherStatus},{" "}
-            <strong>Living with:</strong> {matrimonial.family.with},{" "}
-            <strong>Occupation:</strong> {matrimonial.family.as},{" "}
-            <strong>Nature of Business:</strong>{" "}
-            {matrimonial.family.natureOfBusiness},{" "}
-            <strong>Mother Status:</strong> {matrimonial.family.motherStatus},{" "}
-            <strong>Family Location:</strong>{" "}
-            {matrimonial.family.familyLocation}, <strong>Family Type:</strong>{" "}
-            {matrimonial.family.familyType}, <strong>Family Values:</strong>{" "}
-            {matrimonial.family.familyValues},{" "}
-            <strong>Family Affluence:</strong>{" "}
-            {matrimonial.family.familyAffluence}
-          </span>
-        ),
-        astroDetails: (
-          <span>
-            <strong>Manglik/Chevva Dosham:</strong>{" "}
-            {matrimonial.astroDetails.manglikChevvaidosham},{" "}
-            <strong>Nakshatra:</strong> {matrimonial.astroDetails.nakshatra}
-          </span>
-        ),
-        partnerPreferences: (
-          <span>
-            <strong>Age Range:</strong>{" "}
-            {matrimonial.partnerPreferences.ageRange.min} -{" "}
-            {matrimonial.partnerPreferences.ageRange.max},{" "}
-            <strong>Gender:</strong> {matrimonial.partnerPreferences.gender},{" "}
-            <strong>Education:</strong>{" "}
-            {matrimonial.partnerPreferences.education},{" "}
-            <strong>Profession:</strong>{" "}
-            {matrimonial.partnerPreferences.profession},{" "}
-            <strong>Min Height:</strong>{" "}
-            {matrimonial.partnerPreferences.minHeight},{" "}
-            <strong>Max Income:</strong>{" "}
-            {matrimonial.partnerPreferences.maxIncome}
-          </span>
-        ),
-        educationAndCareer: (
-          <span>
-            <strong>Highest Qualification:</strong>{" "}
-            {matrimonial.educationAndCareer.highestQualification},{" "}
-            <strong>College Attended:</strong>{" "}
-            {matrimonial.educationAndCareer.collegeAttended},{" "}
-            <strong>Working With:</strong>{" "}
-            {matrimonial.educationAndCareer.workingWith},{" "}
-            <strong>Annual Income:</strong>{" "}
-            {matrimonial.educationAndCareer.annualIncome}
-          </span>
-        ),
-        locationOfGroom: (
-          <span>
-            <strong>Country Living In:</strong>{" "}
-            {matrimonial.locationOfGroom.countryLivingIn},{" "}
-            <strong>State Living In:</strong>{" "}
-            {matrimonial.locationOfGroom.stateLivingIn},{" "}
-            <strong>City Living In:</strong>{" "}
-            {matrimonial.locationOfGroom.cityLivingIn},{" "}
-            <strong>Grew Up In:</strong> {matrimonial.locationOfGroom.grewUpIn},{" "}
-            <strong>Ethnic Origin:</strong>{" "}
-            {matrimonial.locationOfGroom.ethnicOrigin},{" "}
-            <strong>Zip/Pin Code:</strong>{" "}
-            {matrimonial.locationOfGroom.zipPinCode}
-          </span>
-        ),
-        action: (
-          <>
-            <button
-              className=" fs-3 text-danger bg-transparent border-0"
-              onClick={() => showModal(matrimonial._id)}
-            >
-              <MdOutlineDelete />
-            </button>
-          </>
-        ),
-      }));
+      .map((matrimonial, index) => {
+        const religiousBackground = matrimonial.religiousBackground || {};
+        const family = matrimonial.family || {};
+        const astroDetails = matrimonial.astroDetails || {};
+        const partnerPreferences = matrimonial.partnerPreferences || {};
+        const educationAndCareer = matrimonial.educationAndCareer || {};
+        const locationOfGroom = matrimonial.locationOfGroom || {};
+
+        return {
+          key: index + 1,
+          firstName: matrimonial.profileId?.firstName || "N/A",
+          lastName: matrimonial.profileId?.lastName || "N/A",
+          images: matrimonial.images || [],
+          // email: matrimonial.userId?.email || "N/A",
+          phone: matrimonial.userId?.phone || "N/A",
+          dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
+          profession: matrimonial.profileId?.profession || "N/A",
+          nativePlace: matrimonial.nativePlace || "N/A",
+          maritalStatus: matrimonial.maritalStatus || "N/A",
+          address: matrimonial.address || "N/A",
+          education: matrimonial.education || "N/A",
+          hobbies: Array.isArray(matrimonial.hobbies)
+            ? matrimonial.hobbies.join(", ")
+            : "N/A",
+          gender: matrimonial.profileId?.gender || "N/A",
+          createdAt: moment(matrimonial.createdAt).format("YYYY-MM-DD"),
+          aboutMe: matrimonial.aboutMe || "N/A",
+          height: matrimonial.height || "N/A",
+          profileCreatedBy: matrimonial.profileCreatedBy || "N/A",
+          healthInformation: matrimonial.healthInformation || "N/A",
+          anyDisability: matrimonial.anyDisability || "N/A",
+          bloodGroup: matrimonial.bloodGroup || "N/A",
+          lifestyle: matrimonial.lifestyle || "N/A",
+          moreAboutYourselfPartnerAndFamily:
+            matrimonial.moreAboutYourselfPartnerAndFamily || "N/A",
+          religiousBackground: (
+            <span>
+              <strong>Religion:</strong> {religiousBackground.religion || "N/A"}
+              , <strong>Mother Tongue:</strong>{" "}
+              {religiousBackground.motherTongue || "N/A"},{" "}
+              <strong>Community:</strong>{" "}
+              {religiousBackground.community || "N/A"},{" "}
+              <strong>Sub Community:</strong>{" "}
+              {religiousBackground.subCommunity || "N/A"},{" "}
+              <strong>Gothra/Gothram:</strong>{" "}
+              {religiousBackground.gothraGothram || "N/A"}
+            </span>
+          ),
+          family: (
+            <span>
+              <strong>Number of Siblings:</strong>{" "}
+              {family.numberOfSiblings || "N/A"},{" "}
+              <strong>Father Status:</strong> {family.fatherStatus || "N/A"},{" "}
+              <strong>Living with:</strong> {family.with || "N/A"},{" "}
+              <strong>Occupation:</strong> {family.as || "N/A"},{" "}
+              <strong>Nature of Business:</strong>{" "}
+              {family.natureOfBusiness || "N/A"},{" "}
+              <strong>Mother Status:</strong> {family.motherStatus || "N/A"},{" "}
+              <strong>Family Location:</strong> {family.familyLocation || "N/A"}
+              , <strong>Family Type:</strong> {family.familyType || "N/A"},{" "}
+              <strong>Family Values:</strong> {family.familyValues || "N/A"},{" "}
+              <strong>Family Affluence:</strong>{" "}
+              {family.familyAffluence || "N/A"}
+            </span>
+          ),
+          astroDetails: (
+            <span>
+              <strong>Manglik/Chevva Dosham:</strong>{" "}
+              {astroDetails.manglikChevvaidosham || "N/A"},{" "}
+              <strong>Nakshatra:</strong> {astroDetails.nakshatra || "N/A"}
+            </span>
+          ),
+          partnerPreferences: (
+            <span>
+              <strong>Age Range:</strong>{" "}
+              {partnerPreferences.ageRange?.min || "N/A"} -{" "}
+              {partnerPreferences.ageRange?.max || "N/A"},{" "}
+              <strong>Gender:</strong> {partnerPreferences.gender || "N/A"},{" "}
+              <strong>Education:</strong>{" "}
+              {partnerPreferences.education || "N/A"},{" "}
+              <strong>Profession:</strong>{" "}
+              {partnerPreferences.profession || "N/A"},{" "}
+              <strong>Min Height:</strong>{" "}
+              {partnerPreferences.minHeight || "N/A"},{" "}
+              <strong>Max Income:</strong>{" "}
+              {partnerPreferences.maxIncome || "N/A"}
+            </span>
+          ),
+          educationAndCareer: (
+            <span>
+              <strong>Highest Qualification:</strong>{" "}
+              {educationAndCareer.highestQualification || "N/A"},{" "}
+              <strong>College Attended:</strong>{" "}
+              {educationAndCareer.collegeAttended || "N/A"},{" "}
+              <strong>Working With:</strong>{" "}
+              {educationAndCareer.workingWith || "N/A"},{" "}
+              <strong>Annual Income:</strong>{" "}
+              {educationAndCareer.annualIncome || "N/A"}
+            </span>
+          ),
+          locationOfGroom: (
+            <span>
+              <strong>Country Living In:</strong>{" "}
+              {locationOfGroom.countryLivingIn || "N/A"},{" "}
+              <strong>State Living In:</strong>{" "}
+              {locationOfGroom.stateLivingIn || "N/A"},{" "}
+              <strong>City Living In:</strong>{" "}
+              {locationOfGroom.cityLivingIn || "N/A"},{" "}
+              <strong>Grew Up In:</strong> {locationOfGroom.grewUpIn || "N/A"},{" "}
+              <strong>Ethnic Origin:</strong>{" "}
+              {locationOfGroom.ethnicOrigin || "N/A"},{" "}
+              <strong>Zip/Pin Code:</strong>{" "}
+              {locationOfGroom.zipPinCode || "N/A"}
+            </span>
+          ),
+          action: (
+            <>
+              {matrimonial.isApproved ? (
+                <button
+                  className=" fs-3 text-danger bg-transparent border-0"
+                  onClick={() => showModal(matrimonial._id)}
+                >
+                  <MdOutlineDelete />
+                </button>
+              ) : (
+                <span className="text-muted">Not Approved</span>
+              )}
+            </>
+          ),
+        };
+      });
   };
 
   const showModal = (matrimonialId) => {

@@ -42,7 +42,6 @@ const AnnouncementList = () => {
     setShowModal(false);
   };
 
-  // Function to check if the announcement date is in the future
   const isFutureDate = (dateString) => {
     const currentDate = new Date();
     const announcementDate = new Date(dateString);
@@ -51,7 +50,7 @@ const AnnouncementList = () => {
 
   return (
     <div>
-      <h2 style={{ color: 'green' }}>Announcements List</h2>
+      <h2 style={{ color: "green" }}>Announcements List</h2>
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
@@ -65,7 +64,10 @@ const AnnouncementList = () => {
         </thead>
         <tbody>
           {announcements
-            .filter((announcement) => announcement.isActive && isFutureDate(announcement.date))
+            .filter(
+              (announcement) =>
+                announcement.isActive && isFutureDate(announcement.date)
+            )
             .map((filteredAnnouncement) => (
               <tr key={filteredAnnouncement._id}>
                 <td>{filteredAnnouncement.announcementType}</td>
@@ -120,4 +122,4 @@ const AnnouncementList = () => {
   );
 };
 
-export default AnnouncementList;
+export default AnnouncementList; 

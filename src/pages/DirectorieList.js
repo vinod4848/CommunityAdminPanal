@@ -6,7 +6,7 @@ import {
   getDirectorie,
 } from "../features/directory/directorySlice";
 // import { Link } from "react-router-dom";
-import moment from "moment";
+// import moment from "moment";
 // import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
@@ -63,11 +63,11 @@ const columns = [
     dataIndex: "address",
   },
 
-  {
-    title: "Established Date",
-    dataIndex: "establishedDate",
-    render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
-  },
+  // {
+  //   title: "Established Date",
+  //   dataIndex: "establishedDate",
+  //   render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
+  // },
   // {
   //   title: "Social Media Links",
   //   dataIndex: "socialMediaLinks",
@@ -105,7 +105,7 @@ const Directorielist = () => {
       address: directorie.address,
       description: directorie.description,
       companyName: directorie.companyName,
-      establishedDate: directorie.establishedDate,
+      // establishedDate: directorie.establishedDate,
       socialMediaLinks: directorie.socialMediaLinks,
       tags: directorie.tags,
       locality: directorie.locality,
@@ -152,7 +152,7 @@ const Directorielist = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">Directorie</h3>
+      <h3 className="mb-4 title">Directory</h3>
       <div>
         <Table columns={columns} dataSource={transformDirectorieData()} />
       </div>

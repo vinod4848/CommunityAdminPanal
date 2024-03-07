@@ -18,7 +18,6 @@ import EventListApprovalPending from "./pages/EventListApprovalPending";
 import Directorielist from "./pages/DirectorieList";
 import Matrimoniallist from "./pages/Matrimonial.List";
 import Blogcatlist from "./pages/Blogcatlist";
-import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Colorlist from "./pages/Colorlist";
 import Categorylist from "./pages/Categorylist";
@@ -152,7 +151,6 @@ function App() {
           <Route path="events/:eventId" element={<AddEvent />} />
           <Route path="news" element={<AddNews />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
-          <Route path="orders" element={<Orders />} />
           <Route path="customers" element={<Customers />} />
           <Route path="list-color" element={<Colorlist />} />
           <Route path="list-category" element={<Categorylist />} />
