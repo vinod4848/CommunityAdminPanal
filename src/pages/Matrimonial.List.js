@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, Space, Image } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,127 +8,290 @@ import {
 } from "../features/matrimonial/matrimonialSlice";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
+// const columns = [
+//   {
+//     title: "SN",
+//     dataIndex: "key",
+//     className: "column-sn",
+//   },
+//   {
+//     title: "FirstName",
+//     dataIndex: "firstName",
+//     className: "column-firstName",
+//   },
+//   {
+//     title: "LastName",
+//     dataIndex: "lastName",
+//   },
+//   {
+//     title: "Gender",
+//     dataIndex: "gender",
+//   },
+//   {
+//     title: "Phone",
+//     dataIndex: "phone",
+//   },
+//   {
+//     title: "DateOfBirth",
+//     dataIndex: "dateOfBirth",
+//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+//   },
+//   {
+//     title: "Profession",
+//     dataIndex: "profession",
+//   },
+//   {
+//     title: "NativePlace",
+//     dataIndex: "nativePlace",
+//   },
+//   {
+//     title: "Height",
+//     dataIndex: "height",
+//   },
+
+//   {
+//     title: "AboutMe",
+//     dataIndex: "aboutMe",
+//   },
+//   {
+//     title: "MaritalStatus",
+//     dataIndex: "maritalStatus",
+//   },
+//   {
+//     title: "ProfileCreatedBy",
+//     dataIndex: "profileCreatedBy",
+//   },
+//   {
+//     title: "AnyDisability",
+//     dataIndex: "anyDisability",
+//   },
+//   {
+//     title: "BloodGroup",
+//     dataIndex: "bloodGroup",
+//   },
+//   {
+//     title: "Lifestyle",
+//     dataIndex: "lifestyle",
+//   },
+//   {
+//     title: "moreAboutYourselfPartnerAndFamily",
+//     dataIndex: "moreAboutYourselfPartnerAndFamily",
+//   },
+//   {
+//     title: "Hobbies",
+//     dataIndex: "hobbies",
+//     render: (hobbies) => (
+//       <span>{Array.isArray(hobbies) ? hobbies.join(", ") : ""}</span>
+//     ),
+//   },
+//   {
+//     title: "Created Date",
+//     dataIndex: "createdAt",
+//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+//   },
+
+//   {
+//     title: "Partner Preferences",
+//     dataIndex: "partnerPreferences",
+//   },
+
+//   {
+//     title: "ReligiousBackground",
+//     dataIndex: "religiousBackground",
+//   },
+//   {
+//     title: "Family",
+//     dataIndex: "family",
+//   },
+//   {
+//     title: "AstroDetails",
+//     dataIndex: "astroDetails",
+//   },
+//   {
+//     title: "EducationAndCareer",
+//     dataIndex: "educationAndCareer",
+//   },
+//   {
+//     title: "HealthInformation",
+//     dataIndex: "healthInformation",
+//   },
+//   {
+//     title: "LocationOfGroom",
+//     dataIndex: "locationOfGroom",
+//   },
+//   {
+//     title: "Profile",
+//     dataIndex: "images",
+//     render: (images) => (
+//       <img src={images} alt="profileBanner" style={{ maxWidth: "100px" }} />
+//     ),
+//   },
+//   {
+//     title: "Actions",
+//     dataIndex: "action",
+//     className: "column-actions",
+//   },
+// ];
+
 const columns = [
   {
     title: "SN",
     dataIndex: "key",
     className: "column-sn",
+    align: "center",
+    width: 50,
+  },
+  // {
+  //   title: "Profile",
+  //   dataIndex: "images",
+  //   render: (images) => (
+  //     <img
+  //       src={images}
+  //       alt="profileBanner"
+  //       style={{ maxWidth: "100px", }}
+  //     />
+  //   ),
+  //   align: "center",
+  //   width: 80,
+  // },
+  {
+    title: "Profile",
+    dataIndex: "images",
+    render: (images) => (
+      <Space size={[8, 8]} wrap>
+        {images.length > 0 ? (
+          images.map((imageUrl, index) => (
+            <Image
+              key={index}
+              src={imageUrl}
+              alt={`Image ${index}`}
+              style={{ width: "150px", height: "100px", marginBottom: "8px" }}
+            />
+          ))
+        ) : (
+          <span>No images</span>
+        )}
+      </Space>
+    ),
   },
   {
-    title: "FirstName",
+    title: "First Name",
     dataIndex: "firstName",
     className: "column-firstName",
   },
   {
-    title: "LastName",
+    title: "Last Name",
     dataIndex: "lastName",
   },
   {
     title: "Gender",
     dataIndex: "gender",
+    align: "center",
   },
-  // {
-  //   title: "Email",
-  //   dataIndex: "email",
-  // },
   {
     title: "Phone",
     dataIndex: "phone",
   },
   {
-    title: "DateOfBirth",
+    title: "Date of Birth",
     dataIndex: "dateOfBirth",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+    render: (deadline) => moment(deadline).format("MMM DD, YYYY"),
   },
   {
     title: "Profession",
     dataIndex: "profession",
   },
   {
-    title: "NativePlace",
+    title: "Native Place",
     dataIndex: "nativePlace",
   },
   {
     title: "Height",
     dataIndex: "height",
+    align: "center",
   },
-
   {
-    title: "AboutMe",
+    title: "About Me",
     dataIndex: "aboutMe",
+    ellipsis: true,
   },
   {
-    title: "MaritalStatus",
+    title: "Marital Status",
     dataIndex: "maritalStatus",
+    align: "center",
   },
   {
-    title: "ProfileCreatedBy",
+    title: "Profile Created By",
     dataIndex: "profileCreatedBy",
   },
   {
-    title: "AnyDisability",
+    title: "Any Disability",
     dataIndex: "anyDisability",
+    align: "center",
   },
   {
-    title: "BloodGroup",
+    title: "Blood Group",
     dataIndex: "bloodGroup",
+    align: "center",
   },
   {
     title: "Lifestyle",
     dataIndex: "lifestyle",
   },
   {
-    title: "moreAboutYourselfPartnerAndFamily",
+    title: "More About Yourself, Partner, and Family",
     dataIndex: "moreAboutYourselfPartnerAndFamily",
+    ellipsis: true,
   },
   {
     title: "Hobbies",
     dataIndex: "hobbies",
     render: (hobbies) => (
-      <span>{Array.isArray(hobbies) ? hobbies.join(", ") : ""}</span>
+      <span className="nowrap">
+        {Array.isArray(hobbies) ? hobbies.join(", ") : ""}
+      </span>
     ),
+    ellipsis: true,
   },
   {
     title: "Created Date",
     dataIndex: "createdAt",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+    render: (deadline) => moment(deadline).format("MMM DD, YYYY"),
   },
-
   {
     title: "Partner Preferences",
     dataIndex: "partnerPreferences",
+    ellipsis: true,
   },
-
   {
-    title: "ReligiousBackground",
+    title: "Religious Background",
     dataIndex: "religiousBackground",
+    ellipsis: true,
   },
   {
     title: "Family",
     dataIndex: "family",
+    ellipsis: true,
   },
   {
-    title: "AstroDetails",
+    title: "Astro Details",
     dataIndex: "astroDetails",
+    ellipsis: true,
   },
   {
-    title: "EducationAndCareer",
+    title: "Education and Career",
     dataIndex: "educationAndCareer",
+    ellipsis: true,
   },
   {
-    title: "HealthInformation",
+    title: "Health Information",
     dataIndex: "healthInformation",
+    ellipsis: true,
   },
   {
-    title: "LocationOfGroom",
+    title: "Location of Groom",
     dataIndex: "locationOfGroom",
-  },
-  {
-    title: "Profile",
-    dataIndex: "images",
-    render: (images) => (
-      <img src={images} alt="profileBanner" style={{ maxWidth: "100px" }} />
-    ),
+    ellipsis: true,
   },
   {
     title: "Actions",
@@ -171,7 +334,7 @@ const MatrimonialList = () => {
           dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
           profession: matrimonial.profileId?.profession || "N/A",
           nativePlace: matrimonial.nativePlace || "N/A",
-          maritalStatus: matrimonial.maritalStatus || "N/A",
+          maritalStatus: matrimonial.profileId?.maritalStatus || "N/A",
           address: matrimonial.address || "N/A",
           education: matrimonial.education || "N/A",
           hobbies: Array.isArray(matrimonial.hobbies)

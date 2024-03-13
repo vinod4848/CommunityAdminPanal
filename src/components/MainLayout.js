@@ -431,6 +431,18 @@ const MainLayout = () => {
                 },
               ],
             },
+            {
+              key: "reports",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Reports",
+              children: [
+                {
+                  key: "reports-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Reports  List",
+                },
+              ],
+            },
           ]}
         />
       </Sider>

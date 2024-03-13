@@ -1,4 +1,4 @@
-import { Table, Button } from "antd";
+import { Table, Button, Space, Image } from "antd";
 import moment from "moment";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
@@ -9,134 +9,282 @@ import {
   updateAMatrimonial,
 } from "../features/matrimonial/matrimonialSlice";
 
+// const columns = [
+//   {
+//     title: "SN",
+//     dataIndex: "key",
+//     className: "column-sn",
+//   },
+//   {
+//     title: "FirstName",
+//     dataIndex: "firstName",
+//     className: "column-firstName",
+//   },
+//   {
+//     title: "LastName",
+//     dataIndex: "lastName",
+//   },
+//   {
+//     title: "Gender",
+//     dataIndex: "gender",
+//   },
+//   {
+//     title: "Phone",
+//     dataIndex: "phone",
+//   },
+//   {
+//     title: "DateOfBirth",
+//     dataIndex: "dateOfBirth",
+//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+//   },
+//   {
+//     title: "Profession",
+//     dataIndex: "profession",
+//   },
+//   {
+//     title: "NativePlace",
+//     dataIndex: "nativePlace",
+//   },
+//   {
+//     title: "Height",
+//     dataIndex: "height",
+//   },
+
+//   {
+//     title: "AboutMe",
+//     dataIndex: "aboutMe",
+//   },
+//   {
+//     title: "MaritalStatus",
+//     dataIndex: "maritalStatus",
+//   },
+//   {
+//     title: "ProfileCreatedBy",
+//     dataIndex: "profileCreatedBy",
+//   },
+//   {
+//     title: "AnyDisability",
+//     dataIndex: "anyDisability",
+//   },
+//   {
+//     title: "BloodGroup",
+//     dataIndex: "bloodGroup",
+//   },
+//   {
+//     title: "Lifestyle",
+//     dataIndex: "lifestyle",
+//   },
+//   {
+//     title: "moreAboutYourselfPartnerAndFamily",
+//     dataIndex: "moreAboutYourselfPartnerAndFamily",
+//   },
+//   {
+//     title: "Hobbies",
+//     dataIndex: "hobbies",
+//     render: (hobbies) => (
+//       <span>{Array.isArray(hobbies) ? hobbies.join(", ") : ""}</span>
+//     ),
+//   },
+//   {
+//     title: "Created Date",
+//     dataIndex: "createdAt",
+//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+//   },
+
+//   {
+//     title: "Partner Preferences",
+//     dataIndex: "partnerPreferences",
+//   },
+
+//   {
+//     title: "ReligiousBackground",
+//     dataIndex: "religiousBackground",
+//   },
+//   {
+//     title: "Family",
+//     dataIndex: "family",
+//   },
+//   {
+//     title: "AstroDetails",
+//     dataIndex: "astroDetails",
+//   },
+//   {
+//     title: "EducationAndCareer",
+//     dataIndex: "educationAndCareer",
+//   },
+//   {
+//     title: "HealthInformation",
+//     dataIndex: "healthInformation",
+//   },
+//   {
+//     title: "LocationOfGroom",
+//     dataIndex: "locationOfGroom",
+//   },
+//   {
+//     title: "Profile",
+//     dataIndex: "image",
+//     render: (image) => (
+//       <img src={image} alt="profileBanner" style={{ maxWidth: "100px" }} />
+//     ),
+//   },
+//   {
+//     title: "Activate",
+//     dataIndex: "activateDeactivate",
+//   },
+// ];
+
 const columns = [
   {
     title: "SN",
     dataIndex: "key",
     className: "column-sn",
+    align: "center",
+    width: 50,
   },
   {
-    title: "FirstName",
+    title: "Profile",
+    dataIndex: "images",
+    render: (images) => (
+      <Space size={[8, 8]} wrap>
+        {images.length > 0 ? (
+          images.map((imageUrl, index) => (
+            <Image
+              key={index}
+              src={imageUrl}
+              alt={`Image ${index}`}
+              style={{ width: "150px", height: "100px", marginBottom: "8px" }}
+            />
+          ))
+        ) : (
+          <span>No images</span>
+        )}
+      </Space>
+    ),
+  },
+  {
+    title: "First Name",
     dataIndex: "firstName",
     className: "column-firstName",
   },
   {
-    title: "LastName",
+    title: "Last Name",
     dataIndex: "lastName",
   },
   {
     title: "Gender",
     dataIndex: "gender",
+    align: "center",
   },
-  // {
-  //   title: "Email",
-  //   dataIndex: "email",
-  // },
   {
     title: "Phone",
     dataIndex: "phone",
   },
   {
-    title: "DateOfBirth",
+    title: "Date of Birth",
     dataIndex: "dateOfBirth",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+    render: (deadline) => moment(deadline).format("MMM DD, YYYY"),
   },
   {
     title: "Profession",
     dataIndex: "profession",
   },
   {
-    title: "NativePlace",
+    title: "Native Place",
     dataIndex: "nativePlace",
   },
   {
     title: "Height",
     dataIndex: "height",
+    align: "center",
   },
-
   {
-    title: "AboutMe",
+    title: "About Me",
     dataIndex: "aboutMe",
+    ellipsis: true,
   },
   {
-    title: "MaritalStatus",
+    title: "Marital Status",
     dataIndex: "maritalStatus",
+    align: "center",
   },
   {
-    title: "ProfileCreatedBy",
+    title: "Profile Created By",
     dataIndex: "profileCreatedBy",
   },
   {
-    title: "AnyDisability",
+    title: "Any Disability",
     dataIndex: "anyDisability",
+    align: "center",
   },
   {
-    title: "BloodGroup",
+    title: "Blood Group",
     dataIndex: "bloodGroup",
+    align: "center",
   },
   {
     title: "Lifestyle",
     dataIndex: "lifestyle",
   },
   {
-    title: "moreAboutYourselfPartnerAndFamily",
+    title: "More About Yourself, Partner, and Family",
     dataIndex: "moreAboutYourselfPartnerAndFamily",
+    ellipsis: true,
   },
   {
     title: "Hobbies",
     dataIndex: "hobbies",
     render: (hobbies) => (
-      <span>{Array.isArray(hobbies) ? hobbies.join(", ") : ""}</span>
+      <span className="nowrap">
+        {Array.isArray(hobbies) ? hobbies.join(", ") : ""}
+      </span>
     ),
+    ellipsis: true,
   },
   {
     title: "Created Date",
     dataIndex: "createdAt",
-    render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
+    render: (deadline) => moment(deadline).format("MMM DD, YYYY"),
   },
-
   {
     title: "Partner Preferences",
     dataIndex: "partnerPreferences",
+    ellipsis: true,
   },
-
   {
-    title: "ReligiousBackground",
+    title: "Religious Background",
     dataIndex: "religiousBackground",
+    ellipsis: true,
   },
   {
     title: "Family",
     dataIndex: "family",
+    ellipsis: true,
   },
   {
-    title: "AstroDetails",
+    title: "Astro Details",
     dataIndex: "astroDetails",
+    ellipsis: true,
   },
   {
-    title: "EducationAndCareer",
+    title: "Education and Career",
     dataIndex: "educationAndCareer",
+    ellipsis: true,
   },
   {
-    title: "HealthInformation",
+    title: "Health Information",
     dataIndex: "healthInformation",
+    ellipsis: true,
   },
   {
-    title: "LocationOfGroom",
+    title: "Location of Groom",
     dataIndex: "locationOfGroom",
-  },
-  {
-    title: "Profile",
-    dataIndex: "image",
-    render: (image) => (
-      <img src={image} alt="profileBanner" style={{ maxWidth: "100px" }} />
-    ),
+    ellipsis: true,
   },
   {
     title: "Activate",
     dataIndex: "activateDeactivate",
   },
 ];
-
 const MatrimonialListApprovalPending = () => {
   const dispatch = useDispatch();
 
@@ -159,7 +307,7 @@ const MatrimonialListApprovalPending = () => {
         const partnerPreferences = matrimonial.partnerPreferences || {};
         const educationAndCareer = matrimonial.educationAndCareer || {};
         const locationOfGroom = matrimonial.locationOfGroom || {};
-  
+
         return {
           key: index + 1,
           firstName: profileId.firstName || "N/A",
@@ -189,9 +337,8 @@ const MatrimonialListApprovalPending = () => {
             matrimonial.moreAboutYourselfPartnerAndFamily || "N/A",
           religiousBackground: (
             <span>
-              <strong>Religion:</strong>{" "}
-              {religiousBackground.religion || "N/A"},{" "}
-              <strong>Mother Tongue:</strong>{" "}
+              <strong>Religion:</strong> {religiousBackground.religion || "N/A"}
+              , <strong>Mother Tongue:</strong>{" "}
               {religiousBackground.motherTongue || "N/A"},{" "}
               <strong>Community:</strong>{" "}
               {religiousBackground.community || "N/A"},{" "}
@@ -211,9 +358,8 @@ const MatrimonialListApprovalPending = () => {
               <strong>Nature of Business:</strong>{" "}
               {family.natureOfBusiness || "N/A"},{" "}
               <strong>Mother Status:</strong> {family.motherStatus || "N/A"},{" "}
-              <strong>Family Location:</strong>{" "}
-              {family.familyLocation || "N/A"},{" "}
-              <strong>Family Type:</strong> {family.familyType || "N/A"},{" "}
+              <strong>Family Location:</strong> {family.familyLocation || "N/A"}
+              , <strong>Family Type:</strong> {family.familyType || "N/A"},{" "}
               <strong>Family Values:</strong> {family.familyValues || "N/A"},{" "}
               <strong>Family Affluence:</strong>{" "}
               {family.familyAffluence || "N/A"}
@@ -274,7 +420,10 @@ const MatrimonialListApprovalPending = () => {
             <Button
               type="primary"
               onClick={() =>
-                handleActivateDeactivate(matrimonial._id, !matrimonial.isApproved)
+                handleActivateDeactivate(
+                  matrimonial._id,
+                  !matrimonial.isApproved
+                )
               }
             >
               {matrimonial.isApproved ? "Deactivate" : "Activate"}
@@ -283,7 +432,7 @@ const MatrimonialListApprovalPending = () => {
         };
       });
   };
-  
+
   const handleActivateDeactivate = async (matrimonialId, isApproved) => {
     try {
       await axios.put(`${base_url}/matrimonial/profiles/${matrimonialId}`, {

@@ -57,6 +57,7 @@ import TabletsList from "./pages/TabletsList";
 import BicyclesList from "./pages/BicyclesList";
 import BikeList from "./pages/BikeList";
 import CarList from "./pages/CarList";
+import ReportsList from "./pages/ReportsList";
 
 function App() {
   return (
@@ -143,6 +144,7 @@ function App() {
           <Route path="users/:userId" element={<AddUser />} />
           {/* <Route path="user-list" element={<UserList />} /> */}
           <Route path="user-list" element={<UserListV1 />} />
+          <Route path="reports-list" element={<ReportsList />} />
           <Route path="furniture-list" element={<FurnitureList />} />
           <Route path="fashion-list" element={<FashionList />} />
           <Route path="gallery-list" element={<GalleryList />} />
