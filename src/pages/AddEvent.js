@@ -134,14 +134,46 @@ const AddEvent = () => {
 
         <div className="mb-3">
           <label>Category</label>
-          <input
-            type="text"
+          <select
             name="category"
             className="form-control"
             value={event.category}
             onChange={(e) => setBlog({ ...event, category: e.target.value })}
-          />
+          >
+            <option value="">Select a Category</option>
+            <option value="Conferences and Conventions">
+              Conferences and Conventions
+            </option>
+            <option value="Trade Shows and Expos">Trade Shows and Expos</option>
+            <option value="Music Festivals">Music Festivals</option>
+            <option value="Sports Events">Sports Events</option>
+            <option value="Weddings">Weddings</option>
+            <option value="Corporate Events">Corporate Events</option>
+            <option value="Fashion Shows">Fashion Shows</option>
+            <option value="Art Exhibitions">Art Exhibitions</option>
+            <option value="Food and Drink Festivals">
+              Food and Drink Festivals
+            </option>
+            <option value="Charity and Fundraising Events">
+              Charity and Fundraising Events
+            </option>
+            <option value="Film Festivals">Film Festivals</option>
+            <option value="Tech and Innovation Expos">
+              Tech and Innovation Expos
+            </option>
+            <option value="Cultural and Heritage Events">
+              Cultural and Heritage Events
+            </option>
+            <option value="Health and Wellness Expos">
+              Health and Wellness Expos
+            </option>
+            <option value="Educational Seminars and Workshops">
+              Educational Seminars and Workshops
+            </option>
+            <option value="Other">Other</option>
+          </select>
         </div>
+
         <div className="mb-3">
           <label>Address</label>
           <input

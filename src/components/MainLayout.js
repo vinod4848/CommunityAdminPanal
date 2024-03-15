@@ -63,30 +63,43 @@ const MainLayout = () => {
 
             // for usery Manegment start
 
+            // {
+            //   key: "user",
+            //   icon: <FaEnvelope className="fs-4" />,
+            //   label: "Users",
+            //   children: [
+            //     {
+            //       key: "users",
+            //       icon: <FaBlogger className="fs-4" />,
+            //       label: "Add User",
+            //     },
+            //     {
+            //       key: "user-list",
+            //       icon: <FaEnvelopeOpen className="fs-4" />,
+            //       label: "Users List",
+            //     },
+            //     {
+            //       key: "approval-list-User",
+            //       icon: <ImBlog className="fs-4" />,
+            //       label: "Approval Pending",
+            //     },
+            //     {
+            //       key: "block-user-list",
+            //       icon: <FaEnvelopeOpen className="fs-4" />,
+            //       label: "Block User",
+            //     },
+            //   ],
+            // },
+
             {
               key: "user",
-              icon: <FaEnvelope className="fs-4" />,
+              icon: <FaBlogger className="fs-4" />,
               label: "Users",
               children: [
                 {
-                  key: "users",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add User",
-                },
-                {
                   key: "user-list",
-                  icon: <FaEnvelopeOpen className="fs-4" />,
-                  label: "Users List",
-                },
-                {
-                  key: "approval-list-User",
                   icon: <ImBlog className="fs-4" />,
-                  label: "Approval Pending",
-                },
-                {
-                  key: "block-user-list",
-                  icon: <FaEnvelopeOpen className="fs-4" />,
-                  label: "Block User",
+                  label: "User List",
                 },
               ],
             },
@@ -170,15 +183,15 @@ const MainLayout = () => {
               ],
             },
             {
-              key: "job",
+              key: "Job",
               icon: <FaBlogger className="fs-4" />,
               label: "Job",
               children: [
-                {
-                  key: "job",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Job ",
-                },
+                // {
+                //   key: "job",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Job ",
+                // },
                 {
                   key: "job-list",
                   icon: <ImBlog className="fs-4" />,
@@ -196,11 +209,11 @@ const MainLayout = () => {
               icon: <FaBlogger className="fs-4" />,
               label: "Directory",
               children: [
-                {
-                  key: "directory",
-                  icon: <FaBlogger className="fs-4" />,
-                  label: "Add Directory ",
-                },
+                // {
+                //   key: "directory",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Directory ",
+                // },
                 {
                   key: "directory-list",
                   icon: <ImBlog className="fs-4" />,
@@ -209,23 +222,23 @@ const MainLayout = () => {
               ],
             },
 
-            // {
-            //   key: "gallery",
-            //   icon: <FaBlogger className="fs-4" />,
-            //   label: "Gallery",
-            //   children: [
-            //     {
-            //       key: "gallery",
-            //       icon: <FaBlogger className="fs-4" />,
-            //       label: "Add Gallery ",
-            //     },
-            //     {
-            //       key: "gallery-list",
-            //       icon: <ImBlog className="fs-4" />,
-            //       label: "Gallery  List",
-            //     },
-            //   ],
-            // },
+            {
+              key: "gallery",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Gallery",
+              children: [
+                {
+                  key: "gallery",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Add Gallery ",
+                },
+                {
+                  key: "gallery-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Gallery  List",
+                },
+              ],
+            },
 
             {
               key: "Matrimonial",
@@ -276,7 +289,7 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "Category Announcement List",
                 },
-                
+
                 {
                   key: "announcements",
                   icon: <FaBlogger className="fs-4" />,
@@ -292,13 +305,142 @@ const MainLayout = () => {
                   icon: <ImBlog className="fs-4" />,
                   label: "List Announcements ",
                 },
-               
+
                 {
                   key: "completed-list",
                   icon: <ImBlog className="fs-4" />,
                   label: "Completed  List",
-                },             
-                
+                },
+              ],
+            },
+            {
+              key: "Property",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Property",
+              children: [
+                // {
+                //   key: "property",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Property ",
+                // },
+                {
+                  key: "property-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Property  List",
+                },
+
+                // {
+                //   key: "landPlot",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Lands_Plots",
+                // },
+                {
+                  key: "landPlot-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Lands & Plots List ",
+                },
+                // {
+                //   key: "shopOffice",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add ShopOffice ",
+                // },
+                {
+                  key: "shopOffice-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "Shop & Office  List",
+                },
+
+                // {
+                //   key: "pgGuestHouse",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add PgGuestHouse ",
+                // },
+                {
+                  key: "pgGuestHouse-list",
+                  icon: <FaBlogger className="fs-4" />,
+                  label: "PG & GuestHouse List",
+                },
+              ],
+            },
+            {
+              key: "product ",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Products",
+              children: [
+                // {
+                //   key: "sellAndbuy",
+                //   icon: <FaBlogger className="fs-4" />,
+                //   label: "Add Sell/Buy ",
+                // },
+                // {
+                //   key: "sellAndbuy-list",
+                //   icon: <ImBlog className="fs-4" />,
+                //   label: "Sell/Buy  List",
+                // },
+                {
+                  key: "fashion-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Fashion  List",
+                },
+                {
+                  key: "furniture-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Furniture  List",
+                },
+                {
+                  key: "electronicsList-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "ElectronicsList  List",
+                },
+                {
+                  key: "phone-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Phone List",
+                },
+                {
+                  key: "accessories-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Accessories  List",
+                },
+                {
+                  key: "tablets-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Tablets  List",
+                },
+              ],
+            },
+            {
+              key: "vehicle",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Vehicle",
+              children: [
+                {
+                  key: "car-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Car  List",
+                },
+                {
+                  key: "bike-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Bike  List",
+                },
+                {
+                  key: "bicycles-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Bicycles  List",
+                },
+              ],
+            },
+            {
+              key: "reports",
+              icon: <FaBlogger className="fs-4" />,
+              label: "Reports",
+              children: [
+                {
+                  key: "reports-list",
+                  icon: <ImBlog className="fs-4" />,
+                  label: "Reports  List",
+                },
               ],
             },
           ]}

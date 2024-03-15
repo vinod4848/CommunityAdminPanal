@@ -2,8 +2,6 @@ import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  getNew,deleteANew } from "../features/news/newSlice";
-// import { Link } from "react-router-dom";
-// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
 
@@ -61,9 +59,6 @@ const Newslist = () => {
       category: news.category,
       action: (
         <>
-          {/* <Link to={`/admin/news/${news._id}`} className="fs-3 text-danger">
-            <BiEdit />
-          </Link> */}
           <button
             className="ms-2 fs-3 text-danger bg-transparent border-0"
             onClick={() => showModal(news._id)}
