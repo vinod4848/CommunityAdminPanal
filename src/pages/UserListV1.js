@@ -18,7 +18,10 @@ const UserListV1 = () => {
         setLoading(true);
         const response = await axios.get(`${base_url}/getAllUsers`);
         const data = response.data;
-        setUsers(data.users);
+        const sortedUsers = data.users.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setUsers(sortedUsers);
       } catch (error) {
         console.error(error);
         setError("Error fetching user data. Please try again later.");
@@ -71,7 +74,13 @@ const UserListV1 = () => {
             };
           })
           .flat()
-          .filter((item) => item.field !== "__v" && item.field !== "createdAt")
+          .filter(
+            (item) =>
+              item.field !== "__v" &&
+              item.field !== "createdAt" &&
+              item.field !== "locked" &&
+              item.field !== "blocked"
+          )
           .filter((item) => item.field !== "userId" && item.field !== "_id")
           .map((item) => ({
             ...item,
@@ -89,12 +98,12 @@ const UserListV1 = () => {
 
   const userProfileColumns = [
     {
-      title: "Field",
+      title: "",
       dataIndex: "field",
       key: "field",
     },
     {
-      title: "Value",
+      title: "",
       dataIndex: "value",
       key: "value",
       render: (value, record) =>
