@@ -47,6 +47,13 @@ const AnnouncementList = () => {
     const announcementDate = new Date(dateString);
     return announcementDate > currentDate;
   };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div>
@@ -54,8 +61,9 @@ const AnnouncementList = () => {
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
-            <th>Category</th>
+            <th>Approvedby</th>
             <th>Created By</th>
+            <th>Category</th>
             <th>Description</th>
             <th>Date</th>
             <th>Image</th>
@@ -70,10 +78,16 @@ const AnnouncementList = () => {
             )
             .map((filteredAnnouncement) => (
               <tr key={filteredAnnouncement._id}>
+                <td>{filteredAnnouncement.approvedby.username}</td>
+                <td>
+                  {filteredAnnouncement.createdBy
+                    ? filteredAnnouncement.createdBy.username || "Not Available"
+                    : filteredAnnouncement.profileId?.firstName ||
+                      "Not Available"}
+                </td>
                 <td>{filteredAnnouncement.announcementType}</td>
-                <td>{filteredAnnouncement.createdBy.username}</td>
                 <td>{filteredAnnouncement.description}</td>
-                <td>{filteredAnnouncement.date}</td>
+                <td>{formatDate(filteredAnnouncement.date)}</td>
                 <td>
                   <img
                     src={filteredAnnouncement.image}
@@ -122,4 +136,4 @@ const AnnouncementList = () => {
   );
 };
 
-export default AnnouncementList; 
+export default AnnouncementList;

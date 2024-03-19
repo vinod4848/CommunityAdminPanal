@@ -22,9 +22,9 @@ const columns = [
   },
   {
     title: "Company Logo",
-    dataIndex: "companyLogo",
-    render: (companyLogo) => (
-      <img src={companyLogo} alt="EventBanner" style={{ maxWidth: "100px" }} />
+    dataIndex: "images",
+    render: (images) => (
+      <img src={images} alt="EventBanner" style={{ maxWidth: "100px" }} />
     ),
   },
 
@@ -112,7 +112,7 @@ const Directorielist = () => {
       website: directorie.website,
       businessArea: directorie.businessArea,
       contactNumber: directorie.contactNumber,
-      companyLogo: directorie.companyLogo,
+      images: directorie.images,
       companyEmail: directorie.companyEmail,
       action: (
         <>

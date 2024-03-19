@@ -1,183 +1,179 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, Button, Modal, Space, Spin, Alert } from "antd";
-import moment from "moment";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../index.css";
+import { RiSearchLine } from "react-icons/ri";
 import { base_url } from "../utils/base_url";
 
 const UserListV1 = () => {
-  const [users, setUsers] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
+  const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${base_url}/getAllUsers`);
-        const data = response.data;
-        const sortedUsers = data.users.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-        setUsers(sortedUsers);
-      } catch (error) {
-        console.error(error);
-        setError("Error fetching user data. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  const showUserProfile = async (record) => {
+  const fetchData = async () => {
     try {
-      setModalLoading(true);
-      const response = await axios.get(`${base_url}/findById/${record._id}`);
-      const userData = response.data;
-      setSelectedUser(userData);
-      setIsModalVisible(true);
+      const response = await axios.get(`${base_url}/profiles`);
+      setProfileData(response.data);
+      console.log("Fetched data:", response.data);
     } catch (error) {
-      console.error(error);
-      setError("Error fetching user profile. Please try again later.");
-    } finally {
-      setModalLoading(false);
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch profile data. Please try again later.");
     }
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedUser(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
-  const formattedCreatedAt = (date) => moment(date).format("YYYY-MM-DD");
+  const handleLockProfile = async (profileId) => {
+    try {
+      const response = await axios.get(`${base_url}/profiles/${profileId}`);
+      const currentProfile = response.data;
 
-  const userProfileData =
-    selectedUser && selectedUser.userProfile
-      ? Object.entries(selectedUser.userProfile)
-          .map(([field, value]) => {
-            if (typeof value === "object") {
-              return Object.entries(value).map(([subfield, subvalue]) => ({
-                key: `${field}.${subfield}`,
-                field: `${field}.${subfield}`,
-                value: subvalue,
-              }));
-            }
+      const updatedProfile = {
+        ...currentProfile,
+        locked: !currentProfile.locked,
+      };
+      await axios.put(`${base_url}/profiles/${profileId}`, updatedProfile);
+      fetchData();
+    } catch (error) {
+      console.error("Error locking/unlocking profile:", error);
+    }
+  };
 
-            return {
-              key: field,
-              field,
-              value,
-            };
-          })
-          .flat()
-          .filter(
-            (item) =>
-              item.field !== "__v" &&
-              item.field !== "createdAt" &&
-              item.field !== "locked" &&
-              item.field !== "blocked"
-          )
-          .filter((item) => item.field !== "userId" && item.field !== "_id")
-          .map((item) => ({
-            ...item,
-            value:
-              item.field === "dateOfBirth"
-                ? moment(item.value).format("YYYY-MM-DD")
-                : item.value,
-          }))
-          .sort((a, b) => {
-            if (a.field === "url") return -1;
-            if (b.field === "url") return 1;
-            return 0;
-          })
-      : [];
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-  const userProfileColumns = [
-    {
-      title: "",
-      dataIndex: "field",
-      key: "field",
-    },
-    {
-      title: "",
-      dataIndex: "value",
-      key: "value",
-      render: (value, record) =>
-        record.field === "url" ? (
-          <img src={value} alt="Profile" style={{ maxWidth: "50%" }} />
-        ) : (
-          value
-        ),
-    },
-  ];
+  if (!profileData) {
+    return <div>Loading...</div>;
+  }
 
-  const userColumns = [
-    {
-      title: "SN",
-      dataIndex: "",
-      render: (_, record, index) => index + 1,
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-    },
-    {
-      title: "MembershipId",
-      dataIndex: "membershipId",
-    },
-    {
-      title: "Relationship",
-      dataIndex: "relationship",
-    },
-    {
-      title: "Signin Date",
-      dataIndex: "createdAt",
-      render: formattedCreatedAt,
-    },
-    {
-      title: "Actions",
-      dataIndex: "",
-      render: (_, record) => (
-        <Button onClick={() => showUserProfile(record)}>View Profile</Button>
-      ),
-    },
-  ];
+  const filteredData = profileData.filter((profile) => {
+    const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    const hasPhone = profile.userId && profile.userId.phone;
+    return (
+      fullName.includes(query) ||
+      (hasPhone && profile.userId.phone.includes(query))
+    );
+  });
 
   return (
-    <div className="user-list-container">
-      <h1>User Lists</h1>
-      {loading ? (
-        <Spin size="large" />
-      ) : error ? (
-        <Alert message={error} type="error" />
-      ) : (
-        <Table dataSource={users} columns={userColumns} />
-      )}
+    <div className="container">
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Name or Phone"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
+      <h1 className="title">Profile Details</h1>
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {filteredData.map((profile) => (
+          <div key={profile._id} className="col">
+            <div className="card h-100 d-flex flex-column justify-content-between">
+              <div className="lock-buttons">
+                <button
+                  className={`lock-button ${
+                    profile.locked ? "btn-danger" : "btn-success"
+                  }`}
+                  onClick={() => handleLockProfile(profile._id)}
+                >
+                  {profile.locked ? "Unblock" : "Block"}
+                </button>
+              </div>
+              {profile.image ? (
+                <img
+                  src={profile.image}
+                  className="card-img-top"
+                  alt="Profile"
+                  style={{ height: "150px", objectFit: "cover" }}
+                />
+              ) : profile.url ? (
+                <p className="small">{profile.url}</p>
+              ) : (
+                <p className="small">No image or URL available</p>
+              )}
 
-      <Modal
-        title="User Profile"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Space direction="vertical">
-          {modalLoading ? (
-            <Spin size="large" />
-          ) : userProfileData.length > 0 ? (
-            <Table
-              dataSource={userProfileData}
-              columns={userProfileColumns}
-              pagination={false}
-            />
-          ) : (
-            <p>No profile information available.</p>
-          )}
-        </Space>
-      </Modal>
+              <div className="card-body">
+                <h6 className="card-title">{`${profile.firstName} ${profile.lastName}`}</h6>
+                <div className="d-flex justify-content-between">
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Father's Name:</strong>{" "}
+                      {profile.family?.fatherName || "Not Available"}
+                    </p>
+                  </div>
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Mother's Name:</strong>{" "}
+                      {profile.family?.motherName || "Not Available"}
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Marital Status:</strong>{" "}
+                      {profile.maritalStatus || "Not Available"}
+                    </p>
+                  </div>
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Profession:</strong>{" "}
+                      {profile.profession || "Not Available"}
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>DOB:</strong>{" "}
+                      {profile.dateOfBirth
+                        ? new Date(profile.dateOfBirth).toLocaleDateString()
+                        : "Not Available"}
+                    </p>
+                  </div>
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Gender:</strong>{" "}
+                      {profile.gender || "Not Available"}
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <div className="flex-fill">
+                    <p className="card-text small">
+                      <strong>Phone:</strong>{" "}
+                      {profile.userId?.phone || "Not Available"}
+                    </p>
+                  </div>
+                </div>
+                <p className="card-text small">
+                  <strong>Address:</strong>{" "}
+                  {profile.address
+                    ? `${profile.address.street},
+                     ${profile.address.city}, 
+                     ${profile.address.state}, 
+                     ${profile.address.country},
+                      ${profile.address.postalCode}`
+                    : "Not Available"}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Table, message, Modal, Button, Select, Space, Image } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-
+import { useSelector } from "react-redux";
 const { Option } = Select;
 
 const BikeList = () => {
@@ -11,6 +11,7 @@ const BikeList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [BikeToDelete, setBikeToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchPhone = async () => {
@@ -65,6 +66,7 @@ const BikeList = () => {
     try {
       const response = await axios.put(`${base_url}/bikes/${record._id}`, {
         isActive: !record.isActive,
+        approvedby: getUserData?._id || "",
       });
       if (response.status === 200) {
         message.success(
@@ -90,6 +92,10 @@ const BikeList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -190,6 +196,7 @@ const BikeList = () => {
       key: index,
       ...item,
       firstName: item.profileId.firstName,
+      approvedby: item.approvedby ? item.approvedby.username || "N/A" : "N/A",
     }));
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 
@@ -11,7 +12,7 @@ const LandsPlotsList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [PropertiesToDelete, setPropertiesToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
-
+  const getUserData = useSelector((state) => state.auth.user);
   useEffect(() => {
     const fetchLandPlots = async () => {
       try {
@@ -65,6 +66,7 @@ const LandsPlotsList = () => {
     try {
       const response = await axios.put(`${base_url}/properties/${record._id}`, {
         isActive: !record.isActive,
+        approvedby: getUserData?._id || "",
       });
       if (response.status === 200) {
         message.success(
@@ -92,6 +94,10 @@ const LandsPlotsList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -221,6 +227,7 @@ const LandsPlotsList = () => {
       key: index,
       ...Propertie,
       firstName: Propertie.profileId.firstName,
+      approvedby: Propertie.approvedby ? Propertie.approvedby.username || "N/A" : "N/A",
     }));
 
   return (

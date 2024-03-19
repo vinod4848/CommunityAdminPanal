@@ -56,9 +56,10 @@ const CompleteAnnouncementsList = () => {
       <h2 style={{ color: "red" }}>Complete Announcements List</h2>
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
-          <tr>
-            <th>Category</th>
+        <tr>
+            <th>Approvedby</th>
             <th>Created By</th>
+            <th>Category</th>
             <th>Description</th>
             <th>Date</th>
             <th>Image</th>
@@ -68,8 +69,15 @@ const CompleteAnnouncementsList = () => {
         <tbody>
           {announcements.map((announcement) => (
             <tr key={announcement._id}>
-              <td>{announcement.announcementType}</td>
-              <td>{announcement.createdBy.username}</td>
+              
+              <td>{announcement.approvedby.username}</td>
+              <td>
+                  {announcement.createdBy
+                    ? announcement.createdBy.username || "Not Available"
+                    : announcement.profileId?.firstName ||
+                      "Not Available"}
+                </td>
+                <td>{announcement.announcementType}</td>
               <td>{announcement.description}</td>
               <td>{announcement.date}</td>
               <td>

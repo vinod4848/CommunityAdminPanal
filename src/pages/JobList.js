@@ -10,6 +10,7 @@ import CustomModel from "../components/CustomModel";
 
 const columns = [
   { title: "SN", dataIndex: "key" },
+  { title: "ApprovedBy", dataIndex: "approvedby" },
   { title: "Title", dataIndex: "title" },
   { title: "Company", dataIndex: "company" },
   { title: "Location", dataIndex: "location" },
@@ -43,10 +44,11 @@ const Joblist = () => {
 
   const transformJobData = () => {
     return jobState
-      .filter((job) => job.isPublished) 
+      .filter((job) => job.isPublished)
       .map((job, index) => ({
         key: index + 1,
         title: job.title,
+        approvedby: job.approvedby.username,
         company: job.company,
         location: job.location,
         description: job.description,
@@ -99,7 +101,7 @@ const Joblist = () => {
         <Table
           columns={columns}
           dataSource={transformJobData()}
-          scroll={{ x: true }} 
+          scroll={{ x: true }}
         />
       </div>
       <CustomModel

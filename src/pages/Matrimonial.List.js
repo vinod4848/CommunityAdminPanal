@@ -141,6 +141,7 @@ const columns = [
     align: "center",
     width: 50,
   },
+  { title: "approvedby", dataIndex: "approvedby" },
   // {
   //   title: "Profile",
   //   dataIndex: "images",
@@ -334,6 +335,7 @@ const MatrimonialList = () => {
           dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
           profession: matrimonial.profileId?.profession || "N/A",
           nativePlace: matrimonial.nativePlace || "N/A",
+          approvedby: matrimonial.approvedby ? matrimonial.approvedby.username || "N/A" : "N/A",
           maritalStatus: matrimonial.profileId?.maritalStatus || "N/A",
           address: matrimonial.address || "N/A",
           education: matrimonial.education || "N/A",

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { base_url } from "../utils/base_url";
 import { Modal, Button, Table, Image } from "react-bootstrap";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AnnouncementApprovalPendingList = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     axios
@@ -42,15 +44,25 @@ const AnnouncementApprovalPendingList = () => {
     setShowModal(false);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const handleActivate = (announcementId) => {
     axios
       .put(`${base_url}/updateAnnouncementStatus/${announcementId}`, {
         isActive: true,
+        approvedby: getUserData?._id || "", // Update approvedby with user data
       })
       .then((response) => {
         if (response.status !== 200) {
           throw new Error("Failed to activate announcement");
         }
+        // Update the local state with the updated isActive status
         setAnnouncements((prevAnnouncements) =>
           prevAnnouncements.map((announcement) =>
             announcement._id === announcementId
@@ -69,8 +81,8 @@ const AnnouncementApprovalPendingList = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Category</th>
             <th>CreatedBy</th>
+            <th>Category</th>
             <th>Description</th>
             <th>Date</th>
             <th>Image</th>
@@ -82,10 +94,15 @@ const AnnouncementApprovalPendingList = () => {
             .filter((announcement) => !announcement.isActive)
             .map((filteredAnnouncement) => (
               <tr key={filteredAnnouncement._id}>
+                <td>
+                  {filteredAnnouncement.createdBy
+                    ? filteredAnnouncement.createdBy.username || "Not Available"
+                    : filteredAnnouncement.profileId?.firstName ||
+                      "Not Available"}
+                </td>
                 <td>{filteredAnnouncement.announcementType}</td>
-                <td>{filteredAnnouncement.createdBy.username}</td>
                 <td>{filteredAnnouncement.description}</td>
-                <td>{filteredAnnouncement.date}</td>
+                <td>{formatDate(filteredAnnouncement.date)}</td>
                 <td>
                   <Image
                     src={filteredAnnouncement.image}

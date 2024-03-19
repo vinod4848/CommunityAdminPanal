@@ -41,7 +41,7 @@ const MainLayout = () => {
         <div className="logo">
           <h2 className="text-white fs-5 text-center py-3 mb-0">
             {show && <span className="sm-logo">Get</span>}
-            {show2 && <span className="gl-logo">community</span>}
+            {show2 && <span className="gl-logo">Community</span>}
           </h2>
         </div>
         <Menu

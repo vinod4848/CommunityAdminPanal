@@ -3,7 +3,7 @@ import { Table, message, Modal, Button, Select, Space, Image } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-
+import { useSelector } from "react-redux";
 const { Option } = Select;
 
 const CarList = () => {
@@ -11,6 +11,7 @@ const CarList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -66,6 +67,7 @@ const CarList = () => {
     try {
       const response = await axios.put(`${base_url}/cars/${record._id}`, {
         isActive: !record.isActive,
+        approvedby: getUserData?._id || "",
       });
       if (response.status === 200) {
         message.success(
@@ -91,6 +93,10 @@ const CarList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -199,6 +205,8 @@ const CarList = () => {
       key: index,
       ...item,
       firstName: item.profileId.firstName,
+      approvedby: item.approvedby ? item.approvedby.username || "N/A" : "N/A",
+
     }));
 
   return (

@@ -3,6 +3,7 @@ import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -11,6 +12,7 @@ const ShopOfficeList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [pgGuestHousesToDelete, setPgGuestHousesToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchPgGuestHouses = async () => {
@@ -67,6 +69,7 @@ const ShopOfficeList = () => {
         `${base_url}/shopOffices/${record._id}`,
         {
           isActive: !record.isActive,
+          approvedby: getUserData?._id || "",
         }
       );
       if (response.status === 200) {
@@ -94,6 +97,10 @@ const ShopOfficeList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -213,6 +220,8 @@ const ShopOfficeList = () => {
       key: index,
       ...pgGuestHouse,
       firstName: pgGuestHouse.profileId.firstName,
+      approvedby: pgGuestHouse.approvedby ? pgGuestHouse.approvedby.username || "N/A" : "N/A",
+
     }));
 
   return (

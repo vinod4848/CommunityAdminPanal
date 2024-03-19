@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getJob, updateAJob } from "../features/job/jobSlice";
 import CustomModel from "../components/CustomModel";
 
+
 const columns = [
   { title: "SN", dataIndex: "key" },
   { title: "Title", dataIndex: "title" },
@@ -31,6 +32,7 @@ const columns = [
 
 const JobListApprovalPending = () => {
   const [open, setOpen] = useState(false);
+  const getUserData = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const JobListApprovalPending = () => {
     try {
       await axios.put(`${base_url}/jobs/${jobId}`, {
         isPublished: isPublished,
+        approvedby: getUserData?._id || "",
       });
       dispatch(updateAJob({ jobId, isPublished }));
       setTimeout(() => {

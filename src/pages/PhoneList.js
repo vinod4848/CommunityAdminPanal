@@ -3,7 +3,7 @@ import { Table, message, Modal, Button, Select, Space, Image } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-
+import { useSelector } from "react-redux";
 const { Option } = Select;
 
 const PhoneList = () => {
@@ -11,7 +11,7 @@ const PhoneList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [PhoneToDelete, setPhoneToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
-
+  const getUserData = useSelector((state) => state.auth.user);
   useEffect(() => {
     const fetchPhone = async () => {
       try {
@@ -65,12 +65,11 @@ const PhoneList = () => {
     try {
       const response = await axios.put(`${base_url}/phones/${record._id}`, {
         isActive: !record.isActive,
+        approvedby: getUserData?._id || "",
       });
       if (response.status === 200) {
         message.success(
-          `Phone ${
-            record.isActive ? "deactivated" : "activated"
-          } successfully`
+          `Phone ${record.isActive ? "deactivated" : "activated"} successfully`
         );
         const upadtePhone = phones.map((item) =>
           item._id === record._id
@@ -92,6 +91,10 @@ const PhoneList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -171,6 +174,7 @@ const PhoneList = () => {
       key: index,
       ...item,
       firstName: item.profileId.firstName,
+      approvedby: item.approvedby ? item.approvedby.username || "N/A" : "N/A",
     }));
 
   return (

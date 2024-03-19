@@ -3,6 +3,7 @@ import { Table, message, Modal, Button, Select, Space, Image } from "antd";
 import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -11,6 +12,7 @@ const FurnitureList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [furnitureToDelete, setFurnitureToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const fetchFurniture = async () => {
@@ -67,6 +69,7 @@ const FurnitureList = () => {
         `${base_url}/furniture/${record._id}`,
         {
           isActive: !record.isActive,
+          approvedby: getUserData?._id || "",
         }
       );
       if (response.status === 200) {
@@ -91,6 +94,10 @@ const FurnitureList = () => {
       title: "SN",
       dataIndex: "",
       render: (_, record, index) => index + 1,
+    },
+    {
+      title: "Approved By",
+      dataIndex: "approvedby",
     },
     {
       title: "Post By",
@@ -181,6 +188,7 @@ const FurnitureList = () => {
       key: index,
       ...item,
       firstName: item.profileId.firstName,
+      approvedby: item.approvedby ? item.approvedby.username || "N/A" : "N/A",
     }));
 
   return (

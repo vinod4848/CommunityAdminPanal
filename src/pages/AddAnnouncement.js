@@ -23,7 +23,9 @@ const AddAnnouncements = () => {
     axios
       .get(`${base_url}/announcement-categories`)
       .then((response) => setAnnouncementCategories(response.data))
-      .catch((error) => console.error("Error fetching announcement categories:", error));
+      .catch((error) =>
+        console.error("Error fetching announcement categories:", error)
+      );
   }, []);
 
   const handleChange = (e) => {
@@ -81,7 +83,10 @@ const AddAnnouncements = () => {
           >
             <option value="">Select Category</option>
             {announcementCategories.map((category) => (
-              <option key={category._id} value={category.announcementCategoryName}>
+              <option
+                key={category._id}
+                value={category.announcementCategoryName}
+              >
                 {category.announcementCategoryName}
               </option>
             ))}

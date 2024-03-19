@@ -146,7 +146,7 @@ const columns = [
     dataIndex: "images",
     render: (images) => (
       <Space size={[8, 8]} wrap>
-        {images.length > 0 ? (
+        {images && images.length > 0 ? (
           images.map((imageUrl, index) => (
             <Image
               key={index}
@@ -161,6 +161,7 @@ const columns = [
       </Space>
     ),
   },
+
   {
     title: "First Name",
     dataIndex: "firstName",
@@ -287,6 +288,7 @@ const columns = [
 ];
 const MatrimonialListApprovalPending = () => {
   const dispatch = useDispatch();
+  const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(getMatrimonial());
@@ -321,6 +323,7 @@ const MatrimonialListApprovalPending = () => {
           maritalStatus: matrimonial.maritalStatus || "N/A",
           address: matrimonial.address || "N/A",
           education: matrimonial.education || "N/A",
+          images: matrimonial.images || "N/A",
           hobbies: Array.isArray(matrimonial.hobbies)
             ? matrimonial.hobbies.join(", ")
             : "N/A",
@@ -437,6 +440,7 @@ const MatrimonialListApprovalPending = () => {
     try {
       await axios.put(`${base_url}/matrimonial/profiles/${matrimonialId}`, {
         isApproved: isApproved,
+        approvedby: getUserData?._id || "",
       });
       dispatch(updateAMatrimonial({ matrimonialId, isApproved }));
       setTimeout(() => {
