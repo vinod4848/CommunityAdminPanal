@@ -4,20 +4,24 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Option } = Select;
 
 const LandsPlotsList = () => {
-  const [properties, setproperties] = useState([]);
+  const [properties, setProperties] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [PropertiesToDelete, setPropertiesToDelete] = useState(null);
+  const [propertiesToDelete, setPropertiesToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const getUserData = useSelector((state) => state.auth.user);
+
   useEffect(() => {
     const fetchLandPlots = async () => {
       try {
         const response = await axios.get(`${base_url}/properties`);
-        setproperties(response.data);
+        setProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -26,31 +30,35 @@ const LandsPlotsList = () => {
     fetchLandPlots();
   }, []);
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/properties/${PropertiesToDelete}`
+        `${base_url}/properties/${propertiesToDelete}`
       );
       if (response.status === 200) {
         message.success("Land plot deleted successfully");
         const updatedLandPlots = properties.filter(
-          (Propertie) => Propertie._id !== PropertiesToDelete
+          (property) => property._id !== propertiesToDelete
         );
-        setproperties(updatedLandPlots);
+        setProperties(updatedLandPlots);
         setDeleteModalVisible(false);
         setPropertiesToDelete(null);
       } else {
-        message.error("Failed to delete Propertie");
+        message.error("Failed to delete property");
       }
     } catch (error) {
-      console.error("Error deleting properties:", error);
-      message.error("Failed to delete properties");
+      console.error("Error deleting property:", error);
+      message.error("Failed to delete property");
     }
   };
 
-  const showDeleteModal = (PropertieId) => {
+  const showDeleteModal = (propertyId) => {
     setDeleteModalVisible(true);
-    setPropertiesToDelete(PropertieId);
+    setPropertiesToDelete(propertyId);
   };
 
   const hideDeleteModal = () => {
@@ -74,18 +82,18 @@ const LandsPlotsList = () => {
             record.isActive ? "deactivated" : "activated"
           } successfully`
         );
-        const updatedLandPlots = properties.map((Propertie) =>
-          Propertie._id === record._id
-            ? { ...Propertie, isActive: !record.isActive }
-            : Propertie
+        const updatedLandPlots = properties.map((property) =>
+          property._id === record._id
+            ? { ...property, isActive: !record.isActive }
+            : property
         );
-        setproperties(updatedLandPlots);
+        setProperties(updatedLandPlots);
       } else {
-        message.error("Failed to toggle Land & Plots activation status");
+        message.error("Failed to toggle property activation status");
       }
     } catch (error) {
-      console.error("Error toggling Land & Plots activation status:", error);
-      message.error("Failed to toggle Land & Plots activation status");
+      console.error("Error toggling property activation status:", error);
+      message.error("Failed to toggle property activation status");
     }
   };
 
@@ -193,14 +201,6 @@ const LandsPlotsList = () => {
           >
             <AiFillDelete />
           </Button>
-          {/* <Link
-            to={`/admin/property/${record._id}`}
-            className="fs-3 text-danger"
-          >
-            <Button type="text">
-              <BiEdit />
-            </Button>
-          </Link> */}
         </div>
       ),
     },
@@ -215,46 +215,64 @@ const LandsPlotsList = () => {
     },
   ];
 
-  const data = properties
-    .filter((Propertie) => {
+  const filteredData = properties.filter((property) => {
+    const adTitleMatch = property.adTitle.toLowerCase().includes(searchQuery.toLowerCase());
+    const priceMatch = property.price.toString().toLowerCase().includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = property.propertyType.toLowerCase().includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
+
+  const data = filteredData
+    .filter((property) => {
       if (filterValue === "all") {
         return true;
       } else {
-        return Propertie.isActive === (filterValue === "true");
+        return property.isActive === (filterValue === "true");
       }
     })
-    .map((Propertie, index) => ({
+    .map((property, index) => ({
       key: index,
-      ...Propertie,
-      firstName: Propertie.profileId.firstName,
-      approvedby: Propertie.approvedby ? Propertie.approvedby.username || "N/A" : "N/A",
+      ...property,
+      firstName: property.profileId.firstName,
+      approvedby: property.approvedby ? property.approvedby.username || "N/A" : "N/A",
     }));
 
-  return (
-    <div>
-      <h2>Properties</h2>
-      <Select
-        defaultValue="all"
-        style={{ width: 120, marginBottom: 16 }}
-        onChange={handleFilterChange}
-      >
-        <Option value="all">Show All</Option>
-        <Option value="true">Show Active</Option>
-        <Option value="false">Show Inactive</Option>
-      </Select>
-      <Table columns={columns} dataSource={data} />
-      <Modal
-        title="Confirm Delete"
-        visible={deleteModalVisible}
-        onOk={handleDelete}
-        onCancel={hideDeleteModal}
-        okText="Yes"
-        cancelText="No"
-      >
-        <p>Are you sure you want to delete this Propertie?</p>
-      </Modal>
-    </div>
-  );
-};
-
-export default LandsPlotsList;
+    return (
+      <div>
+        <h2>Properties</h2>
+        <div className="mb-3 input-group">
+          <span className="input-group-text">
+            <RiSearchLine />
+          </span>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Ad Title, Price, or Property Type"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+        </div>
+        <Select
+          defaultValue="all"
+          style={{ width: 120, marginBottom: 16 }}
+          onChange={handleFilterChange}
+        >
+          <Option value="all">Show All</Option>
+          <Option value="true">Show Active</Option>
+          <Option value="false">Show Inactive</Option>
+        </Select>
+        <Table columns={columns} dataSource={data} />
+        <Modal
+          title="Confirm Delete"
+          visible={deleteModalVisible}
+          onOk={handleDelete}
+          onCancel={hideDeleteModal}
+          okText="Yes"
+          cancelText="No"
+        >
+          <p>Are you sure you want to delete this Property?</p>
+        </Modal>
+      </div>
+    );
+}
+    export default LandsPlotsList;

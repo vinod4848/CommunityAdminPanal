@@ -4,6 +4,7 @@ import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Option } = Select;
 
@@ -11,6 +12,7 @@ const FashionList = () => {
   const [fashion, setFashion] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [fashionToDelete, setFashionToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filterValue, setFilterValue] = useState("all");
 
   const getUserData = useSelector((state) => state.auth.user);
@@ -63,22 +65,26 @@ const FashionList = () => {
   const handleFilterChange = (value) => {
     setFilterValue(value);
   };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const handleToggleActive = async (record) => {
     try {
-      const response = await axios.put(
-        `${base_url}/fashion/${record._id}`,
-        {
-          isActive: !record.isActive,
-          approvedby: getUserData?._id || "",
-        }
-      );
+      const response = await axios.put(`${base_url}/fashion/${record._id}`, {
+        isActive: !record.isActive,
+        approvedby: getUserData?._id || "",
+      });
       if (response.status === 200) {
         message.success(
-          `Fashion ${record.isActive ? "deactivated" : "activated"} successfully`
+          `Fashion ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
         );
         const updatedFashion = fashion.map((item) =>
-          item._id === record._id ? { ...item, isActive: !record.isActive } : item
+          item._id === record._id
+            ? { ...item, isActive: !record.isActive }
+            : item
         );
         setFashion(updatedFashion);
       } else {
@@ -171,8 +177,21 @@ const FashionList = () => {
       ),
     },
   ];
+  const filteredData = fashion.filter((item) => {
+    const adTitleMatch = item.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = item.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = item.description
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
 
-  const data = fashion
+  const data = filteredData
     .filter((item) => {
       if (filterValue === "all") {
         return true;
@@ -190,6 +209,18 @@ const FashionList = () => {
   return (
     <div>
       <h2>Fashion List</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or FashionType"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

@@ -1,15 +1,14 @@
-import { Table } from "antd";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Table, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteADirectorie,
   getDirectorie,
 } from "../features/directory/directorySlice";
-// import { Link } from "react-router-dom";
-// import moment from "moment";
-// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
+
+const { Search } = Input;
 
 const columns = [
   {
@@ -62,27 +61,6 @@ const columns = [
     title: "Address",
     dataIndex: "address",
   },
-
-  // {
-  //   title: "Established Date",
-  //   dataIndex: "establishedDate",
-  //   render: (establishedDate) => moment(establishedDate).format("YYYY-MM-DD"),
-  // },
-  // {
-  //   title: "Social Media Links",
-  //   dataIndex: "socialMediaLinks",
-  //   render: (socialMediaLinks) => (
-  //     <span>
-  //       Facebook: {socialMediaLinks.facebook}, Twitter:{" "}
-  //       {socialMediaLinks.twitter}, LinkedIn: {socialMediaLinks.linkedin}
-  //     </span>
-  //   ),
-  // },
-  {
-    title: "Tags",
-    dataIndex: "tags",
-    render: (tags) => <span>{tags.join(", ")}</span>,
-  },
   {
     title: "Actions",
     dataIndex: "action",
@@ -90,59 +68,61 @@ const columns = [
 ];
 
 const Directorielist = () => {
-  const [directorieId, setdirectorieId] = useState();
+  const [directorieId, setDirectorieId] = useState();
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDirectorie());
   }, [dispatch]);
   const directorieState = useSelector((state) => state.directorie.directories);
 
+  const filteredData = directorieState.filter((directorie) => {
+    const fieldsToSearch = [
+      "companyName",
+      "companyEmail",
+      "contactNumber",
+      "locality",
+      "businessArea",
+    ];
+    const query = searchQuery.toLowerCase();
+    return fieldsToSearch.some((field) =>
+      String(directorie[field]).toLowerCase().includes(query)
+    );
+  });
+
   const transformDirectorieData = () => {
-    return directorieState.map((directorie, index) => ({
+    return filteredData.map((directorie, index) => ({
       key: index + 1,
-      gstNumber: directorie.gstNumber,
-      address: directorie.address,
-      description: directorie.description,
       companyName: directorie.companyName,
-      // establishedDate: directorie.establishedDate,
-      socialMediaLinks: directorie.socialMediaLinks,
-      tags: directorie.tags,
-      locality: directorie.locality,
-      website: directorie.website,
-      businessArea: directorie.businessArea,
-      contactNumber: directorie.contactNumber,
-      images: directorie.images,
       companyEmail: directorie.companyEmail,
+      contactNumber: directorie.contactNumber,
+      locality: directorie.locality,
+      businessArea: directorie.businessArea,
+      images: directorie.images,
+      description: directorie.description,
+      address: directorie.address,
       action: (
-        <>
-          {/* <Link
-            to={`/admin/directorie/${directorie._id}`}
-            className="ms-1 fs-4 text-danger"
-          >
-            <BiEdit />
-          </Link> */}
-          <button
-            className=" fs-4 text-danger bg-transparent border-0"
-            onClick={() => showModal(directorie._id)}
-          >
-            <MdOutlineDelete />
-          </button>
-        </>
+        <button
+          className="fs-4 text-danger bg-transparent border-0"
+          onClick={() => showModal(directorie._id)}
+        >
+          <MdOutlineDelete />
+        </button>
       ),
     }));
   };
 
   const showModal = (directorieId) => {
     setOpen(true);
-    setdirectorieId(directorieId);
+    setDirectorieId(directorieId);
   };
 
   const hideModal = () => {
     setOpen(false);
   };
 
-  const deletedirectorie = (directorieId) => {
+  const deleteDirectorie = (directorieId) => {
     dispatch(deleteADirectorie(directorieId));
     setOpen(false);
     setTimeout(() => {
@@ -150,9 +130,20 @@ const Directorielist = () => {
     }, 100);
   };
 
+  const handleSearch = (value) => {
+    setSearchQuery(value);
+  };
+
   return (
     <div>
       <h3 className="mb-4 title">Directory</h3>
+      <div className="mb-2">
+        <Search
+          placeholder="Search by Company Name, Company Email, Contact Number, Locality, or Business Area"
+          onSearch={handleSearch}
+          enterButton
+        />
+      </div>
       <div>
         <Table columns={columns} dataSource={transformDirectorieData()} />
       </div>
@@ -160,9 +151,9 @@ const Directorielist = () => {
         hideModal={hideModal}
         open={open}
         PerformAction={() => {
-          deletedirectorie(directorieId);
+          deleteDirectorie(directorieId);
         }}
-        title="Are you sure you want to delete this Directorie"
+        title="Are you sure you want to delete this Directory"
       />
     </div>
   );

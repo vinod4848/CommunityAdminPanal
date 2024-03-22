@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Table, message, Modal, Button, Select } from "antd";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Option } = Select;
 
 const LandsPlotsList = () => {
   const [landPlots, setLandPlots] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [LandPlotsToDelete, setLandPlotsToDelete] = useState(null);
+  const [landPlotsToDelete, setLandPlotsToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -30,12 +33,12 @@ const LandsPlotsList = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/landPlots/${LandPlotsToDelete}`
+        `${base_url}/landPlots/${landPlotsToDelete}`
       );
       if (response.status === 200) {
         message.success("Land plot deleted successfully");
         const updatedLandPlots = landPlots.filter(
-          (landPlot) => landPlot._id !== LandPlotsToDelete
+          (landPlot) => landPlot._id !== landPlotsToDelete
         );
         setLandPlots(updatedLandPlots);
         setDeleteModalVisible(false);
@@ -61,6 +64,10 @@ const LandsPlotsList = () => {
 
   const handleFilterChange = (value) => {
     setFilterValue(value);
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleToggleActive = async (record) => {
@@ -128,7 +135,6 @@ const LandsPlotsList = () => {
       title: "Property Type",
       dataIndex: "type",
     },
-
     {
       title: "Images",
       dataIndex: "images",
@@ -179,7 +185,21 @@ const LandsPlotsList = () => {
     },
   ];
 
-  const data = landPlots
+  const filteredData = landPlots.filter((landPlot) => {
+    const adTitleMatch = landPlot.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = landPlot.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = landPlot.type
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
+
+  const data = filteredData
     .filter((landPlot) => {
       if (filterValue === "all") {
         return true;
@@ -191,13 +211,26 @@ const LandsPlotsList = () => {
       key: index,
       ...landPlot,
       firstName: landPlot.profileId.firstName,
-      approvedby: landPlot.approvedby ? landPlot.approvedby.username || "N/A" : "N/A",
-
+      approvedby: landPlot.approvedby
+        ? landPlot.approvedby.username || "N/A"
+        : "N/A",
     }));
 
   return (
     <div>
       <h2>Land & Plots</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or Property Type"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

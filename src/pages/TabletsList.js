@@ -4,6 +4,7 @@ import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Option } = Select;
 
@@ -12,6 +13,7 @@ const TabletsList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [PhoneToDelete, setPhoneToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const getUserData = useSelector((state) => state.auth.user);
   useEffect(() => {
     const fetchPhone = async () => {
@@ -62,6 +64,10 @@ const TabletsList = () => {
     setFilterValue(value);
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const handleToggleActive = async (record) => {
     try {
       const response = await axios.put(`${base_url}/tablets/${record._id}`, {
@@ -70,7 +76,9 @@ const TabletsList = () => {
       });
       if (response.status === 200) {
         message.success(
-          `tablets ${record.isActive ? "deactivated" : "activated"} successfully`
+          `tablets ${
+            record.isActive ? "deactivated" : "activated"
+          } successfully`
         );
         const upadtePhone = tablets.map((item) =>
           item._id === record._id
@@ -168,7 +176,20 @@ const TabletsList = () => {
     },
   ];
 
-  const data = tablets
+  const filteredData = tablets.filter((item) => {
+    const adTitleMatch = item.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = item.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = item.type
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
+  const data = filteredData
     .filter((item) => {
       if (filterValue === "all") {
         return true;
@@ -186,6 +207,18 @@ const TabletsList = () => {
   return (
     <div>
       <h2>Tablets List</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or Tablets"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

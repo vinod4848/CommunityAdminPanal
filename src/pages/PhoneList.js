@@ -4,6 +4,8 @@ import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
+
 const { Option } = Select;
 
 const PhoneList = () => {
@@ -11,6 +13,7 @@ const PhoneList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [PhoneToDelete, setPhoneToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const getUserData = useSelector((state) => state.auth.user);
   useEffect(() => {
     const fetchPhone = async () => {
@@ -59,6 +62,9 @@ const PhoneList = () => {
 
   const handleFilterChange = (value) => {
     setFilterValue(value);
+  };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleToggleActive = async (record) => {
@@ -162,7 +168,21 @@ const PhoneList = () => {
     },
   ];
 
-  const data = phones
+  const filteredData = phones.filter((item) => {
+    const adTitleMatch = item.brand
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = item.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = item.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
+
+  const data = filteredData
     .filter((item) => {
       if (filterValue === "all") {
         return true;
@@ -180,6 +200,18 @@ const PhoneList = () => {
   return (
     <div>
       <h2>Phone List</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or Brand"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

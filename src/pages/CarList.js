@@ -4,6 +4,7 @@ import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
 const { Option } = Select;
 
 const CarList = () => {
@@ -11,6 +12,7 @@ const CarList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -61,6 +63,9 @@ const CarList = () => {
 
   const handleFilterChange = (value) => {
     setFilterValue(value);
+  };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleToggleActive = async (record) => {
@@ -192,8 +197,24 @@ const CarList = () => {
       ),
     },
   ];
+  const filteredData = cars.filter((item) => {
+    const adTitleMatch = item.brand
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = item.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = item.fuelType
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const carTypeMatch = item.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch ||carTypeMatch || priceMatch || propertyTypeMatch;
+  });
 
-  const data = cars
+  const data = filteredData
     .filter((item) => {
       if (filterValue === "all") {
         return true;
@@ -212,6 +233,18 @@ const CarList = () => {
   return (
     <div>
       <h2>Cars List</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or FashionType"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

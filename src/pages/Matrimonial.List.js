@@ -1,4 +1,4 @@
-import { Table, Space, Image } from "antd";
+import { Table, Space, Image,Input } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,130 +8,7 @@ import {
 } from "../features/matrimonial/matrimonialSlice";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
-// const columns = [
-//   {
-//     title: "SN",
-//     dataIndex: "key",
-//     className: "column-sn",
-//   },
-//   {
-//     title: "FirstName",
-//     dataIndex: "firstName",
-//     className: "column-firstName",
-//   },
-//   {
-//     title: "LastName",
-//     dataIndex: "lastName",
-//   },
-//   {
-//     title: "Gender",
-//     dataIndex: "gender",
-//   },
-//   {
-//     title: "Phone",
-//     dataIndex: "phone",
-//   },
-//   {
-//     title: "DateOfBirth",
-//     dataIndex: "dateOfBirth",
-//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
-//   },
-//   {
-//     title: "Profession",
-//     dataIndex: "profession",
-//   },
-//   {
-//     title: "NativePlace",
-//     dataIndex: "nativePlace",
-//   },
-//   {
-//     title: "Height",
-//     dataIndex: "height",
-//   },
-
-//   {
-//     title: "AboutMe",
-//     dataIndex: "aboutMe",
-//   },
-//   {
-//     title: "MaritalStatus",
-//     dataIndex: "maritalStatus",
-//   },
-//   {
-//     title: "ProfileCreatedBy",
-//     dataIndex: "profileCreatedBy",
-//   },
-//   {
-//     title: "AnyDisability",
-//     dataIndex: "anyDisability",
-//   },
-//   {
-//     title: "BloodGroup",
-//     dataIndex: "bloodGroup",
-//   },
-//   {
-//     title: "Lifestyle",
-//     dataIndex: "lifestyle",
-//   },
-//   {
-//     title: "moreAboutYourselfPartnerAndFamily",
-//     dataIndex: "moreAboutYourselfPartnerAndFamily",
-//   },
-//   {
-//     title: "Hobbies",
-//     dataIndex: "hobbies",
-//     render: (hobbies) => (
-//       <span>{Array.isArray(hobbies) ? hobbies.join(", ") : ""}</span>
-//     ),
-//   },
-//   {
-//     title: "Created Date",
-//     dataIndex: "createdAt",
-//     render: (deadline) => moment(deadline).format("YYYY-MM-DD"),
-//   },
-
-//   {
-//     title: "Partner Preferences",
-//     dataIndex: "partnerPreferences",
-//   },
-
-//   {
-//     title: "ReligiousBackground",
-//     dataIndex: "religiousBackground",
-//   },
-//   {
-//     title: "Family",
-//     dataIndex: "family",
-//   },
-//   {
-//     title: "AstroDetails",
-//     dataIndex: "astroDetails",
-//   },
-//   {
-//     title: "EducationAndCareer",
-//     dataIndex: "educationAndCareer",
-//   },
-//   {
-//     title: "HealthInformation",
-//     dataIndex: "healthInformation",
-//   },
-//   {
-//     title: "LocationOfGroom",
-//     dataIndex: "locationOfGroom",
-//   },
-//   {
-//     title: "Profile",
-//     dataIndex: "images",
-//     render: (images) => (
-//       <img src={images} alt="profileBanner" style={{ maxWidth: "100px" }} />
-//     ),
-//   },
-//   {
-//     title: "Actions",
-//     dataIndex: "action",
-//     className: "column-actions",
-//   },
-// ];
+const { Search } = Input;
 
 const columns = [
   {
@@ -142,19 +19,6 @@ const columns = [
     width: 50,
   },
   { title: "approvedby", dataIndex: "approvedby" },
-  // {
-  //   title: "Profile",
-  //   dataIndex: "images",
-  //   render: (images) => (
-  //     <img
-  //       src={images}
-  //       alt="profileBanner"
-  //       style={{ maxWidth: "100px", }}
-  //     />
-  //   ),
-  //   align: "center",
-  //   width: 80,
-  // },
   {
     title: "Profile",
     dataIndex: "images",
@@ -304,6 +168,7 @@ const columns = [
 const MatrimonialList = () => {
   const [matrimonialId, setMatrimonialId] = useState();
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -314,8 +179,22 @@ const MatrimonialList = () => {
     (state) => state.matrimonial.matrimonials
   );
 
+
+  const filteredData = matrimonialState.filter((matrimonial) => {
+    const fieldsToSearch = [
+      "firstName",
+      "profession",
+      "gender",
+      "nativePlace",
+    ];
+    const query = searchQuery.toLowerCase();
+    return fieldsToSearch.some((field) =>
+      String(matrimonial[field]).toLowerCase().includes(query)
+    );
+  });
+  
   const transformMatrimonialData = () => {
-    return matrimonialState
+    return filteredData
       .filter((matrimonial) => matrimonial.isApproved)
       .map((matrimonial, index) => {
         const religiousBackground = matrimonial.religiousBackground || {};
@@ -324,7 +203,7 @@ const MatrimonialList = () => {
         const partnerPreferences = matrimonial.partnerPreferences || {};
         const educationAndCareer = matrimonial.educationAndCareer || {};
         const locationOfGroom = matrimonial.locationOfGroom || {};
-
+  
         return {
           key: index + 1,
           firstName: matrimonial.profileId?.firstName || "N/A",
@@ -335,7 +214,9 @@ const MatrimonialList = () => {
           dateOfBirth: moment(matrimonial.dateOfBirth).format("YYYY-MM-DD"),
           profession: matrimonial.profileId?.profession || "N/A",
           nativePlace: matrimonial.nativePlace || "N/A",
-          approvedby: matrimonial.approvedby ? matrimonial.approvedby.username || "N/A" : "N/A",
+          approvedby: matrimonial.approvedby
+            ? matrimonial.approvedby.username || "N/A"
+            : "N/A",
           maritalStatus: matrimonial.profileId?.maritalStatus || "N/A",
           address: matrimonial.address || "N/A",
           education: matrimonial.education || "N/A",
@@ -437,7 +318,7 @@ const MatrimonialList = () => {
             <>
               {matrimonial.isApproved ? (
                 <button
-                  className=" fs-3 text-danger bg-transparent border-0"
+                  className="fs-3 text-danger bg-transparent border-0"
                   onClick={() => showModal(matrimonial._id)}
                 >
                   <MdOutlineDelete />
@@ -450,6 +331,7 @@ const MatrimonialList = () => {
         };
       });
   };
+  
 
   const showModal = (matrimonialId) => {
     setOpen(true);
@@ -458,6 +340,10 @@ const MatrimonialList = () => {
 
   const hideModal = () => {
     setOpen(false);
+  };
+
+  const handleSearch = (value) => {
+    setSearchQuery(value);
   };
 
   const deleteMatrimonial = (matrimonialId) => {
@@ -471,6 +357,13 @@ const MatrimonialList = () => {
   return (
     <div>
       <h3 className="mb-4 title">Matrimonial Profiles</h3>
+      <div className="mb-2">
+        <Search
+          placeholder="Search by Name Profession or NativePlace"
+          onSearch={handleSearch}
+          enterButton
+        />
+      </div>
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}

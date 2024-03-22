@@ -4,59 +4,67 @@ import axios from "axios";
 import { base_url } from "../utils/base_url";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { RiSearchLine } from "react-icons/ri";
 
 const { Option } = Select;
 
 const ShopOfficeList = () => {
-  const [shopOffices, setPgGuestHouses] = useState([]);
+  const [shopOffices, setShopOffices] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [pgGuestHousesToDelete, setPgGuestHousesToDelete] = useState(null);
+  const [shopOfficeToDelete, setShopOfficeToDelete] = useState(null);
   const [filterValue, setFilterValue] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const getUserData = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    const fetchPgGuestHouses = async () => {
+    const fetchShopOffices = async () => {
       try {
         const response = await axios.get(`${base_url}/shopOffices`);
-        setPgGuestHouses(response.data);
+        setShopOffices(response.data);
       } catch (error) {
         console.error("Error fetching shopOffices:", error);
       }
     };
 
-    fetchPgGuestHouses();
+    fetchShopOffices();
   }, []);
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${base_url}/shopOffices/${pgGuestHousesToDelete}`
+        `${base_url}/shopOffices/${shopOfficeToDelete}`
       );
       if (response.status === 200) {
-        message.success("Land plot deleted successfully");
-        const updatedPgGuestHouses = shopOffices.filter(
-          (pgGuestHouse) => pgGuestHouse._id !== pgGuestHousesToDelete
+        message.success("Shop/Office deleted successfully");
+        const updatedShopOffices = shopOffices.filter(
+          (office) => office._id !== shopOfficeToDelete
         );
-        setPgGuestHouses(updatedPgGuestHouses);
+        setShopOffices(updatedShopOffices);
         setDeleteModalVisible(false);
-        setPgGuestHousesToDelete(null);
+        setShopOfficeToDelete(null);
       } else {
-        message.error("Failed to delete shopOffices");
+        message.error("Failed to delete Shop/Office");
       }
     } catch (error) {
-      console.error("Error deleting shopOffices:", error);
-      message.error("Failed to delete shopOffices");
+      console.error("Error deleting Shop/Office:", error);
+      message.error("Failed to delete Shop/Office");
     }
   };
 
-  const showDeleteModal = (landPlotId) => {
+  const handleSearch = (e) => {
+    setSearchQuery(String(e.target.value));
+  };
+  
+
+  const showDeleteModal = (officeId) => {
     setDeleteModalVisible(true);
-    setPgGuestHousesToDelete(landPlotId);
+    setShopOfficeToDelete(officeId);
   };
 
   const hideDeleteModal = () => {
     setDeleteModalVisible(false);
-    setPgGuestHousesToDelete(null);
+    setShopOfficeToDelete(null);
   };
 
   const handleFilterChange = (value) => {
@@ -69,34 +77,66 @@ const ShopOfficeList = () => {
         `${base_url}/shopOffices/${record._id}`,
         {
           isActive: !record.isActive,
-          approvedby: getUserData?._id || "",
+          approvedby: getUserData ? getUserData._id || "" : "",
         }
       );
       if (response.status === 200) {
         message.success(
-          `shops & Offices ${
+          `Shop/Office ${
             record.isActive ? "deactivated" : "activated"
           } successfully`
         );
-        const updatedPgGuestHouses = shopOffices.map((pgGuestHouse) =>
-          pgGuestHouse._id === record._id
-            ? { ...pgGuestHouse, isActive: !record.isActive }
-            : pgGuestHouse
+        const updatedShopOffices = shopOffices.map((office) =>
+          office._id === record._id
+            ? { ...office, isActive: !record.isActive }
+            : office
         );
-        setPgGuestHouses(updatedPgGuestHouses);
+        setShopOffices(updatedShopOffices);
       } else {
-        message.error("Failed to toggle shops & Offices activation status");
+        message.error("Failed to toggle Shop/Office activation status");
       }
     } catch (error) {
-      console.error("Error toggling shops & Offices activation status:", error);
-      message.error("Failed to toggle shops & Offices activation status");
+      console.error("Error toggling Shop/Office activation status:", error);
+      message.error("Failed to toggle Shop/Office activation status");
     }
   };
+
+  const filteredShopOffices = shopOffices.filter((office) => {
+    const adTitleMatch = office.adTitle
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const priceMatch = office.price
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const propertyTypeMatch = office.shopOfficeType
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return adTitleMatch || priceMatch || propertyTypeMatch;
+  });
+
+  const data = filteredShopOffices
+    .filter((office) => {
+      if (filterValue === "all") {
+        return true;
+      } else {
+        return office.isActive === (filterValue === "true");
+      }
+    })
+    .map((office, index) => ({
+      key: index,
+      ...office,
+      firstName: office.profileId.firstName,
+      approvedby: office.approvedby
+        ? office.approvedby.username || "N/A"
+        : "N/A",
+    }));
+
   const columns = [
     {
       title: "SN",
       dataIndex: "",
-      render: (_, record, index) => index + 1,
+      render: (_, __, index) => index + 1,
     },
     {
       title: "Approved By",
@@ -177,7 +217,7 @@ const ShopOfficeList = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (text, record) => (
+      render: (_, record) => (
         <div>
           <Button
             onClick={() => showDeleteModal(record._id)}
@@ -186,14 +226,6 @@ const ShopOfficeList = () => {
           >
             <AiFillDelete />
           </Button>
-          {/* <Link
-            to={`/admin/shopOffices/${record._id}`}
-            className="fs-3 text-danger"
-          >
-            <Button type="text">
-              <BiEdit />
-            </Button>
-          </Link> */}
         </div>
       ),
     },
@@ -207,26 +239,21 @@ const ShopOfficeList = () => {
       ),
     },
   ];
-
-  const data = shopOffices
-    .filter((pgGuestHouse) => {
-      if (filterValue === "all") {
-        return true;
-      } else {
-        return pgGuestHouse.isActive === (filterValue === "true");
-      }
-    })
-    .map((pgGuestHouse, index) => ({
-      key: index,
-      ...pgGuestHouse,
-      firstName: pgGuestHouse.profileId.firstName,
-      approvedby: pgGuestHouse.approvedby ? pgGuestHouse.approvedby.username || "N/A" : "N/A",
-
-    }));
-
   return (
     <div>
       <h2>Shops & Office</h2>
+      <div className="mb-3 input-group">
+        <span className="input-group-text">
+          <RiSearchLine />
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Ad Title, Price, or Property Type"
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+      </div>
       <Select
         defaultValue="all"
         style={{ width: 120, marginBottom: 16 }}

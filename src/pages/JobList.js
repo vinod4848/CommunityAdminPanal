@@ -1,12 +1,12 @@
-import { Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Input } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAJob, getJob } from "../features/job/jobSlice";
-// import { Link } from "react-router-dom";
-// import { BiEdit } from "react-icons/bi";
 import { MdOutlineDelete } from "react-icons/md";
 import CustomModel from "../components/CustomModel";
+
+const { Search } = Input;
 
 const columns = [
   { title: "SN", dataIndex: "key" },
@@ -34,6 +34,7 @@ const columns = [
 const Joblist = () => {
   const [jobId, setJobId] = useState();
   const [open, setOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,7 +45,13 @@ const Joblist = () => {
 
   const transformJobData = () => {
     return jobState
-      .filter((job) => job.isPublished)
+      .filter(
+        (job) =>
+          job.isPublished &&
+          (job.title.toLowerCase().includes(searchInput.toLowerCase()) ||
+            job.company.toLowerCase().includes(searchInput.toLowerCase()) ||
+            job.location.toLowerCase().includes(searchInput.toLowerCase()))
+      )
       .map((job, index) => ({
         key: index + 1,
         title: job.title,
@@ -63,9 +70,6 @@ const Joblist = () => {
         contactEmail: job.contactEmail,
         action: (
           <>
-            {/* <Link to={`/admin/job/${job._id}`} className="ms-1 fs-5 text-danger">
-              <BiEdit />
-            </Link> */}
             <button
               className="fs-5 text-danger bg-transparent border-0"
               onClick={() => showModal(job._id)}
@@ -75,6 +79,10 @@ const Joblist = () => {
           </>
         ),
       }));
+  };
+
+  const handleSearch = (value) => {
+    setSearchInput(value);
   };
 
   const showModal = (jobId) => {
@@ -97,6 +105,13 @@ const Joblist = () => {
   return (
     <div>
       <h3 className="mb-4 title">Jobs</h3>
+      <div className="mb-2">
+        <Search
+          placeholder="Search by title, company, or location"
+          onSearch={handleSearch}
+          enterButton
+        />
+      </div>
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}
